@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">{{screenTitle}}</ion-title>
+</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate padding-right>
+    <ion-item no-lines>
+      <ion-avatar bp-layout="row center">
+        <img [src]="registerForm.controls.avatar.value">
+      </ion-avatar>
+      <ion-icon bp-layout="row center" (click)="selectAvatarSource()" name="camera"></ion-icon>
+    </ion-item>
+    <ion-item bp-layout="row gutter-none" class="meeting">
+      <ion-label bp-layout="fit">
+        <ion-icon color="primary" name="medal"></ion-icon>
+      </ion-label>
+      <ion-select placeholder="Title" bp-layout="fill" [selectOptions]="{title: 'Select title'}" class="selection" formControlName="title">
+        <ion-option *ngFor="let title of titles" [value]="title.name">{{title.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="person"></ion-icon>
+      </ion-label>
+      <ion-input required formControlName="fullName" type="text" placeholder="Full Name"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.fullName.valid  && (registerForm.controls.fullName.dirty || submitAttempt)">Full Name is required.</div>
+    <ion-item class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="call"></ion-icon>
+      </ion-label>
+      <ion-input formControlName="mobile" type="text" placeholder="Mobile"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.mobile.valid  && (registerForm.controls.mobile.dirty || submitAttempt)">Full Name is required.</div>
+    <ion-item class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="mail"></ion-icon>
+      </ion-label>
+      <ion-input formControlName="emailAddress" type="email" placeholder="Email address"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.emailAddress.valid  && (registerForm.controls.emailAddress.dirty || submitAttempt)">Invalid Email address.</div>
+    <ion-item *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="lock"></ion-icon>
+      </ion-label>
+      <ion-input formControlName="password" required validateEqual="confirmPassword" reverse="true" type="password" placeholder="Password"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="screenTitle.toLowerCase() === 'register' && !registerForm.controls.password.valid  && (registerForm.controls.password.dirty || submitAttempt)">Password is required.</div>
+    <ion-item *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="lock"></ion-icon>
+      </ion-label>
+      <ion-input formControlName="confirmPassword" required validateEqual="password" type="password" placeholder="Confirm Password"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="screenTitle.toLowerCase() === 'register' && !registerForm.controls.confirmPassword.valid  && (registerForm.controls.confirmPassword.dirty || submitAttempt)">Password mismatch.</div>
+    <ion-item bp-layout="row gutter-none" class="meeting">
+      <ion-label bp-layout="fit">
+        <ion-icon color="primary" name="globe"></ion-icon>
+      </ion-label>
+      <ion-select placeholder="Country" bp-layout="fill" [selectOptions]="{title: 'Select Country'}" class="selection" formControlName="country"
+        [class.value-unselected]="registerForm.controls['country'].value === ''" [class.value-selected]="registerForm.controls['country'].value !== ''">
+        <ion-option *ngFor="let country of countries" [value]="country.name">{{country.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="briefcase"></ion-icon>
+      </ion-label>
+      <ion-input type="text" formControlName="company" placeholder="Company"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.company.valid  && (registerForm.controls.company.dirty || submitAttempt)">Company is required.</div>
+    <ion-item class="meeting">
+      <ion-label>
+        <ion-icon color="primary" name="shirt"></ion-icon>
+      </ion-label>
+      <ion-input formControlName="position" type="text" placeholder="Position"></ion-input>
+    </ion-item>
+    <ion-item no-lines class="meeting">
+      <ion-label>Notify me by</ion-label>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>Email notification</ion-label>
+      <ion-checkbox formControlName="notifByEmail" [(checked)]="registerForm.controls.notifByEmail.value"></ion-checkbox>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>SMS notification</ion-label>
+      <ion-checkbox formControlName="notifBySms" [(checked)]="registerForm.controls.notifBySms.value"></ion-checkbox>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>Push notification</ion-label>
+      <ion-checkbox formControlName="notifByPush" [(checked)]="registerForm.controls.notifByPush.value"></ion-checkbox>
+    </ion-item>
+    <div bp-layout="row fill" *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
+      <div bp-layout="fit" class="left-checkbox">
+        <ion-item no-lines>
+          <ion-checkbox formControlName="acceptTermsAndPrivacy" class="padding-left-small"></ion-checkbox>
+        </ion-item>
+      </div>
+      <div bp-layout="fill padding-right--sm">
+        <ion-label class="wrap-text">I accept the
+          <a href="" (click)="viewDisclimer('terms')">Terms of service</a> and
+          <a href="" (click)="viewDisclimer('privacy')">Privacy policy</a>
+        </ion-label>
+      </div>
+    </div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="screenTitle.toLowerCase() === 'register' && !registerForm.controls.acceptTermsAndPrivacy.valid  && (registerForm.controls.acceptTermsAndPrivacy.dirty || submitAttempt)">
+      Required accept Terms of service and Privacy policy.
+    </div>
+    <div padding-left margin-bottom margin-top>
+      <button type="submit" ion-button full>{{buttonTitle}}</button>
+    </div>
+  </form>
+</ion-content>

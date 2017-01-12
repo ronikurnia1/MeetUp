@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">Meeting Tracker</ion-title>
+</ion-navbar>
+</ion-header>
+
+<ion-content padding-left padding-right>
+  <ion-item no-lines class="meeting">
+    <ion-label>Meeting date:</ion-label>
+    <ion-select [(ngModel)]="meetingDate" [selectOptions]="selectOptions">
+      <ion-option *ngFor="let item of availableMeetingDates" [value]="item.value">{{getDateFormated(item.value,'DD MMM YYYY')}}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <div bp-layout="row center middle gutter-none margin-left margin-right">
+    <div bp-layout="col 6">
+      <div class="tile">
+        <div>{{meetingTracker.invited}}</div>
+        <div class="tile-info">Invited</div>
+      </div>
+    </div>
+    <div bp-layout="col 6">
+      <div class="tile">
+        <div>{{meetingTracker.hosted}}</div>
+        <div class="tile-info">Hosted</div>
+      </div>
+    </div>
+  </div>
+  <div bp-layout="row center middle gutter-none margin-left margin-right">
+    <div bp-layout="col 6">
+      <div class="tile">
+        <div>{{meetingTracker.meets}}</div>
+        <div class="tile-info">Meets</div>
+      </div>
+    </div>
+    <div bp-layout="col 6">
+      <div class="tile">
+        <div>{{meetingTracker.leads}}</div>
+        <div class="tile-info">Leads</div>
+      </div>
+    </div>
+  </div>
+
+  <ion-list padding>
+    <ion-item *ngFor="let meeting of meetingTracker.meetings">
+      <div bp-layout="flex">
+        <ion-avatar item-left bp-layout="fit">
+          <img src="assets/icon/avatar.png">
+        </ion-avatar>
+        <div margin-left class="meeting" bp-layout="fill">
+          <rating [(ngModel)]="meeting.rate"></rating>
+          <div class="wrap-text bold-text">{{meeting.subject}}</div>
+          <div class="wrap-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
+          <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
+          <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

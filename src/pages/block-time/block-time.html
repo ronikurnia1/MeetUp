@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Block Time</ion-title>
+    <ion-buttons right>
+      <button clear color="primary" ion-button icon-only (click)="removeBlockTime($event)">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="form" (ngSubmit)="updateBlockTime()" novalidate margin-right>
+    <ion-list margin-right>
+      <ion-item margin-left padding-right class="meeting">
+        <ion-label>
+          <ion-icon bp-layout="margin-right--sm" color="primary" name="calendar"></ion-icon>
+          Date
+        </ion-label>
+        <ion-datetime displayFormat="DDD, DD MMM YYYY" formControlName="date"></ion-datetime>
+      </ion-item>
+      <ion-item margin-left padding-right class="meeting">
+        <ion-label>
+          <ion-icon bp-layout="margin-right--sm" color="primary" name="time"></ion-icon>
+          Start
+        </ion-label>
+        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" formControlName="startTime"></ion-datetime>
+      </ion-item>
+      <ion-item margin-left padding-right class="meeting">
+        <ion-label>
+          <ion-icon bp-layout="margin-right--sm" color="primary" name="time"></ion-icon>
+          End
+        </ion-label>
+        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" formControlName="endTime"></ion-datetime>
+      </ion-item>
+      <ion-item margin-left padding-right class="meeting">
+        <ion-input formControlName="description" type="text" placeholder="Description"></ion-input>
+      </ion-item>
+    </ion-list>
+    <div padding-left margin-bottom margin-top>
+      <button ion-button full>Save</button>
+    </div>
+  </form>
+</ion-content>

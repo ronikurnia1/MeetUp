@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">Meeting Details</ion-title>
+</ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-item no-lines class="meeting">
+    <div bp-layout="flex">
+      <ion-avatar item-left bp-layout="fit">
+        <img [src]="meeting.meetingWith.avatar">
+      </ion-avatar>
+      <div margin-left bp-layout="fill">
+        <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
+        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
+        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+      </div>
+    </div>
+    <div>
+      <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
+      <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
+      <div>{{meeting.time}}</div>
+      <div margin-top margin-bottom>{{meeting.location}}</div>
+      <div margin-top class="bold-text">Remarks</div>
+      <div class="wrap-text">{{meeting.remarks}}</div>
+    </div>
+  </ion-item>
+  <div bp-layout="row center" margin-top>
+    <ion-buttons *ngIf="type === 'invitation'">
+      <button ion-button clear icon-only (click)="acceptMeeting()">
+          <ion-icon color="green" name="checkbox-outline"></ion-icon>
+          <span ion-text color="green">Accept</span>
+        </button> &nbsp;&nbsp;&nbsp;
+      <button ion-button clear icon-only (click)="declineMeeting()">
+          <ion-icon color="danger" name="close-circle"></ion-icon>
+          <span ion-text color="danger">Decline</span>
+        </button>
+    </ion-buttons>
+    <ion-buttons *ngIf="type === 'hosted'" padding-right>
+      <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()">
+          <ion-icon name="time"></ion-icon>
+          <span ion-text color="primary">Reschedule</span>
+        </button> &nbsp;&nbsp;&nbsp;
+      <button ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()">
+          <ion-icon color="danger" name="remove-circle"></ion-icon>
+          <span ion-text color="danger">Cancel</span>
+        </button>
+    </ion-buttons>
+  </div>
+</ion-content>

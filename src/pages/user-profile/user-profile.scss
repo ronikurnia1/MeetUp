@@ -1,0 +1,18 @@
+page-user-profile {
+    .title-md {
+        left: -12px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .item-ios ion-avatar img, 
+    .item-md ion-avatar ion-img, 
+    .item-md ion-avatar img {
+        height: 90px;
+        width: 90px;
+    }
+    .center-align {
+        text-align: center;
+    }
+}

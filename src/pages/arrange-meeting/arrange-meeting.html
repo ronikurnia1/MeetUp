@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Arrange Meeting</ion-title>
+</ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-item no-lines class="meeting">
+    <div bp-layout="flex">
+      <ion-avatar item-left bp-layout="fit">
+        <ion-img [src]="recipient.avatarUrl"></ion-img>
+      </ion-avatar>
+      <div margin-left bp-layout="fill">
+        <div class="wrap-text bold-text">{{recipient.title}} {{recipient.fullName}}</div>
+        <div class="wrap-text">{{recipient.company}}&nbsp;</div>
+        <div class="wrap-text">{{recipient.country}}&nbsp;</div>
+      </div>
+    </div>
+  </ion-item>
+  <div class="bold-text" margin-top padding-left>Subject</div>
+  <form [formGroup]="form" (ngSubmit)="sendInvitation()" novalidate>
+    <ion-item class="meeting" padding-right>
+      <ion-select formControlName="subject" placeholder="Select technology" (ionChange)="updateSubject($event)" [selectOptions]="subjectSelectOptions"
+        class="selection">
+        <ion-option *ngFor="let tech of technologies" [value]="tech.name">{{tech.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.subject.valid  && (form.controls.subject.dirty || submitAttempt)">Subject is required.</div>
+    <ion-item *ngIf="form.controls.subject.value === 'Other'" class="meeting" padding-right>
+      <ion-input formControlName="customSubject" type="text" placeholder="Type your subject"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.customSubject.valid && form.controls.customSubject.enabled && (form.controls.customSubject.dirty || submitAttempt)">Your subject is required.</div>
+    
+    
+    <div padding-left margin-top class="meeting bold-text">Schedule</div>
+    <ion-item class="meeting" no-lines>
+      <input (click)="scheduleOptionSelected('bestTimeSlot')" class="radio-button" type="radio" [checked]="scheduleOption === 'bestTimeSlot'" name="scheduleOption" id="bestTimeSlot">
+      <label class="radio-label"for="bestTimeSlot">Best time slot</label>
+    </ion-item>
+    <div margin-left [class.bold-text]="scheduleOption === 'bestTimeSlot'">
+      <div margin-left>{{getDateFormated(bestTimeSlot.date,'dddd, DD MMMM YYYY')}}</div>
+      <div margin-left>{{bestTimeSlot.startTime}}-{{bestTimeSlot.endTime}}</div>
+    </div>
+    <ion-item class="meeting" no-lines>
+      <input (click)="scheduleOptionSelected('manualTime')" class="radio-button" type="radio" [checked]="scheduleOption !== 'bestTimeSlot'" name="scheduleOption" id="manualTime">
+      <label class="radio-label" for="manualTime">Select manually</label>
+    </ion-item>
+    <ion-item *ngIf="scheduleOption !== 'bestTimeSlot'" class="meeting" margin-left padding-right>
+      <ion-label>Date</ion-label>
+      <ion-datetime formControlName="date" displayFormat="DDDD, DD MMM YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="scheduleOption !== 'bestTimeSlot'" class="meeting" margin-left padding-right>
+      <ion-label>Start</ion-label>
+      <ion-datetime formControlName="startTime" displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="scheduleOption !== 'bestTimeSlot'" class="meeting" margin-left padding-right>
+      <ion-label>End</ion-label>
+      <ion-datetime formControlName="endTime" displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>
+    </ion-item>
+
+    <ion-item class="meeting" padding-right>
+      <ion-select formControlName="location" placeholder="Location" [selectOptions]="locationSelectOptions" class="selection">
+        <ion-option *ngFor="let loc of locations" [value]="loc.name">{{loc.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.location.valid  && (form.controls.location.dirty || submitAttempt)">Location is required.</div>
+    <ion-item class="meeting" padding-right>
+      <ion-textarea placeholder="Remarks" formControlName="remarks"></ion-textarea>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.remarks.valid  && (form.controls.remarks.dirty || submitAttempt)">Location is required.</div>
+    <div margin>
+      <button ion-button full type="submit">
+      <ion-icon name="send"></ion-icon>&nbsp;&nbsp;Send Invitation
+    </button>
+    </div>
+  </form>
+
+
+
+
+</ion-content>

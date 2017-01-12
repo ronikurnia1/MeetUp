@@ -1,0 +1,68 @@
+page-register {
+    .title-md {
+        left: -30px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .item-ios ion-avatar img, 
+    .item-md ion-avatar ion-img, 
+    .item-md ion-avatar img {
+        height: 90px;
+        width: 90px;
+    }
+    .item.item-md .checkbox-md {
+        margin: 9px 20px 9px 4px;
+    }
+    .label-md {
+        margin: 0;
+    }
+    .label-ios {
+        margin: 0;
+    }
+    .label-md .selection {
+        margin-left: 6px;
+        padding-right: 20px;
+    }
+    .label-ios .selection {
+        margin-left: 12px;
+        padding-right: 15px;
+    }
+
+    .select-md {
+        width: 100%;
+        padding-left: 8px;
+    }
+    .select-ios {
+        width: 100%;
+        padding: 11px 8px 8px;
+    }
+    ion-select {
+        max-width: 100%;
+    }
+    .label-ios + ion-input .text-input, 
+    .label-ios + ion-textarea .text-input, 
+    .label-ios + .input + .cloned-input {
+        margin-left: 6px;
+    }
+    .item-input .label-md, 
+    .item-select .label-md, 
+    .item-datetime .label-md, 
+    .item-input .label-ios, 
+    .item-select .label-ios, 
+    .item-datetime .label-ios {   
+        width: 23px;
+        -webkit-flex: initial;
+        flex: initial;
+    }
+    .padding-left-small {
+        padding-left: 8px;
+    }
+    .left-checkbox {
+        width: 64px;
+    }
+    ion-icon {
+        font-size: 1.8em;
+    }
+}

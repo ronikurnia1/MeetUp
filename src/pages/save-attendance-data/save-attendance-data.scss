@@ -1,0 +1,20 @@
+page-save-attendance-data {
+    .title-md {
+        left: -30px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+
+    .center-align {
+        text-align: center;
+    }
+    .item-ios ion-avatar img, 
+    .item-md ion-avatar ion-img, 
+    .item-md ion-avatar img {
+        height: 90px;
+        width: 90px;
+    }
+
+}

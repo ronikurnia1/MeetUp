@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Scaned Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-item no-lines class="meeting">
+    <div bp-layout="flex">
+      <ion-avatar item-left bp-layout="fit">
+        <ion-img [src]="profile.avatarUrl"></ion-img>
+      </ion-avatar>
+      <div margin-left bp-layout="fill">
+        <div class="wrap-text bold-text">{{profile.title}} {{profile.fullName}}</div>
+        <div class="wrap-text">{{profile.company}}&nbsp;</div>
+        <div class="wrap-text">{{profile.country}}&nbsp;</div>
+      </div>
+    </div>
+  </ion-item>
+  <div class="bold-text" margin-top padding-left>Subject</div>
+  <form [formGroup]="form" (ngSubmit)="submitScanedBadge()" novalidate>
+    <ion-item class="meeting" padding-right>
+      <ion-select formControlName="subject" placeholder="Select technology" (ionChange)="updateSubject($event)" [selectOptions]="subjectSelectOptions"
+        class="selection">
+        <ion-option *ngFor="let tech of technologies" [value]="tech.name">{{tech.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.subject.valid  && (form.controls.subject.dirty || submitAttempt)">Subject is required.</div>
+    <ion-item *ngIf="form.controls.subject.value === 'Other'" class="meeting" padding-right>
+      <ion-input formControlName="customSubject" type="text" placeholder="Type your subject"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.customSubject.valid && form.controls.customSubject.enabled && (form.controls.customSubject.dirty || submitAttempt)">Your subject is required.</div>
+
+    <ion-item class="meeting" padding-right>
+      <ion-textarea placeholder="Follow Up Plan" formControlName="followUp"></ion-textarea>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.followUp.valid  && (form.controls.followUp.dirty || submitAttempt)">Follow up plan is required.</div>
+
+    <ion-item class="meeting" padding-right>
+      <ion-textarea placeholder="Remarks" formControlName="remarks"></ion-textarea>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.remarks.valid  && (form.controls.remarks.dirty || submitAttempt)">Remarks is required.</div>
+    <div bp-layout="row center middle" margin>
+      <rating formControlName="rate"></rating>
+    </div>
+    <div margin>
+      <button ion-button full type="submit">
+      <ion-icon name="send"></ion-icon>&nbsp;&nbsp;Submit
+    </button>
+    </div>
+  </form>
+
+</ion-content>

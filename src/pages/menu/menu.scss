@@ -1,0 +1,10 @@
+page-menu {
+    .toolbar-background {
+    background-color: white;
+    }
+
+    .item-md ion-icon[item-left], .item-md ion-icon[item-right],
+    .item-ios ion-icon[item-left], .item-ios ion-icon[item-right] {
+        width: 24px;
+    }
+}

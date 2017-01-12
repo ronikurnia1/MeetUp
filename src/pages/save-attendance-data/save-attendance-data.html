@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">Scanned Detail</ion-title>
+</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item no-lines>
+    <ion-avatar bp-layout="row center">
+      <img [src]="profile.avatar">
+    </ion-avatar>
+    <div bp-layout="row fill">
+      <ion-item>
+        <div class="center-align bold-text">{{profile.fullName}}</div>
+        <div class="center-align">{{profile.company}}</div>
+        <div class="center-align">{{profile.position}}</div>
+        <div class="center-align">{{profile.country}}</div>
+        <div class="center-align">{{profile.emailAddress}}</div>
+        <div class="center-align">{{profile.mobile}}</div>
+      </ion-item>
+    </div>
+  </ion-item>
+  <div margin>
+    <button ion-button full (click)="saveScannedData($event)">Save &amp; Back to Scanner</button>
+  </div>
+</ion-content>

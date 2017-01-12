@@ -1,0 +1,45 @@
+page-meeting-tracker {
+    .title-md {
+        left: -30px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .tile {
+        padding: 18px;
+        text-align: center;
+        font-size: 40px;
+        background-color: #387ef5;
+        color: #ffffff;
+        border: 0.5px solid #ffffff;
+    }
+    .tile-info {
+        font-size: 14px;
+        color: #ffffff;
+    }
+    .list-ios > .item-block:first-child {
+        border-top: none;
+    }
+    .list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+        border-bottom: none;
+    }
+    .item-ios ion-avatar[item-left], 
+    .item-ios ion-thumbnail[item-left],
+    .item-md ion-avatar[item-left], 
+    .item-md ion-thumbnail[item-left] {
+        margin:10px 0 0 0;
+    }
+    ul {
+        padding: 0px;
+        margin: 2px 0 2px 0;
+        &.rating li {
+            padding: 0;
+            background: none;
+            color: #387ef5;
+            ion-icon {
+                font-size: 23px;
+            }
+        }
+    }
+}

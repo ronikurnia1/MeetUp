@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">Reschedule</ion-title>
+</ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-item no-lines class="meeting" margin-bottom>
+    <div bp-layout="flex">
+      <ion-avatar item-left bp-layout="fit">
+        <img [src]="meeting.meetingWith.avatar">
+      </ion-avatar>
+      <div margin-left bp-layout="fill">
+        <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
+        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
+        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+      </div>
+    </div>
+    <div>
+      <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
+      <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
+      <div>{{meeting.time}}</div>
+    </div>
+  </ion-item>
+
+  <div padding-left class="meeting bold-text">Reschedule to</div>
+
+  <ion-item class="meeting" no-lines>
+    <input (click)="scheduleOptionSelected('bestTimeSlot')" class="radio-button" type="radio" [checked]="scheduleOption === 'bestTimeSlot'"
+      name="scheduleOption" id="bestTimeSlot">
+    <label class="radio-label" for="bestTimeSlot">Best time slot</label>
+  </ion-item>
+
+  <div class="meeting pull-right" [class.bold-text]="scheduleOption === 'bestTimeSlot'">
+    <div>{{getDateFormated(bestTimeSlot.date,'dddd, DD MMMM YYYY')}}</div>
+    <div>{{bestTimeSlot.startTime}}-{{bestTimeSlot.endTime}}</div>
+  </div>
+
+  <ion-item class="meeting" no-lines>
+    <input (click)="scheduleOptionSelected('manualTime')" class="radio-button" type="radio" [checked]="scheduleOption !== 'bestTimeSlot'"
+      name="scheduleOption" id="manualTime">
+    <label class="radio-label" for="manualTime">Select manually</label>
+  </ion-item>
+  <div margin-right>
+    <ion-item *ngIf="scheduleOption === 'manualTime'" class="meeting" margin-left padding-right>
+      <ion-label>Date</ion-label>
+      <ion-datetime displayFormat="DDDD, DD MMM YYYY" [(ngModel)]="manualTime.date"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="scheduleOption === 'manualTime'" class="meeting" margin-left padding-right>
+      <ion-label>Start</ion-label>
+      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="manualTime.startTime"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="scheduleOption === 'manualTime'" class="meeting" margin-left padding-right>
+      <ion-label>End</ion-label>
+      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="manualTime.endTime"></ion-datetime>
+    </ion-item>
+  </div>
+
+  <div margin>
+    <button ion-button full (click)="rescheduleMeeting()">Reschedule</button>
+  </div>
+</ion-content>

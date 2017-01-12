@@ -1,0 +1,220 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Calendar</ion-title>
+    <ion-buttons right>
+      <button clear color="primary" ion-button icon-only (click)="synchToPhoneCalendar($event)">
+        <ion-icon name="sync"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding-left padding-right>
+
+  <ion-slides #calendarSlides (ionDidChange)="onSlideChanged($event)" [options]="slideOptions">
+    <ion-slide>
+      <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
+        <div bp-layout="col">
+          <div class="month">{{last2WeeksCal.monthYear}}</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none">
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">M</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">W</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">F</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none padding-bottom--sm" class="border-bottom">
+        <div bp-layout="col center middle" *ngFor="let day of last2WeeksCal.weekDays">
+          <div class="date" (click)="selectDate(day)" [class.selected]="day.selected">{{day.display}}</div>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
+        <div bp-layout="col">
+          <div class="month">{{last2WeeksCal.monthYear}}</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none">
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">M</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">W</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">F</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none padding-bottom--sm" class="border-bottom">
+        <div bp-layout="col center middle" *ngFor="let day of lastWeekCal.weekDays">
+          <div class="date" (click)="selectDate(day)" [class.selected]="day.selected">{{day.display}}</div>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
+        <div bp-layout="col">
+          <div class="month">{{currentWeekCal.monthYear}}</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none">
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">M</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">W</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">F</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none padding-bottom--sm" class="border-bottom">
+        <div bp-layout="col center middle" *ngFor="let day of currentWeekCal.weekDays">
+          <div class="date" (click)="selectDate(day)" [class.selected]="day.selected">{{day.display}}</div>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
+        <div bp-layout="col">
+          <div class="month">{{nextWeekCal.monthYear}}</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none">
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">M</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">W</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">F</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none padding-bottom--sm" class="border-bottom">
+        <div bp-layout="col center middle" *ngFor="let day of nextWeekCal.weekDays">
+          <div class="date" (click)="selectDate(day)" [class.selected]="day.selected">{{day.display}}</div>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
+        <div bp-layout="col">
+          <div class="month">{{next2WeeksCal.monthYear}}</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none">
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">M</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">W</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">T</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">F</div>
+        </div>
+        <div bp-layout="col">
+          <div class="day">S</div>
+        </div>
+      </div>
+      <div bp-layout="row center middle gutter-none padding-bottom--sm" class="border-bottom">
+        <div bp-layout="col center middle" *ngFor="let day of next2WeeksCal.weekDays">
+          <div class="date" (click)="selectDate(day)" [class.selected]="day.selected">{{day.display}}</div>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <div bp-layout="row flex" padding class="meeting">
+    <div bp-layout="fit padding-top--sm">
+      <ion-icon class="big-block-time" name="time"></ion-icon>
+      <ion-icon color="danger" class="small-block-time" name="remove-circle"></ion-icon>
+    </div>
+    <div bp-layout="fill margin-bottom">
+      <ion-item class="meeting">
+        <ion-label>Start</ion-label>
+        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="blocking.timeStarts"></ion-datetime>
+      </ion-item>
+      <ion-item class="meeting">
+        <ion-label>End</ion-label>
+        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="blocking.timeEnds"></ion-datetime>
+      </ion-item>
+    </div>
+    <button ion-button full>Block time</button>
+  </div>
+  <ion-item *ngFor="let meeting of schedules" class="meeting">
+    <div bp-layout="flex">
+      <div bp-layout="fit margin-right--sm">{{meeting.time}}</div>
+      <div bp-layout="fill margin-left--sm">
+        <div class="bold-text wrap-text">{{meeting.subject}}</div>
+        <div *ngIf="meeting.type==='meeting'" bp-layout="margin-top--sm" class="wrap-text">Venue: {{meeting.location}}</div>
+      </div>
+    </div>
+  </ion-item>
+
+
+
+</ion-content>

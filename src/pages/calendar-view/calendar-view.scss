@@ -1,0 +1,58 @@
+page-calendar-view {
+    .title-md {
+        left: -12px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .border-bottom {
+        border-bottom: 1px solid #a4a4a4;
+    }
+    .month {
+        text-align: center;
+        border-bottom: 1px solid #a4a4a4;
+        padding: 0 0 5px 0;
+    }
+    .day {
+        padding:5px;
+        color: #3f3f3f;
+        text-align: center;
+        font-weight: bold;
+    }
+    .date {
+        padding-top: 6px;
+        height: 30px;
+        width: 30px;
+        color: #3f3f3f;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        float: none;    
+    }
+    .selected {
+        border-radius: 50%;
+        background-color: #387ef5;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    .page-title {
+        z-index: 100;
+    }
+    ion-slides {
+        height: 92px;
+    }
+    .swiper-slide {
+        font-size: 14px;
+    }
+    .big-block-time {
+        font-size: 55px;
+    }
+    .small-block-time {
+        font-size: 35px;
+        position: relative;
+        left: -16px;
+        top: 8px;
+    }
+}

@@ -1,0 +1,31 @@
+page-my-schedule {
+    .primary-title, .secondary-title {
+        color: $text-color;
+        position: absolute;
+        left: 65px;
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+    }
+    .primary-title {
+        font-size: 16px;
+        font-weight: bold;
+        top: 10px;
+    }
+    .secondary-title {
+        font-size: 14px;
+        top: 30px;
+        font-style: italic;
+    }
+    .toolbar-content .button-ios {
+        height: 36px;
+    }
+    .label-md {
+        margin: 13px 8px 0 0;
+    }
+    .button-large-md {
+        height: 3.6rem;
+    }
+    .label-ios {
+        margin: 11px 8px 0 0;
+    }    
+}

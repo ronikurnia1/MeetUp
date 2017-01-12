@@ -1,0 +1,21 @@
+page-pick-user {
+    .title-md {
+        left: -5px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .sub-title {
+        top: -2px;
+        position: relative;
+        font-size: 14px;
+        font-weight: normal;
+    }
+    .item-ios ion-avatar[item-left], 
+    .item-ios ion-thumbnail[item-left], 
+    .item-md ion-avatar[item-left], 
+    .item-md ion-thumbnail[item-left] {
+        margin: 0 16px 0 0;
+    }    
+}

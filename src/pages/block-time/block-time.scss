@@ -1,0 +1,46 @@
+page-block-time {
+    .title-md {
+        left: -10px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .list-md .item-input.ng-invalid.ng-touched:not(.input-has-focus):last-child {
+        box-shadow: none;
+        border-bottom: none;
+    }
+    .list-md .item-input.input-has-focus:last-child {
+        border-bottom: none;
+        box-shadow: none;
+    }
+    .list-md .item-input.ng-invalid.ng-touched:not(.input-has-focus):last-child .item-inner {
+        border-bottom: 1px solid #dedede;
+    }
+    .list-md > .item-block:last-child .item-inner {
+        border-bottom: 1px solid #dedede;
+    }
+    .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):last-child {
+        border-bottom: none;
+        box-shadow: none;
+    }
+    .item-md.item-input.ng-valid.input-has-value:not(.input-has-focus) .item-inner {
+        border-bottom: 0.55px solid #dedede;
+    }
+
+    .list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+        border-bottom: none;
+    }
+    .list-ios > .item-block:last-child .item-inner, .list-ios > .item-wrapper:last-child .item-block .item-inner {
+        border-bottom: 0.55px solid #c8c7cc;
+    }
+    .list-ios > .item-block:first-child {
+        border-top: none;
+    }
+    ion-icon {
+        font-size: 1.7em;
+    }
+    .label-md {
+        margin: 0;
+    }
+}

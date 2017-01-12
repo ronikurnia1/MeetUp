@@ -1,0 +1,35 @@
+<ion-content padding>
+  <div bp-layout="row center middle" margin-top>
+    <div bp-layout="fill" margin-top>
+      <img class="center" align="middle" src="assets/logo/logo.png">
+    </div>
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="login($event)" padding novalidate>
+    <ion-item lines>
+      <ion-label>
+        <ion-icon color="primary" name="mail"></ion-icon>
+      </ion-label>
+      <ion-input type="email" placeholder="Email address" formControlName="emailAddress"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!loginForm.controls.emailAddress.valid  && (loginForm.controls.emailAddress.dirty || submitAttempt)">Invalid email address.</div>
+    <ion-item>
+      <ion-label>
+        <ion-icon color="primary" name="lock"></ion-icon>
+      </ion-label>
+      <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!loginForm.controls.password.valid  && (loginForm.controls.password.dirty || submitAttempt)">Password is required.</div>
+    <ion-item no-lines>
+      <ion-label>Remember me</ion-label>
+      <ion-checkbox formControlName="rememberMe"></ion-checkbox>
+    </ion-item>
+    <div class="pullRight" margin-bottom>
+      <a href="" (click)="forgetPassword($event)">Forget password?</a>
+    </div>
+    <button type="submit" margin-top ion-button full>Login</button>
+  </form>
+  <div padding-left padding-right>
+    <div>Don't have an account?</div>
+    <button margin-top ion-button full (click)="register()">Register</button>
+  </div>
+</ion-content>

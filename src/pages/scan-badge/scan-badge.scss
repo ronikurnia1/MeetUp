@@ -1,0 +1,48 @@
+page-scan-badge {
+    .title-md {
+        left: -25px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .label-md .selection {
+        margin-left: 6px;
+        padding-right: 20px;
+    }
+    .label-ios .selection {
+        margin-left: 12px;
+        padding-right: 15px;
+    }
+
+    .select-md {
+        width: 100%;
+        padding-left: 8px;
+    }
+    .select-ios {
+        width: 100%;
+        padding: 11px 8px 8px 8px;
+    }
+    ion-select {
+        max-width: 100%;
+    }
+
+    .input-ios .text-input {
+        padding-right: 10px;
+        padding-left: 8px;
+    }
+
+    ul {
+        padding: 0px;
+        margin: 2px 0 2px 0;
+        &.rating li {
+            padding: 0;
+            background: none;
+            color: #387ef5;
+            ion-icon {
+                font-size: 23px;
+            }
+        }
+    }
+
+}

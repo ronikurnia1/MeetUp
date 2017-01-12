@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>My Profile</ion-title>
+    <ion-buttons right>
+      <button clear color="primary" ion-button icon-only (click)="showMoreMenu($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding-left padding-right padding-bottom class="meeting">
+  <ion-item no-lines>
+    <ion-avatar bp-layout="row center">
+      <img [src]="profile.avatar">
+    </ion-avatar>
+    <div bp-layout="row fill">
+      <ion-item>
+        <div class="center-align bold-text">{{profile.fullName}}</div>
+        <div class="center-align">{{profile.company}}</div>
+        <div class="center-align">{{profile.position}}</div>
+        <div class="center-align">{{profile.country}}</div>
+        <div class="center-align">{{profile.emailAddress}}</div>
+        <div class="center-align">{{profile.mobile}}</div>
+      </ion-item>
+    </div>
+  </ion-item>
+  <ion-item no-lines>
+    <div>Group</div>
+    <p padding-left margin-bottom>{{profile.userType}}</p>
+    <div>Description</div>
+    <p padding-left class=wrap-text>{{profile.description}}</p>
+  </ion-item>
+</ion-content>

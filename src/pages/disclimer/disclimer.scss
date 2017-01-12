@@ -1,0 +1,13 @@
+page-disclimer {
+    .title-md {
+        left: -28px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
+    .justify {
+        text-align: justify;
+        text-justify: inter-word;
+    }
+}

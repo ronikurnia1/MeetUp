@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">{{title}}</ion-title>
+</ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-item no-lines class="meeting">
+    <div bp-layout="flex">
+      <ion-avatar item-left bp-layout="fit">
+        <img [src]="meeting.meetingWith.avatar">
+      </ion-avatar>
+      <div margin-left bp-layout="fill">
+        <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
+        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
+        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+      </div>
+    </div>
+    <div>
+      <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
+      <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
+      <div>{{meeting.time}}</div>
+      <div margin-top margin-bottom>{{meeting.location}}</div>
+    </div>
+  </ion-item>
+  <ion-item>
+    <ion-textarea placeholder="Reason" [(ngModel)]="reason"></ion-textarea>
+  </ion-item>
+  <div ion-text class="small-text" color="danger" padding-left *ngIf="(submitAttempt && reason.trim().length === 0)">Reason is required.</div>
+  <button margin-top *ngIf="cancelationType.toLowerCase() === 'withdraw'" ion-button (click)="withdrawAcceptedMeeting()" full
+    color="danger">Cancel Meeting</button>
+  <button margin-top *ngIf="cancelationType.toLowerCase() === 'cancel'" ion-button (click)="cancelMeeting()" full color="danger">Cancel Meeting</button>
+  <button margin-top *ngIf="cancelationType.toLowerCase() === 'decline'" ion-button (click)="declineInvitation()" full color="danger">Decline Meeting</button>
+</ion-content>

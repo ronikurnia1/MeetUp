@@ -1,0 +1,8 @@
+page-notification {
+    .item-md ion-icon[item-left] + .item-inner, .item-md ion-icon[item-left] + .item-input {
+        margin-left: 2px;
+    }
+    .smaller {
+        font-size: 12px;
+    }
+}

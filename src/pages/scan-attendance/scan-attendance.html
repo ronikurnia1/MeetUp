@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title style="z-index: 100">Scan Attendance</ion-title>
+</ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div class="row">
+    <div class="col">
+    </div>
+  </div>
+
+
+  <div bp-layout="row center middle" class="center">
+    <div bp-layout="fill" margin>
+      <button margin-bottom ion-button full (click)="scan('registration')">Registration</button>
+      <button margin-bottom ion-button full (click)="scan('entrance')">Room Entrance</button>
+      <button ion-button full (click)="scan('meeting')">Meeting</button>
+    </div>
+  </div>
+</ion-content>

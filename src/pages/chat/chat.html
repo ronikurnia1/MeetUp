@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Chat</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+
+  <ion-list [virtualScroll]="users" approxItemHeight="45px">
+    <ion-item *virtualItem="let user" class="meeting" (click)="userSelected(user)">
+      <ion-avatar item-left>
+        <ion-img [src]="user.avatarUrl"></ion-img>
+      </ion-avatar>
+      <div class="bold-text">{{user.title}} {{user.fullName}}</div>
+      <div>Last chat text</div>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

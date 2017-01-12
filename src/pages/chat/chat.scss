@@ -1,0 +1,8 @@
+page-chat {
+    .item-ios ion-avatar[item-left], 
+    .item-ios ion-thumbnail[item-left], 
+    .item-md ion-avatar[item-left], 
+    .item-md ion-thumbnail[item-left] {
+        margin: 0 16px 0 0;
+    }
+}
