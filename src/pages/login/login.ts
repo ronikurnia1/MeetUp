@@ -28,8 +28,8 @@ export class LoginPage {
     private formBuilder: FormBuilder) {
     // build login form
     this.loginForm = formBuilder.group({
-      // emailAddress: ['', Validators.compose([Validators.required, Validators.pattern(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)])],
-      emailAddress: ['', Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
+      // email: ['', Validators.compose([Validators.required, Validators.pattern(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)])],
+      email: ['', Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
       password: ['', Validators.required],
       rememberMe: [false]
     })
@@ -80,7 +80,7 @@ export class LoginPage {
   private callApiLogin() {
     // call backend login API
     this.authService.authenticateUser(
-      this.loginForm.controls["emailAddress"].value,
+      this.loginForm.controls["email"].value,
       this.loginForm.controls["password"].value).subscribe(loginResponse => {
         if (loginResponse.result === "OK") {
           // console.log("login response:", loginResponse.userProfile);
@@ -120,9 +120,9 @@ export class LoginPage {
     event.preventDefault();
     event.stopPropagation();
     // console.log("Forget password");
-    if (this.loginForm.controls["emailAddress"].valid) {
+    if (this.loginForm.controls["email"].valid) {
       // call auth service for password ressetting
-      this.authService.resetPassword(this.loginForm.controls["emailAddress"].value)
+      this.authService.resetPassword(this.loginForm.controls["email"].value)
         .subscribe(data => {
           let toast = this.toastCtrl.create({
             message: data.Message,

@@ -35,7 +35,7 @@ export class ChatPage {
    */
   getChatList() {
     this.users = [];
-    this.meetingService.getChatList(this.globalVars.getValue("userData").emailAddress).subscribe(data => {
+    this.meetingService.getChatList(this.globalVars.getValue("userData").email).subscribe(data => {
       data.forEach(itm => this.users.push(itm));
     });
   }

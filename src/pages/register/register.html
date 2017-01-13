@@ -38,9 +38,9 @@
       <ion-label>
         <ion-icon color="primary" name="mail"></ion-icon>
       </ion-label>
-      <ion-input formControlName="emailAddress" type="email" placeholder="Email address"></ion-input>
+      <ion-input formControlName="email" type="email" placeholder="Email address"></ion-input>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.emailAddress.valid  && (registerForm.controls.emailAddress.dirty || submitAttempt)">Invalid Email address.</div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.email.valid  && (registerForm.controls.email.dirty || submitAttempt)">Invalid Email address.</div>
     <ion-item *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
       <ion-label>
         <ion-icon color="primary" name="lock"></ion-icon>

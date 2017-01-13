@@ -5,7 +5,7 @@
         "id": "38923443",
         "title": "Mr.",
         "fullName": "John Doe",
-        "emailAddress": "email@domain.com",
+        "email": "email@domain.com",
         "company": "TechSmart Ltd.",
         "country": "United States",
         "position": "CTO",

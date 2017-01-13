@@ -67,7 +67,7 @@ export class RescheduleMeetingPage {
 
     let rescheduleData = {
       meetingId: this.meeting.id,
-      recipientEmail: this.globalVars.getValue("userData").emailAddress,
+      recipientEmail: this.globalVars.getValue("userData").email,
       statusName: "rescheduled",
       reason: "",
       location: "",

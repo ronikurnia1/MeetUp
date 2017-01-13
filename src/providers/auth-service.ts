@@ -61,13 +61,13 @@ export class AuthService {
   /**
    * Authenticate user
    */
-  authenticateUser(emailAddress: string, password: string): Observable<any> {
+  authenticateUser(email: string, password: string): Observable<any> {
     // TODO:
-    // let data = { email: emailAddress, password: password };
+    // let data = { email: email, password: password };
     // return this.http.post(this.globalVars.getValue("apiUrl") + "login", data)
     //   .map((response: Response) => response.json()).catch(this.handleError);
 
-    let responseFile = emailAddress.toLowerCase().indexOf("admin") > -1 ?
+    let responseFile = email.toLowerCase().indexOf("admin") > -1 ?
       "login-admin.json" : "login-exhibitor.json";
     return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/" + responseFile)
       .map((response: Response) => response.json()).catch(this.handleError);

@@ -9,9 +9,9 @@
       <ion-label>
         <ion-icon color="primary" name="mail"></ion-icon>
       </ion-label>
-      <ion-input type="email" placeholder="Email address" formControlName="emailAddress"></ion-input>
+      <ion-input type="email" placeholder="Email address" formControlName="email"></ion-input>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!loginForm.controls.emailAddress.valid  && (loginForm.controls.emailAddress.dirty || submitAttempt)">Invalid email address.</div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!loginForm.controls.email.valid  && (loginForm.controls.email.dirty || submitAttempt)">Invalid email address.</div>
     <ion-item>
       <ion-label>
         <ion-icon color="primary" name="lock"></ion-icon>
