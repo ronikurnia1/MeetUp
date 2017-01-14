@@ -102,7 +102,7 @@ export class RescheduleMeetingPage {
   }
 
 
-    scheduleOptionSelected(value: string) {
+  scheduleOptionSelected(value: string) {
     // console.log("Value:", value);
     // do the trick to resolve issue: UI doesn't get updated
     this.zone.run(() => {

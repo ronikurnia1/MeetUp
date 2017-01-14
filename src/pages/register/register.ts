@@ -174,8 +174,6 @@ export class RegisterPage {
           country: this.registerForm.controls["country"].value,
           position: this.registerForm.controls["position"].value,
           mobile: this.registerForm.controls["mobile"].value,
-          userType: "delegeate",
-          isAdmin: false,
           notifByEmail: this.registerForm.controls["notifByEmail"].value,
           notifBySms: this.registerForm.controls["notifBySms"].value,
           notifByPush: this.registerForm.controls["notifByPush"].value,

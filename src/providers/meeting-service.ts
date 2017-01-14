@@ -35,7 +35,7 @@ export class MeetingService {
     /**
      * get chat list
      */
-    getChatList(email: string): Observable<any[]> {
+    getChatList(email: string): Observable<any> {
         // TODO:
         let request = "GetChatList?email=" + email;
         // return this.http.get(this.globalVars.getValue("apiUrl") + request)
@@ -74,7 +74,7 @@ export class MeetingService {
     acceptInvitation(meetingId: string,
         userEmail: string): Observable<any> {
         // TODO:
-        // let data = { meetingid: meetingId, recipientemail: userEmail, statusname: "accepted" };
+        // let data = { meetingId: meetingId, recipientEmail: userEmail, statusName: "accepted" };
         // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateStatusMeeting", data)
         //     .map((response: Response) => { response.json() }).catch(this.handleError);
         return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/accept-invitation.json")
