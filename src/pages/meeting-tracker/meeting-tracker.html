@@ -42,17 +42,20 @@
   </div>
 
   <ion-list padding>
-    <ion-item *ngFor="let meeting of meetingTracker.meetings" (click)="viewProfile(meeting.meetingWith)">
+    <ion-item *ngFor="let meeting of meetingTracker.meetings" (click)="viewMeetingDetail(meeting)">
       <div bp-layout="flex">
         <ion-avatar item-left bp-layout="fit">
           <img [src]="meeting.meetingWith.avatar">
         </ion-avatar>
         <div margin-left class="meeting" bp-layout="fill">
-          <rating [(ngModel)]="meeting.rate"></rating>
+          <rating (click)="stopEvent()" [(ngModel)]="meeting.rate"></rating>
           <div class="wrap-text bold-text">{{meeting.subject}}</div>
           <div class="wrap-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
           <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
           <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+        </div>
+        <div bp-layout="fit">
+          <ion-icon color="primary" name="chatbubbles" (click)="viewComment(meeting)"></ion-icon>
         </div>
       </div>
     </ion-item>

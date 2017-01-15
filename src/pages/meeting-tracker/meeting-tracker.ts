@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import * as moment from "moment";
-import { UserProfilePage } from "../user-profile/user-profile";
+import { MeetingDetailsPage } from "../meeting-details/meeting-details";
+import { SendCommentPage } from "../send-comment/send-comment";
 
 @Component({
   selector: 'page-meeting-tracker',
@@ -74,16 +75,27 @@ export class MeetingTrackerPage {
   }
 
 
-  viewProfile(profile: any) {
+  viewMeetingDetail(meeting: any) {
     event.stopPropagation();
     event.preventDefault();
-    let profilePage = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
-    this.navCtrl.push(profilePage, { profile: profile });
+    let profilePage = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+    this.navCtrl.push(profilePage, { meetingData: meeting, type: "tracker" });
   }
 
+  stopEvent() {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  viewComment(meeting: any) {
+    event.stopPropagation();
+    event.preventDefault();
+    let commentPage = this.navCtrl.getViews().find(itm => itm.name === "SendCommentPage") || SendCommentPage;
+    this.navCtrl.push(commentPage, { meetingData: meeting });
+  }
   /**
- * Date Format Helper
- */
+  * Date Format Helper
+  */
   getDateFormated(value: string, format: string): string {
     if (value === "All dates") return "All Dates";
     return moment(value).format(format);

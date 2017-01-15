@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <ion-title style="z-index: 100">Meeting Details</ion-title>
-</ion-navbar>
+    <ion-title>Meeting Details</ion-title>
+  </ion-navbar>
 </ion-header>
 <ion-content padding>
   <ion-item no-lines class="meeting" (click)="viewProfile()">
@@ -21,6 +21,8 @@
     <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
     <div>{{meeting.time}}</div>
     <div margin-top margin-bottom>{{meeting.location}}</div>
+    <div *ngIf="type === 'tracker'" margin-top class="bold-text">Follow Up Plan</div>
+    <div *ngIf="type === 'tracker'" class="wrap-text">{{meeting.followUp}}</div>
     <div margin-top class="bold-text">Remarks</div>
     <div class="wrap-text">{{meeting.remarks}}</div>
   </div>
@@ -45,5 +47,8 @@
           <span ion-text color="danger">Cancel</span>
         </button>
     </ion-buttons>
+  </div>
+  <div padding>
+    <button *ngIf="type === 'tracker'" ion-button full>Post Meeting Survey</button>
   </div>
 </ion-content>
