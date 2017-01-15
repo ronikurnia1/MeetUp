@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import * as moment from "moment";
+import { UserProfilePage } from "../user-profile/user-profile";
 
 @Component({
   selector: 'page-meeting-tracker',
@@ -29,7 +30,8 @@ export class MeetingTrackerPage {
         rate: 2.5,
         meetingWith: {
           fullName: "David Wezilsky",
-          title: "Mr.", company: "DigiLight Inc.", address: "USA"
+          title: "Mr.", company: "DigiLight Inc.", country: "USA",
+          avatar: "assets/icon/avatar.png"
         }
       },
       {
@@ -37,7 +39,8 @@ export class MeetingTrackerPage {
         rate: 3.5,
         meetingWith: {
           fullName: "Mellani Lee",
-          title: "Mrs.", company: "DataSwift Corp.", address: "USA"
+          title: "Mrs.", company: "DataSwift Corp.", country: "USA",
+          avatar: "assets/icon/avatar.png"
         }
       },
       {
@@ -45,7 +48,8 @@ export class MeetingTrackerPage {
         rate: 0,
         meetingWith: {
           fullName: "Jonas Brozikov",
-          title: "Mr.", company: "Vision Bits AB", address: "Sweden"
+          title: "Mr.", company: "Vision Bits AB", country: "Sweden",
+          avatar: "assets/icon/avatar.png"
         }
       },
       {
@@ -53,7 +57,8 @@ export class MeetingTrackerPage {
         rate: 4,
         meetingWith: {
           fullName: "Michael Marlon",
-          title: "Mr.", company: "MapByte Pte Ltd.", address: "Singapore"
+          title: "Mr.", company: "MapByte Pte Ltd.", country: "Singapore",
+          avatar: "assets/icon/avatar.png"
         }
       },
     ]
@@ -68,6 +73,13 @@ export class MeetingTrackerPage {
     console.log('ionViewDidLoad MeetingTrackerPage');
   }
 
+
+  viewProfile(profile: any) {
+    event.stopPropagation();
+    event.preventDefault();
+    let profilePage = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
+    this.navCtrl.push(profilePage, { profile: profile });
+  }
 
   /**
  * Date Format Helper

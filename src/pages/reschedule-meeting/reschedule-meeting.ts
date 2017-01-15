@@ -10,9 +10,14 @@ import { GlobalVarsService } from "../../providers/global-vars-service";
   templateUrl: 'reschedule-meeting.html'
 })
 export class RescheduleMeetingPage {
+  private locationSelectOptions = { title: "Location" };
+  private locations: any[];
+
   public meeting: Meeting;
 
   private scheduleOption: string = "bestTimeSlot";
+  private submitAttempt: boolean = false;
+  private reason: string = "";
 
   private bestTimeSlot: {
     date: string,
@@ -48,6 +53,17 @@ export class RescheduleMeetingPage {
       startTime: "08:00",
       endTime: "09:00"
     };
+
+    this.locations = [
+      { name: "Room #1", value: "room1" },
+      { name: "Room #2", value: "room2" },
+      { name: "Room #3", value: "room3" },
+      { name: "Room #4", value: "room4" },
+      { name: "Room #5", value: "room5" },
+      { name: "Room #6", value: "room6" },
+      { name: "Room #7", value: "room7" }
+    ];
+
   }
 
   ionViewDidLoad() {
@@ -69,7 +85,7 @@ export class RescheduleMeetingPage {
       meetingId: this.meeting.id,
       recipientEmail: this.globalVars.getValue("userData").email,
       statusName: "rescheduled",
-      reason: "",
+      reason: this.reason,
       location: "",
       startTime: this.scheduleOption === "bestTimeSlot" ? bestSlotStartTime : manualStartTime,
       endTime: this.scheduleOption === "bestTimeSlot" ? bestSlotEndTime : manualEndTime,

@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides, ToastController } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from "moment";
 import { Meeting } from "../../domain/meeting";
 import { MeetingService } from "../../providers/meeting-service";
@@ -30,14 +31,17 @@ export class CalendarViewPage {
   }
 
   public schedules: Array<Meeting> = [];
+  private form: FormGroup;
+  private submitAttempt: boolean = false;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private meetingService: MeetingService,
     private globalVars: GlobalVarsService,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private formBuilder: FormBuilder) {
 
-    let currentDate = new Date()
+    let currentDate = new Date();
     let firstDayLast2Weeks = new Date().setDate(currentDate.getDate() - currentDate.getDay() - 14);
     let firstDayLastWeek = new Date().setDate(currentDate.getDate() - currentDate.getDay() - 7);
     let firstDayCurrentWeek = currentDate.setDate(currentDate.getDate() - currentDate.getDay());
@@ -49,17 +53,43 @@ export class CalendarViewPage {
     this.currentWeekCal = this.populateWeekCalendar(new Date(firstDayCurrentWeek));
     this.nextWeekCal = this.populateWeekCalendar(new Date(firstDayNextWeek));
     this.next2WeeksCal = this.populateWeekCalendar(new Date(firstDayNext2Weeks));
+
+    this.form = this.formBuilder.group({
+      date: [new Date()],
+      startTime: ["", Validators.required],
+      endTime: ["", Validators.required],
+      description: ["", Validators.required]
+    });
   }
 
+  blockTime() {
+    event.preventDefault();
+    event.stopPropagation();
+    this.submitAttempt = true;
+    if (this.form.valid) {
+      this.meetingService.createBlockTime(this.form.value).subscribe(response => {
+        let toast = this.toastCtrl.create({
+          message: response.message,
+          duration: 3000,
+          position: "bottom"
+        });
+        toast.present();
+        if (response.result === "OK") {
+          // go back to the previous screen
+          // this.navCtrl.pop({ animate: true });
+        }
+      });
+    }
+  }
 
   synchToPhoneCalendar() {
-      // show toast
-      let toast = this.toastCtrl.create({
-        message: "Calender has been sync successfully.",
-        duration: 3000,
-        position: "bottom"
-      });
-      toast.present();
+    // show toast
+    let toast = this.toastCtrl.create({
+      message: "Calender has been sync successfully.",
+      duration: 3000,
+      position: "bottom"
+    });
+    toast.present();
   }
 
   ionViewDidLoad() {
@@ -73,6 +103,7 @@ export class CalendarViewPage {
     this.currentWeekCal.weekDays.forEach(itm => itm.selected = itm.display === day.display);
     this.nextWeekCal.weekDays.forEach(itm => itm.selected = itm.display === day.display);
     this.next2WeeksCal.weekDays.forEach(itm => itm.selected = itm.display === day.display);
+    this.form.controls["date"].setValue(day.date);
   }
 
   /**
@@ -114,9 +145,21 @@ export class CalendarViewPage {
     for (let i = 0; i <= 6; i++) {
       let date = new Date(firstDate);
       date.setDate(date.getDate() + i);
-      weekCal.weekDays.push({ display: date.getDate(), date: date, disabled: false, selected: date.getDate() === new Date().getDate() });
+      weekCal.weekDays.push({
+        display: date.getDate(),
+        date: date,
+        disabled: false,
+        selected: date.getDate() === new Date().getDate()
+      });
     }
-    weekCal.monthYear = this.getDateFormated(weekCal.weekDays[0].date, "MMMM YYYY").toUpperCase();
+    // check if the month of first day and last is same
+    if (weekCal.weekDays[0].date.getMonth !== weekCal.weekDays[6].date.getMonth) {
+      weekCal.monthYear = this.getDateFormated(weekCal.weekDays[0].date, "MMM-").toUpperCase()
+        + this.getDateFormated(weekCal.weekDays[6].date, "MMM YYYY").toUpperCase();
+    }
+    else {
+      weekCal.monthYear = this.getDateFormated(weekCal.weekDays[0].date, "MMMM YYYY").toUpperCase();
+    }
     return weekCal;
   }
 }

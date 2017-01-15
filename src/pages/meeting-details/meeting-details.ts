@@ -6,6 +6,7 @@ import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { CancelOrDeclinePage } from "../cancel-or-decline/cancel-or-decline";
 import { RescheduleMeetingPage } from "../reschedule-meeting/reschedule-meeting";
+import { UserProfilePage } from "../user-profile/user-profile";
 
 @Component({
   selector: "page-meeting-details",
@@ -24,6 +25,12 @@ export class MeetingDetailsPage {
     this.type = navParams.get("type");
   }
 
+  viewProfile() {
+    event.stopPropagation();
+    event.preventDefault();
+    let profilePage = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
+    this.navCtrl.push(profilePage, { profile: this.meeting.meetingWith });
+  }
 
   acceptMeeting() {
     event.stopPropagation();
@@ -60,36 +67,24 @@ export class MeetingDetailsPage {
     event.stopPropagation();
     event.preventDefault();
     console.log("Decline Meeting.");
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
-    if (cancelDecline) {
-      this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "decline" });
-    } else {
-      this.navCtrl.push(CancelOrDeclinePage, { meetingData: this.meeting, type: "decline" });
-    }
+    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
+    this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "decline" });
   }
 
   cancelMeeting() {
     event.stopPropagation();
     event.preventDefault();
     console.log("Cancel Meeting.");
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
-    if (cancelDecline) {
-      this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "cancel" });
-    } else {
-      this.navCtrl.push(CancelOrDeclinePage, { meetingData: this.meeting, type: "cancel" });
-    }
+    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
+    this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "cancel" });
   }
 
   rescheduleMeeting() {
     event.stopPropagation();
     event.preventDefault();
     console.log("Reschedule Meeting.");
-    let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage");
-    if (reschedule) {
-      this.navCtrl.push(reschedule, { meetingData: this.meeting });
-    } else {
-      this.navCtrl.push(RescheduleMeetingPage, { meetingData: this.meeting });
-    }
+    let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
+    this.navCtrl.push(reschedule, { meetingData: this.meeting });
   }
 
 

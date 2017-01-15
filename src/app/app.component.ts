@@ -22,7 +22,7 @@ export class MyApp {
       this.globalVars.initialize().subscribe(data => {
         for (let itm in data) {
           this.globalVars.setValue(itm, data[itm]);
-          console.log(itm, data[itm]);
+          // console.log(itm, data[itm]);
         }
 
         // Okay, so the platform is ready and our plugins are available.
@@ -37,7 +37,7 @@ export class MyApp {
           // decrypt user data
           let decryptedUserData = this.crypto.decrypt(storedUserData);
           let userData = JSON.parse(decryptedUserData);
-          console.log("User:", JSON.stringify(userData));
+          // console.log("User:", JSON.stringify(userData));
 
           // put it into global vars
           this.globalVars.setValue("userData", userData);

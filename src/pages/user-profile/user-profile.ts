@@ -5,13 +5,16 @@ import { PopoverPage } from "./popover";
 import { RegisterPage } from "../register/register";
 import { ChangePasswordPage } from "../change-password/change-password";
 import { MyQrCodePage } from "../my-qr-code/my-qr-code";
+import { ArrangeMeetingPage } from "../arrange-meeting/arrange-meeting";
 
 @Component({
   selector: 'page-user-profile',
   templateUrl: 'user-profile.html'
 })
 export class UserProfilePage {
+  private myProfile: boolean = false;
   private profile: UserProfile;
+  private pageTitle: string;
 
   private userProfileMenu: string = "menu:userProfile";
 
@@ -20,8 +23,16 @@ export class UserProfilePage {
     private globalVars: GlobalVarsService,
     private popoverCtrl: PopoverController,
     private events: Events) {
+
     // Get profile
-    this.profile = globalVars.getValue("userData");
+    if (navParams.get("profile")) {
+      this.profile = navParams.get("profile");
+      this.pageTitle = "Profile";
+    } else {
+      this.myProfile = true;
+      this.profile = globalVars.getValue("userData");
+      this.pageTitle = "My Profile";
+    }
 
     // subscribe to the PopoverPage
     events.subscribe(this.userProfileMenu, (menu) => {
@@ -32,7 +43,9 @@ export class UserProfilePage {
 
   ionViewWillEnter() {
     // Get profile
-    this.profile = this.globalVars.getValue("userData");
+    if (this.myProfile) {
+      this.profile = this.globalVars.getValue("userData");
+    }
   }
 
   handleMenu(menu: any) {
@@ -53,6 +66,14 @@ export class UserProfilePage {
         break;
       }
     }
+  }
+
+  arrangeMeeting() {
+    event.stopPropagation();
+    event.preventDefault();
+    // console.log("View meeting details.");
+    let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
+    this.navCtrl.push(arrangeMeeting, { selectedUser: this.profile }, { animate: true });
   }
 
   showMoreMenu(event: Event) {

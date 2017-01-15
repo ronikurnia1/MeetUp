@@ -50,7 +50,7 @@
     <ion-slide>
       <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
         <div bp-layout="col">
-          <div class="month">{{last2WeeksCal.monthYear}}</div>
+          <div class="month">{{lastWeekCal.monthYear}}</div>
         </div>
       </div>
       <div bp-layout="row center middle gutter-none">
@@ -188,7 +188,7 @@
       </div>
     </ion-slide>
   </ion-slides>
-  <div bp-layout="row flex" padding class="meeting">
+  <form [formGroup]="form" bp-layout="row flex" (ngSubmit)="blockTime()" padding class="meeting">
     <div bp-layout="fit padding-top--sm">
       <ion-icon class="big-block-time" name="time"></ion-icon>
       <ion-icon color="danger" class="small-block-time" name="remove-circle"></ion-icon>
@@ -196,15 +196,21 @@
     <div bp-layout="fill margin-bottom">
       <ion-item class="meeting">
         <ion-label>Start</ion-label>
-        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="blocking.timeStarts"></ion-datetime>
+        <ion-datetime formControlName="startTime" displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="blocking.timeStarts"></ion-datetime>
       </ion-item>
+      <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.startTime.valid  && (form.controls.startTime.dirty || submitAttempt)">Start time is required.</div>
       <ion-item class="meeting">
         <ion-label>End</ion-label>
-        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="blocking.timeEnds"></ion-datetime>
+        <ion-datetime formControlName="endTime" displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="blocking.timeEnds"></ion-datetime>
       </ion-item>
+      <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.endTime.valid  && (form.controls.endTime.dirty || submitAttempt)">End time is required.</div>
     </div>
-    <button ion-button full>Block time</button>
-  </div>
+    <ion-item class="meeting" margin-bottom>
+      <ion-input formControlName="description" type="text" placeholder="Description"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.description.valid  && (form.controls.description.dirty || submitAttempt)">Description is required.</div>
+    <button ion-button full type="submit">Block time</button>
+  </form>
   <ion-item *ngFor="let meeting of schedules" class="meeting">
     <div bp-layout="flex">
       <div bp-layout="fit margin-right--sm">{{meeting.time}}</div>

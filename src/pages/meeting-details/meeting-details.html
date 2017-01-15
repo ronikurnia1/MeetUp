@@ -4,7 +4,7 @@
 </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-item no-lines class="meeting">
+  <ion-item no-lines class="meeting" (click)="viewProfile()">
     <div bp-layout="flex">
       <ion-avatar item-left bp-layout="fit">
         <img [src]="meeting.meetingWith.avatar">
@@ -15,16 +15,16 @@
         <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
       </div>
     </div>
-    <div>
-      <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
-      <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
-      <div>{{meeting.time}}</div>
-      <div margin-top margin-bottom>{{meeting.location}}</div>
-      <div margin-top class="bold-text">Remarks</div>
-      <div class="wrap-text">{{meeting.remarks}}</div>
-    </div>
   </ion-item>
-  <div bp-layout="row center" margin-top>
+  <div class="meeting" padding-left padding-right>
+    <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
+    <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
+    <div>{{meeting.time}}</div>
+    <div margin-top margin-bottom>{{meeting.location}}</div>
+    <div margin-top class="bold-text">Remarks</div>
+    <div class="wrap-text">{{meeting.remarks}}</div>
+  </div>
+  <div bp-layout="row center" margin-top padding-right>
     <ion-buttons *ngIf="type === 'invitation'">
       <button ion-button clear icon-only (click)="acceptMeeting()">
           <ion-icon color="green" name="checkbox-outline"></ion-icon>

@@ -148,6 +148,17 @@ export class MeetingService {
     }
 
     /**
+     * Create Block time
+     */
+    createBlockTime(blockTime: any) {
+        console.log("blocktime:", blockTime);
+        // TODO:
+        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateBlcokTime", blockTime)
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/create-blocktime.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+    /**
      * Update Block time
      */
     updateBlockTime(blockTime: any): Observable<any> {

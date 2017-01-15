@@ -54,7 +54,15 @@
       <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="manualTime.endTime"></ion-datetime>
     </ion-item>
   </div>
-
+  <ion-item class="meeting" padding-left padding-right padding-top no-lines>
+    <ion-select [(ngModel)]="location" placeholder="Location" [selectOptions]="locationSelectOptions" class="selection">
+      <ion-option *ngFor="let loc of locations" [value]="loc.name">{{loc.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item padding-left padding-right class="meeting">
+    <ion-textarea placeholder="Reason" [(ngModel)]="reason"></ion-textarea>
+  </ion-item>
+  <div ion-text class="small-text" color="danger" padding-left *ngIf="submitAttempt && reason.trim().length === 0">Reason is required.</div>
   <div margin>
     <button ion-button full (click)="rescheduleMeeting()">Reschedule</button>
   </div>

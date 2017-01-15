@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>My Profile</ion-title>
-    <ion-buttons right>
+    <ion-title [class.title-profile]="!myProfile">{{pageTitle}}</ion-title>
+    <ion-buttons right *ngIf="myProfile">
       <button clear color="primary" ion-button icon-only (click)="showMoreMenu($event)">
         <ion-icon name="more"></ion-icon>
       </button>
@@ -20,11 +20,14 @@
         <div class="center-align">{{profile.company}}</div>
         <div class="center-align">{{profile.position}}</div>
         <div class="center-align">{{profile.country}}</div>
-        <div class="center-align">{{profile.email}}</div>
-        <div class="center-align">{{profile.mobile}}</div>
+        <div *ngIf="myProfile" class="center-align">{{profile.email}}</div>
+        <div *ngIf="myProfile" class="center-align">{{profile.mobile}}</div>
       </ion-item>
     </div>
   </ion-item>
+  <div bp-layout="row center middle">
+    <button ion-button *ngIf="!myProfile" (click)="arrangeMeeting()">Meeting</button>
+  </div>
   <ion-item no-lines>
     <div>Group</div>
     <p padding-left margin-bottom>{{profile.userType}}</p>
