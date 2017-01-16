@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Find User</ion-title>
+  </ion-navbar>
+  <ion-toolbar no-border>
+    <ion-searchbar [value]="filterProfileValue" (ionInput)="filterProfile($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item no-lines class="meeting" (click)="openChat(profile)" *ngFor="let profile of profiles">
+      <div bp-layout="flex">
+        <ion-avatar item-left bp-layout="fit">
+          <img [src]="profile.avatar">
+        </ion-avatar>
+        <div margin-left bp-layout="fill">
+          <div class="wrap-text bold-text">{{profile.title}} {{profile.title}} {{profile.fullName}}</div>
+          <div class="wrap-text">{{profile.company}}&nbsp;</div>
+          <div class="wrap-text">{{profile.country}}&nbsp;</div>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

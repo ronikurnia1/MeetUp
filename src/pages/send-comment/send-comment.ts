@@ -14,7 +14,7 @@ export class SendCommentPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.meeting = navParams.get("meetingData");
-    console.log("meeting", this.meeting);
+    // console.log("meeting", this.meeting);
   }
 
   ionViewDidLoad() {

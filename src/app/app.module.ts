@@ -32,6 +32,9 @@ import { ArrangeMeetingPage } from "../pages/arrange-meeting/arrange-meeting";
 import { ScanBadgePage } from "../pages/scan-badge/scan-badge";
 import { SaveAttendanceDataPage } from "../pages/save-attendance-data/save-attendance-data";
 import { SendCommentPage } from "../pages/send-comment/send-comment";
+import { PostMeetingSurveyPage } from "../pages/post-meeting-survey/post-meeting-survey";
+import { ChatDetailsPage } from "../pages/chat-details/chat-details";
+import { FindUserPage } from "../pages/find-user/find-user";
 
 // export function provideStorage() {
 //   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: '__mydb' })
@@ -64,7 +67,10 @@ import { SendCommentPage } from "../pages/send-comment/send-comment";
     ArrangeMeetingPage,
     ScanBadgePage,
     SaveAttendanceDataPage,
-    SendCommentPage
+    SendCommentPage,
+    PostMeetingSurveyPage,
+    ChatDetailsPage,
+    FindUserPage
   ],
   imports: [
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
@@ -96,7 +102,10 @@ import { SendCommentPage } from "../pages/send-comment/send-comment";
     ArrangeMeetingPage,
     ScanBadgePage,
     SaveAttendanceDataPage,
-    SendCommentPage
+    SendCommentPage,
+    PostMeetingSurveyPage,
+    ChatDetailsPage,
+    FindUserPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

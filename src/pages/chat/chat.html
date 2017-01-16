@@ -1,6 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Chat</ion-title>
+    <ion-buttons right>
+      <button clear color="primary" ion-button icon-only (click)="findUser()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
@@ -8,7 +13,7 @@
   <ion-list [virtualScroll]="users" approxItemHeight="45px">
     <ion-item *virtualItem="let user" class="meeting" (click)="userSelected(user)">
       <ion-avatar item-left>
-        <ion-img [src]="user.avatarUrl"></ion-img>
+        <ion-img [src]="user.avatar"></ion-img>
       </ion-avatar>
       <div class="bold-text">{{user.title}} {{user.fullName}}</div>
       <div>Last chat text</div>

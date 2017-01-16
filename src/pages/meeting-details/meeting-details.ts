@@ -7,6 +7,7 @@ import { GlobalVarsService } from "../../providers/global-vars-service";
 import { CancelOrDeclinePage } from "../cancel-or-decline/cancel-or-decline";
 import { RescheduleMeetingPage } from "../reschedule-meeting/reschedule-meeting";
 import { UserProfilePage } from "../user-profile/user-profile";
+import { PostMeetingSurveyPage } from "../post-meeting-survey/post-meeting-survey";
 
 @Component({
   selector: "page-meeting-details",
@@ -35,7 +36,6 @@ export class MeetingDetailsPage {
   acceptMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Accept Meeting.");
 
     this.meetingService.acceptInvitation(this.meeting.id, this.globalVars.getValue("userData"))
       .subscribe(data => {
@@ -66,7 +66,6 @@ export class MeetingDetailsPage {
   declineMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Decline Meeting.");
     let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
     this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "decline" });
   }
@@ -74,7 +73,6 @@ export class MeetingDetailsPage {
   cancelMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Cancel Meeting.");
     let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
     this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "cancel" });
   }
@@ -82,11 +80,16 @@ export class MeetingDetailsPage {
   rescheduleMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Reschedule Meeting.");
     let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
     this.navCtrl.push(reschedule, { meetingData: this.meeting });
   }
 
+  postMeetingSurvey(meetingId: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    let survey = this.navCtrl.getViews().find(itm => itm.name === "PostMeetingSurveyPage") || PostMeetingSurveyPage;
+    this.navCtrl.push(survey, { meetingId: meetingId });
+  }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad MeetingInvitationPage");

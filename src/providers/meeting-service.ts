@@ -57,6 +57,18 @@ export class MeetingService {
     }
 
     /**
+     * get meeting details by id
+     */
+    getMeetingById(meetingId: string): Observable<any> {
+        // TODO:
+        // let request = "GetMeetingById?id=" + meetingId;
+        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-meeting-by-id.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+    /**
      * Send meeting invitation
      */
     sendInvitation(invitaion: any): Observable<any> {

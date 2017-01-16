@@ -15,8 +15,7 @@
         "notifBySms": true,
         "notifByPush": false,
         "isAdmin": false,
-        "avatar": "assets/icon/avatar.png",
-        "avatarUrl": "https://randomuser.me/api/portraits/thumb/men/67.jpg",
+        "avatar": "https://randomuser.me/api/portraits/thumb/men/67.jpg",
         "about": "Lorem ipsum dolor sit amet, vestibulum non, vulputate sed litora eros nascetur, cubilia ut vel vitae. Viverra rutrum odio, volutpat elementum ornare sed nunc. Luctus praesent eget sit metus ipsum, urna imperdiet sed ultricies, ac nulla."
     }
 }

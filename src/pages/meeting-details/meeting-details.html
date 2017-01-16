@@ -49,6 +49,6 @@
     </ion-buttons>
   </div>
   <div padding>
-    <button *ngIf="type === 'tracker'" ion-button full>Post Meeting Survey</button>
+    <button *ngIf="type === 'tracker'" (click)="postMeetingSurvey(meeting.id)" ion-button full>Post Meeting Survey</button>
   </div>
 </ion-content>

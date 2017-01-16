@@ -1,0 +1,18 @@
+{
+    "id": "23434",
+    "subject": "Meeting Subject A",
+    "type": "meeting",
+    "date": "2017-01-05",
+    "time": "10:00-12:00",
+    "location": "Room #1 Table A",
+    "meetingWith": {
+        "id": "33434",
+        "fullName": "John Snow",
+        "company": "Multi TechVision Pte Ltd",
+        "country": "Singpore",
+        "title": "Mr.",
+        "avatar": "assets/icon/avatar.png"
+    },
+    "followUp": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+    "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis."
+}

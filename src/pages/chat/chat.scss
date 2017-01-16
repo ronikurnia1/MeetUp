@@ -1,4 +1,11 @@
 page-chat {
+    .title-md {
+        left: 14px;
+        position: relative;
+    }
+    .back-button.show-back-button {
+        z-index: 1000;
+    }
     .item-ios ion-avatar[item-left], 
     .item-ios ion-thumbnail[item-left], 
     .item-md ion-avatar[item-left], 

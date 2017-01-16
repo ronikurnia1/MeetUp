@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import * as moment from "moment";
 import { MeetingDetailsPage } from "../meeting-details/meeting-details";
 import { SendCommentPage } from "../send-comment/send-comment";
+import { MeetingService } from "../../providers/meeting-service";
 
 @Component({
   selector: 'page-meeting-tracker',
@@ -68,7 +69,11 @@ export class MeetingTrackerPage {
   public selectOptions = { title: "Select Meeting Date" };
   public meetingDate: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) { }
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    private meetingService: MeetingService) {
+
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MeetingTrackerPage');
@@ -79,7 +84,10 @@ export class MeetingTrackerPage {
     event.stopPropagation();
     event.preventDefault();
     let profilePage = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
-    this.navCtrl.push(profilePage, { meetingData: meeting, type: "tracker" });
+    // get meeting details
+    this.meetingService.getMeetingById(meeting.id).subscribe(response => {
+      this.navCtrl.push(profilePage, { meetingData: response, type: "tracker" });
+    });
   }
 
   stopEvent() {
@@ -91,7 +99,10 @@ export class MeetingTrackerPage {
     event.stopPropagation();
     event.preventDefault();
     let commentPage = this.navCtrl.getViews().find(itm => itm.name === "SendCommentPage") || SendCommentPage;
-    this.navCtrl.push(commentPage, { meetingData: meeting });
+    // get meeting details
+    this.meetingService.getMeetingById(meeting.id).subscribe(response => {
+    this.navCtrl.push(commentPage, { meetingData: response });
+    });
   }
   /**
   * Date Format Helper
