@@ -2,7 +2,7 @@
 <widget id="com.ionicframework.meetup" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>MeetUp</name>
     <description>MeetUp Meeting business manager.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Roni Kurniawan</author>
+    <author email="roni.kurniawan@outlook.com" href="http://ionicframework.com/">Roni Kurniawan</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -19,6 +19,7 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <preference name="webviewbounce" value="false" />
+    <preference name="LoadUrlTimeoutValue" value="70000"/>
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="16" />

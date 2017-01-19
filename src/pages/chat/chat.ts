@@ -23,7 +23,7 @@ export class ChatPage {
     this.getChatList();
   }
 
-  userSelected() {
+  userSelected(profile: any) {
     event.stopPropagation();
     event.preventDefault();
     // let chatDetails = this.navCtrl.getViews().find(itm => itm.name === "ChatDetailsPage") || ChatDetailsPage;
@@ -38,7 +38,7 @@ export class ChatPage {
     } else {
       chatDetails = ChatDetailsPage;
     }
-    tabs.parent.push(chatDetails);
+    tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
 
     // let toast = this.toastCtrl.create({
     //   message: "Chat has not been implemented yet.",

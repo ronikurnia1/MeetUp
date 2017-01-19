@@ -1,9 +1,9 @@
 <ion-header>
-
   <ion-navbar>
-    <ion-title>Chat Details</ion-title>
+    <ion-title (click)="openProfile()">
+      {{profile.title}} {{profile.fullName}}
+    </ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -11,18 +11,17 @@
 
 </ion-content>
 
-<ion-footer no-border class="message-color"padding-left padding-bottom padding-top>
+<ion-footer no-border class="message-color bar-footer">
   <div bp-layout="flex gutter-none">
-    <div bp-layout="fill">
+    <div bp-layout="fill padding-top--sm padding-left--sm padding-bottom--sm">
       <ion-item>
-        <ion-textarea placeholder="Type a message"></ion-textarea>
+        <ion-textarea class="input-message" placeholder="Type a message"></ion-textarea>
       </ion-item>
     </div>
-    <div bp-layout="fit center middle">
+    <div bp-layout="fix padding-top--sm">
       <button ion-button icon-only clear>
         <ion-icon color="primary" name="send"></ion-icon>
       </button>
     </div>
   </div>
-
 </ion-footer>

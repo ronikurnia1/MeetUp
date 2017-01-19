@@ -40,6 +40,6 @@ export class FindUserPage {
     } else {
       chatDetails = ChatDetailsPage;
     }
-    tabs.parent.push(chatDetails);
+    tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
   }
 }
