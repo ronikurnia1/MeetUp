@@ -11,6 +11,7 @@ export class Meeting {
         public date: Date,
         public time: string,
         meetWith: any,
+        public status,
         public remarks?: string) {
         if (meetWith) {
             this.meetingWith = new People(

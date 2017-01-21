@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { App, NavController, NavParams, ToastController, Events, Tabs, AlertController } from "ionic-angular";
 import * as moment from "moment";
 import { Meeting } from "../../domain/meeting";
@@ -51,6 +51,7 @@ export class MySchedulePage {
     private toastCtrl: ToastController,
     private meetingService: MeetingService,
     private globalVars: GlobalVarsService,
+    private zone: NgZone,
     private events: Events,
     private alertCtrl: AlertController,
     private authService: AuthService) {
@@ -78,15 +79,18 @@ export class MySchedulePage {
       // remove appropriate schedule
       this.removeSchedule(meetingData);
     });
-
-    let userType: string = this.globalVars.getValue("userData").userType;
-    console.log("user type:", userType);
-    this.showScanBadge = userType.toLowerCase() === "exhibitor" || userType.toLowerCase() === "speaker";
-
   }
 
   ionViewDidLoad() {
     // console.log("ionViewDidLoad MySchedulePage");
+  }
+
+  ionViewWillEnter() {
+    let userType: string = this.globalVars.getValue("userData").userType;
+    // console.log("user type:", userType);
+    this.zone.run(() => {
+      this.showScanBadge = userType.toLowerCase() === "exhibitor" || userType.toLowerCase() === "speaker";
+    });
   }
 
   ionViewWillUnload() {
@@ -282,35 +286,21 @@ export class MySchedulePage {
   }
 
   /**
-   * Toggle (expand/collapse) the meeting
+   * View Meeting Details (Invitation or Hosted)
    */
-  toggleMeeting(data: Meeting) {
+  viewMeetingDetails(data: Meeting, type: string) {
     event.stopPropagation();
     event.preventDefault();
     if (data.type === "meeting") {
-      // this.schedules.forEach(itm => {
-      //   if (itm.subject != data.subject) {
-      //     itm.isExpanded = false;
-      //   }
-      // });
-      data.isExpanded = !data.isExpanded;
+      // console.log("View meeting details.");
+      let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+      this.navCtrl.push(meetingDetails, { meetingData: data, type: type }, { animate: true });
     } else {
       // Open blocking detail
       console.log("Open blocktime detail.");
       let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
       this.navCtrl.push(blockTime, { blockTime: data }, { animate: true });
     }
-  }
-
-  /**
-   * View Meeting Details (Invitation or Hosted)
-   */
-  viewMeetingDetails(data: Meeting, type: string) {
-    event.stopPropagation();
-    event.preventDefault();
-    // console.log("View meeting details.");
-    let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
-    this.navCtrl.push(meetingDetails, { meetingData: data, type: type }, { animate: true });
   }
   /**
    * Filter meeting invitations

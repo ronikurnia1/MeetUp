@@ -6,4 +6,7 @@ page-meeting-details {
     .back-button.show-back-button {
         z-index: 1000;
     }
+    [icon-only] ion-icon {
+        padding: 0 .2em;
+    }
 }

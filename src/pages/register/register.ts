@@ -64,8 +64,7 @@ export class RegisterPage {
         position: [""],
         notifByEmail: [false],
         notifBySms: [false],
-        notifByPush: [false],
-        acceptTermsAndPrivacy: [false, requireTrueValidator]
+        notifByPush: [false]
       });
     } else {
       let profile = this.globalVars.getValue("userData");

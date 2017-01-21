@@ -92,22 +92,14 @@
       <ion-label>Push notification</ion-label>
       <ion-checkbox formControlName="notifByPush" [(checked)]="registerForm.controls.notifByPush.value"></ion-checkbox>
     </ion-item>
-    <div bp-layout="row fill" *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
-      <div bp-layout="fit" class="left-checkbox">
-        <ion-item no-lines>
-          <ion-checkbox formControlName="acceptTermsAndPrivacy" class="padding-left-small"></ion-checkbox>
-        </ion-item>
-      </div>
-      <div bp-layout="fill padding-right--sm">
-        <ion-label class="wrap-text">I accept the
-          <a href="" (click)="viewDisclimer('terms')">Terms of service</a> and
-          <a href="" (click)="viewDisclimer('privacy')">Privacy policy</a>
-        </ion-label>
-      </div>
-    </div>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="screenTitle.toLowerCase() === 'register' && !registerForm.controls.acceptTermsAndPrivacy.valid  && (registerForm.controls.acceptTermsAndPrivacy.dirty || submitAttempt)">
-      Required accept Terms of service and Privacy policy.
-    </div>
+
+    <ion-item class="meeting" no-lines margin-top margin-bottom *ngIf="screenTitle.toLowerCase() === 'register'">
+      <ion-label class="wrap-text">By creating an account you automatically agree to our
+        <a href="" (click)="viewDisclimer('privacy')">Privacy Policy</a> and
+        <a href="" (click)="viewDisclimer('terms')">Terms of Service</a>
+      </ion-label>
+    </ion-item>
+
     <div padding-left margin-bottom margin-top>
       <button type="submit" ion-button full>{{buttonTitle}}</button>
     </div>

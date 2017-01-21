@@ -25,8 +25,8 @@
       </ion-item>
     </div>
   </ion-item>
-  <div bp-layout="row center middle">
-    <button ion-button *ngIf="!myProfile" (click)="arrangeMeeting()">Meeting</button>
+  <div bp-layout="row center middle" class="meeting">
+    <button ion-button text-only *ngIf="!myProfile" (click)="arrangeMeeting()">Meeting</button>
   </div>
   <ion-item no-lines>
     <div>Group</div>

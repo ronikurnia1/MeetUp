@@ -32,7 +32,6 @@ export class ArrangeMeetingPage {
   }
 
   private form: FormGroup;
-  autoManufacturers: string = "";
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -41,24 +40,15 @@ export class ArrangeMeetingPage {
     private meetingService: MeetingService,
     private toastCtrl: ToastController) {
 
-    this.technologies = [
-      { name: "Industry Automations", value: "industryOtomation" },
-      { name: "Nano Engeenering", value: "nanoEngeenering" },
-      { name: "Space Exploration", value: "spaceExploration" },
-      { name: "Robotic Devices", value: "roboticDevices" },
-      { name: "Marine Processing", value: "marineProcessing" },
-      { name: "Micro Satellite", value: "microSatellite" },
-      { name: "Other", value: "other" }
-    ];
-    this.locations = [
-      { name: "Room #1", value: "room1" },
-      { name: "Room #2", value: "room2" },
-      { name: "Room #3", value: "room3" },
-      { name: "Room #4", value: "room4" },
-      { name: "Room #5", value: "room5" },
-      { name: "Room #6", value: "room6" },
-      { name: "Room #7", value: "room7" }
-    ];
+    this.meetingService.getSubjects().subscribe(response => {
+      this.technologies = response;
+
+    });
+    
+    this.meetingService.getLocations().subscribe(response => {
+      this.locations = response;
+    });
+
     this.recipient = navParams.get("selectedUser");
     // TODO: get this value from Backend
     this.bestTimeSlot = {
@@ -90,7 +80,7 @@ export class ArrangeMeetingPage {
   }
 
   sendInvitation() {
-    console.log("data:", JSON.stringify(this.form.value));
+    // console.log("data:", JSON.stringify(this.form.value));
     this.submitAttempt = true;
     if (this.form.valid) {
       console.log("form valid");

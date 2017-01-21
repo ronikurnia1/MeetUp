@@ -56,6 +56,8 @@ export class LoginPage {
    * Register
    */
   register() {
+    event.preventDefault();
+    event.stopPropagation();
     let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage");
     if (register) {
       this.navCtrl.push(register, { title: "Register" });

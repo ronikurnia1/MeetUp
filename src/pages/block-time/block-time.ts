@@ -11,6 +11,7 @@ export class BlockTimePage {
 
   form: FormGroup;
   blockTime = {};
+  submitAttempt: boolean = false;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -76,6 +77,7 @@ export class BlockTimePage {
   updateBlockTime() {
     event.stopPropagation();
     event.preventDefault();
+    this.submitAttempt = true;
     if (this.form.valid) {
       this.meetingService.updateBlockTime(this.form.value).subscribe(response => {
         let toast = this.toastCtrl.create({

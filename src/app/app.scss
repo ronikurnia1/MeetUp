@@ -60,6 +60,22 @@ ion-avatar img {
 .text-on-bottom > .button-inner {
     flex-direction: column;
 }
+.status {
+  padding: 6px 8px;
+  display: inline-block;
+  width: auto;
+  border-radius: 4px;
+  color: #ffffff;
+}
+.Pending {
+  background-color: darkorange;
+}
+.Confirmed {
+  background-color: limegreen;
+}
+.Declined {
+  background-color: #f53d3d;
+}
 
 // Blueprint CSS
 /*!

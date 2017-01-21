@@ -26,22 +26,12 @@ export class MenuPage {
       "color": "#4CAF50"
     },
     {
-      "title": "Arrage Meeting",
-      "icon": "contacts",
-      "color": "#4CAF50"
-    },
-    {
       "title": "Staff Dashboard",
       "icon": "stats",
       "color": "#4CAF50"
     }
   ];
   limitedMenus = [
-    {
-      "title": "My Favorites",
-      "icon": "heart",
-      "color": "#4CAF50"
-    },
     {
       "title": "Announcement/Message",
       "icon": "megaphone",
@@ -50,8 +40,8 @@ export class MenuPage {
   ];
   sharedMenus = [
     {
-      "title": "About Techinnovation",
-      "icon": "information-circle",
+      "title": "My Favorites",
+      "icon": "heart",
       "color": "#4CAF50"
     },
     {
@@ -65,33 +55,13 @@ export class MenuPage {
       "color": "#4CAF50"
     },
     {
-      "title": "For Exhibitors",
-      "icon": "cube",
-      "color": "#4CAF50"
-    },
-    {
       "title": "Venue",
       "icon": "pin",
       "color": "#4CAF50"
     },
     {
-      "title": "Partners",
-      "icon": "body",
-      "color": "#4CAF50"
-    },
-    {
       "title": "Technologies",
       "icon": "school",
-      "color": "#4CAF50"
-    },
-    {
-      "title": "Press",
-      "icon": "paper",
-      "color": "#4CAF50"
-    },
-    {
-      "title": "Gallery",
-      "icon": "images",
       "color": "#4CAF50"
     },
     {
@@ -175,7 +145,9 @@ export class MenuPage {
         break;
       }
       default: {
-        this.items = this.limitedMenus.concat(this.sharedMenus);
+        // this.items = this.limitedMenus.concat(this.sharedMenus);
+        this.items = this.sharedMenus.slice();
+        this.items.splice(1, 0, this.limitedMenus[0]);
         break;
       }
     }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title (click)="openProfile()">
-      {{profile.title}} {{profile.fullName}}
+      {{profile.fullName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,16 +9,48 @@
 
 <ion-content padding>
 
+
+
+  <div class="message-wrapper disable-user-behavior">
+    <div>
+      <img class="profile-pic right" [src]="myAvatar">
+      <div class="chat-bubble right">
+        <div class="message ng-binding" autolinker="">wererwerwerrwrwerv wer</div>
+        <div class="message-detail">
+          <span class="bold ng-binding">Marty</span>,
+          <span am-time-ago="message.date">10 hours ago</span>
+        </div>
+      </div>
+    </div>
+    <div class="cf"></div>
+  </div>
+
+  <div class="message-wrapper disable-user-behavior">
+    <div>
+      <img class="profile-pic left" [src]="profile.avatar">
+      <div class="chat-bubble left">
+        <div class="message ng-binding" autolinker="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+          aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+        <div class="message-detail">
+          <span class="bold ng-binding">Venkman</span>,
+          <span am-time-ago="message.date">11 hours ago</span>
+        </div>
+      </div>
+    </div>
+    <div class="cf"></div>
+  </div>
+
 </ion-content>
+
 
 <ion-footer no-border class="message-color bar-footer">
   <div bp-layout="flex gutter-none">
-    <div bp-layout="fill padding-top--sm padding-left--sm padding-bottom--sm">
-      <ion-item>
-        <ion-textarea class="input-message" placeholder="Type a message"></ion-textarea>
+    <div bp-layout="fill" class="input-message">
+      <ion-item class="meeting">
+        <ion-textarea elastic placeholder="Type a message..."></ion-textarea>
       </ion-item>
     </div>
-    <div bp-layout="fix padding-top--sm">
+    <div bp-layout="fix">
       <button ion-button icon-only clear>
         <ion-icon color="primary" name="send"></ion-icon>
       </button>

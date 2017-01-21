@@ -6,8 +6,10 @@ import { Ionic2RatingModule } from "ionic2-rating";
 //import { Storage } from "@ionic/storage";
 import { QRCodeModule } from "angular2-qrcode";
 
-import { TabsPage } from "../pages/tabs/tabs";
 import { EqualValidator } from "../providers/equal-validator";
+import { Elastic } from "../providers/elastic";
+
+import { TabsPage } from "../pages/tabs/tabs";
 import { LoginPage } from "../pages/login/login";
 import { MySchedulePage } from "../pages/my-schedule/my-schedule";
 import { MeetingDetailsPage } from "../pages/meeting-details/meeting-details";
@@ -42,9 +44,10 @@ import { FindUserPage } from "../pages/find-user/find-user";
 
 @NgModule({
   declarations: [
+    Elastic,
+    EqualValidator,
     MyApp,
     TabsPage,
-    EqualValidator,
     LoginPage,
     MySchedulePage,
     MeetingDetailsPage,

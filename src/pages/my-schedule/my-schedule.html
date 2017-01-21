@@ -20,7 +20,7 @@
             Invitations
         </ion-segment-button>
         <ion-segment-button value="hosting">
-            Hosting
+            Sent
         </ion-segment-button>
     </ion-segment>
     <ion-toolbar no-border>
@@ -37,41 +37,13 @@
 
     <div [ngSwitch]="section">
         <ion-list *ngSwitchCase="'my-schedule'">
-            <ion-item *ngFor="let meeting of schedules" (click)="toggleMeeting(meeting)" class="meeting">
+            <ion-item *ngFor="let meeting of schedules" (click)="viewMeetingDetails(meeting, 'my-schedule')" class="meeting">
                 <div bp-layout="flex margin-bottom">
                     <div bp-layout="fit margin-right--sm">{{meeting.time}}</div>
                     <div bp-layout="fill margin-left--sm">
                         <div class="bold-text wrap-text">{{meeting.subject}}</div>
                         <div *ngIf="meeting.type==='meeting'" bp-layout="margin-top--sm" class="wrap-text">Venue: {{meeting.location}}</div>
                     </div>
-                </div>
-                <div bp-layout="flex" *ngIf="meeting.isExpanded && meeting.type==='meeting'">
-                    <div bp-layout="fit margin-left margin-right">
-                        <ion-avatar item-left>
-                            <img [src]="meeting.meetingWith.avatar">
-                        </ion-avatar>
-                    </div>
-                    <div bp-layout="fill margin-left--sm">
-                        <div class="bold-text wrap-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
-                        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
-                        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
-                    </div>
-                </div>
-                <div bp-layout="flex margin-bottom" *ngIf="meeting.isExpanded && meeting.type==='meeting'">
-                    <div class="bold-text" margin-top>Remarks</div>
-                    <div class="wrap-text">{{meeting.remarks}}</div>
-                </div>
-                <div bp-layout="row center margin-bottom" *ngIf="meeting.isExpanded && meeting.type==='meeting'">
-                    <ion-buttons>
-                        <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)">
-                            <ion-icon name="time"></ion-icon>
-                            <span ion-text color="primary">Reschedule</span>
-                        </button> &nbsp;&nbsp;&nbsp;
-                        <button ion-button clear icon-only class="text-on-bottom" (click)="withdrawAcceptedMeeting(meeting)">
-                            <ion-icon color="danger" name="remove-circle"></ion-icon>
-                            <span ion-text color="danger">Cancel Meeting</span>
-                        </button>
-                    </ion-buttons>
                 </div>
             </ion-item>
         </ion-list>
@@ -90,14 +62,20 @@
                 </div>
                 <div bp-layout="row center margin-top--sm margin-bottom--sm">
                     <ion-buttons>
-                        <button ion-button clear icon-only (click)="acceptMeeting(meeting)">
-                            <ion-icon name="checkbox-outline" color="green"></ion-icon>
-                            <span ion-text color="green">Accept</span>
-                        </button> &nbsp;&nbsp;&nbsp;
-                        <button ion-button clear icon-only (click)="declineMeeting(meeting)">
+
+                        <button ion-button clear icon-only class="text-on-bottom" (click)="declineMeeting(meeting)" margin>
                             <ion-icon color="danger" name="close-circle"></ion-icon>
-                            <span ion-text color="danger">Decline</span>
+                            <span class="meeting" ion-text color="danger">Decline</span>
                         </button>
+                        <button ion-button clear icon-only class="text-on-bottom" (click)="acceptMeeting(meeting)" margin>
+                            <ion-icon name="checkbox-outline" color="secondary"></ion-icon>
+                            <span class="meeting" ion-text color="secondary">Accept</span>
+                        </button> 
+                        <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)" margin>
+                            <ion-icon name="time" color="primary"></ion-icon>
+                            <span class="meeting" ion-text color="primary">Reschedule</span>
+                        </button>
+
                     </ion-buttons>
                 </div>
             </ion-item>
@@ -110,6 +88,7 @@
                         <img [src]="meeting.meetingWith.avatar">
                     </ion-avatar>
                     <div bp-layout="fill margin-left--sm">
+                        <div class="pull-right status {{meeting.status}}">{{meeting.status}}</div>
                         <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
                         <div class="wrap-text">{{meeting.subject}}</div>
                         <div class="wrap-text">{{getDateFormated(meeting.date,'DD MMMM YYYY')}}, {{meeting.time}}</div>
@@ -117,13 +96,13 @@
                 </div>
                 <div margin-top margin-bottom bp-layout="row center">
                     <ion-buttons>
-                        <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)">
+                        <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)" margin>
                             <ion-icon name="time"></ion-icon>
-                            <span ion-text color="primary">Reschedule</span>
-                        </button> &nbsp;&nbsp;&nbsp;
-                        <button ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)">
+                            <span class="meeting" ion-text color="primary">Reschedule</span>
+                        </button>
+                        <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)" margin>
                             <ion-icon color="danger" name="remove-circle"></ion-icon>
-                            <span ion-text color="danger">Cancel</span>
+                            <span class="meeting" ion-text color="danger">Cancel Meeting</span>
                         </button>
                     </ion-buttons>
                 </div>

@@ -77,6 +77,9 @@ export class CalendarViewPage {
         if (response.result === "OK") {
           // go back to the previous screen
           // this.navCtrl.pop({ animate: true });
+          // reset the form
+          this.form.reset();
+          this.submitAttempt = false;
         }
       });
     }
@@ -153,7 +156,7 @@ export class CalendarViewPage {
       });
     }
     // check if the month of first day and last is same
-    if (weekCal.weekDays[0].date.getMonth !== weekCal.weekDays[6].date.getMonth) {
+    if (weekCal.weekDays[0].date.getMonth() !== weekCal.weekDays[6].date.getMonth()) {
       weekCal.monthYear = this.getDateFormated(weekCal.weekDays[0].date, "MMM-").toUpperCase()
         + this.getDateFormated(weekCal.weekDays[6].date, "MMM YYYY").toUpperCase();
     }

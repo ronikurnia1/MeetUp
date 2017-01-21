@@ -12,7 +12,7 @@ page-calendar-view {
     .month {
         text-align: center;
         border-bottom: 1px solid #a4a4a4;
-        padding: 0 0 5px 0;
+        padding: 5px 0 5px 0;
     }
     .day {
         padding:5px;
@@ -21,9 +21,9 @@ page-calendar-view {
         font-weight: bold;
     }
     .date {
-        padding-top: 6px;
-        height: 30px;
-        width: 30px;
+        padding-top: 7px;
+        height: 31px;
+        width: 31px;
         color: #3f3f3f;
         text-align: center;
         margin-left: auto;
@@ -41,7 +41,7 @@ page-calendar-view {
         z-index: 100;
     }
     ion-slides {
-        height: 92px;
+        height: 97px;
     }
     .swiper-slide {
         font-size: 14px;
@@ -54,5 +54,8 @@ page-calendar-view {
         position: relative;
         left: -16px;
         top: 8px;
+    }
+    .text-input-md {
+        margin: 8px 8px 8px 2px;
     }
 }

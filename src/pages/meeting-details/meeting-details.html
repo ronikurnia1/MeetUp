@@ -23,29 +23,41 @@
     <div margin-top margin-bottom>{{meeting.location}}</div>
     <div *ngIf="type === 'tracker'" margin-top class="bold-text">Follow Up Plan</div>
     <div *ngIf="type === 'tracker'" class="wrap-text">{{meeting.followUp}}</div>
+    <div class="status {{meeting.status}}">{{meeting.status}}</div>
     <div margin-top class="bold-text">Remarks</div>
     <div class="wrap-text">{{meeting.remarks}}</div>
   </div>
-  <div bp-layout="row center" margin-top padding-right>
+  <div bp-layout="row center" margin-top>
+    <ion-buttons *ngIf="type === 'my-schedule'">
+      <button ion-button clear icon-only (click)="cancelMeeting()" margin>
+        <ion-icon color="danger" name="remove-circle"></ion-icon>
+        <span class="meeting" ion-text color="danger">Cancel Meeting</span>
+      </button>
+    </ion-buttons>
+
     <ion-buttons *ngIf="type === 'invitation'">
-      <button ion-button clear icon-only (click)="acceptMeeting()">
-          <ion-icon color="green" name="checkbox-outline"></ion-icon>
-          <span ion-text color="green">Accept</span>
-        </button> &nbsp;&nbsp;&nbsp;
-      <button ion-button clear icon-only (click)="declineMeeting()">
-          <ion-icon color="danger" name="close-circle"></ion-icon>
-          <span ion-text color="danger">Decline</span>
-        </button>
+      <button ion-button clear icon-only class="text-on-bottom" (click)="declineMeeting()" margin>
+        <ion-icon color="danger" name="close-circle"></ion-icon>
+        <span class="meeting" ion-text color="danger">Decline</span>
+      </button>
+      <button ion-button clear icon-only class="text-on-bottom" (click)="acceptMeeting()" margin>
+        <ion-icon name="checkbox-outline" color="secondary"></ion-icon>
+        <span class="meeting" ion-text color="secondary">Accept</span>
+      </button>
+      <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()" margin>
+        <ion-icon name="time" color="primary"></ion-icon>
+        <span class="meeting" ion-text color="primary">Reschedule</span>
+      </button>
     </ion-buttons>
     <ion-buttons *ngIf="type === 'hosted'" padding-right>
-      <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()">
-          <ion-icon name="time"></ion-icon>
-          <span ion-text color="primary">Reschedule</span>
-        </button> &nbsp;&nbsp;&nbsp;
-      <button ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()">
-          <ion-icon color="danger" name="remove-circle"></ion-icon>
-          <span ion-text color="danger">Cancel</span>
-        </button>
+      <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()" margin>
+        <ion-icon name="time"></ion-icon>
+        <span class="meeting" ion-text color="primary">Reschedule</span>
+      </button>
+      <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()" margin>
+        <ion-icon color="danger" name="remove-circle"></ion-icon>
+        <span class="meeting" ion-text color="danger">Cancel Meeting</span>
+      </button>
     </ion-buttons>
   </div>
   <div padding>

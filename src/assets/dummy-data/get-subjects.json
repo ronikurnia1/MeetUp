@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Industry Automations",
+        "value": "industryOtomation"
+    },
+    {
+        "name": "Nano Engeenering",
+        "value": "nanoEngeenering"
+    },
+    {
+        "name": "Space Exploration",
+        "value": "spaceExploration"
+    },
+    {
+        "name": "Robotic Devices",
+        "value": "roboticDevices"
+    },
+    {
+        "name": "Marine Processing",
+        "value": "marineProcessing"
+    },
+    {
+        "name": "Micro Satellite",
+        "value": "microSatellite"
+    },
+    {
+        "name": "Other",
+        "value": "other"
+    }
+]

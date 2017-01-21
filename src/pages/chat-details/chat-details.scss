@@ -1,66 +1,42 @@
 page-chat-details {
-    .title-md {
-        left: -28px;
-        position: relative;
-    }
-    .back-button.show-back-button {
-        z-index: 1000;
-    }
-    .text-input-md, .text-input-ios {
-        margin: 0;
-        width: 100%;
-    }
-    .item-md.item-block .item-inner, .item-ios.item-block .item-inner {
-        border-bottom: none;
-    }
-    .item-md.item-input.input-has-focus .item-inner {
-        box-shadow: inherit;
-    }
-    .message-color {
-        background-color: #eeeeee;
-    }
-    .item-md, .item-ios {
-        padding-left: 0;
-    }
-
-    .input-message {
-        overflow: hidden;
-    }
-
-
-    .button-ios {
-        margin:0;
-    }
-
-
-.input-ios .text-input {
-    padding-right: 0;
-}
-
-.item-ios.item-block .item-inner {
-    padding-right: 0;
-}
-
-
-
-
-/* allows the bar-footer to be elastic /*
-/* optionally set a max-height */
-/* maxlength on the textarea will prevent /*
-/* it from getting too large also */
-.bar-footer {
-  overflow: visible !important;
-}
-
-.bar-footer textarea {
-  resize: vertical;
-  height: auto;
-}
-
-/* fixes an ios bug bear */
-button.ion-android-send {
-  padding-top: 2px;
-}
+  .title-md {
+    left: -28px;
+    position: relative;
+  }
+  .back-button.show-back-button {
+    z-index: 1000;
+  }
+  .text-input-md, .text-input-ios {
+    margin: 0;
+    width: 100%;
+  }
+  .item-md.item-block .item-inner, .item-ios.item-block .item-inner {
+    border-bottom: none;
+  }
+  .item-md.item-input.input-has-focus .item-inner {
+    box-shadow: inherit;
+  }
+  .item-md, .item-ios {
+    padding-left: 0;
+  }
+  .button-ios {
+    margin:0;
+  }
+  .input-ios .text-input {
+      padding-right: 0;
+  }
+  .item-ios.item-block .item-inner {
+      padding-right: 0;
+  }
+  .message-color {
+    background-color: #eeeeee;
+  }
+  .item-block {
+    min-height: auto;
+  }
+  .input-message {
+    padding: 7px 0 7px 6px;
+  }
 
 /* add this to keep your footer buttons down 
 at the bottom as the textarea resizes */
@@ -131,7 +107,7 @@ img.profile-pic.right {
 .chat-bubble:before {
   content: "\00a0";
   display: block;
-  height: 16px;
+  height: 18px;
   width: 9px;
   position: absolute;
   bottom: -7.5px;
@@ -147,6 +123,7 @@ img.profile-pic.right {
   background-color: #e6e5eb;
   left: 10px;
   -webkit-transform: rotate(70deg) skew(5deg);
+  transform: rotate(70deg) skew(5deg);
 }
 
 .chat-bubble.right {
@@ -160,6 +137,7 @@ img.profile-pic.right {
   background-color: #158ffe;
   right: 10px;
   -webkit-transform: rotate(118deg) skew(-5deg);
+  transform: rotate(118deg) skew(-5deg);
 }
 
 .chat-bubble.right a.autolinker {

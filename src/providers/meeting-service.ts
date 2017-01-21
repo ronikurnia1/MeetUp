@@ -31,6 +31,29 @@ export class MeetingService {
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
+    /**
+     * get meeting locations
+     */
+    getLocations(): Observable<any[]> {
+        // TODO:
+        // return this.http.get(this.globalVars.getValue("apiUrl") + "/GetLocations")
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-locations.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+
+    /**
+     * get meeting locations
+     */
+    getSubjects(): Observable<any[]> {
+        // TODO:
+        // return this.http.get(this.globalVars.getValue("apiUrl") + "/GetSubjects")
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-subjects.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
 
     /**
      * get chat list
@@ -225,6 +248,7 @@ export class MeetingService {
             rawData.date,
             rawData.time,
             rawData.meetingWith,
+            rawData.status,
             rawData.remarks);
     }
 
