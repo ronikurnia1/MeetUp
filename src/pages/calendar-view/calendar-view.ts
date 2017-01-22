@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Slides, ToastController } from 'ionic-angular';
+import { NavController, NavParams, Slides, AlertController, ToastController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from "moment";
 import { Meeting } from "../../domain/meeting";
@@ -39,6 +39,7 @@ export class CalendarViewPage {
     private meetingService: MeetingService,
     private globalVars: GlobalVarsService,
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private formBuilder: FormBuilder) {
 
     let currentDate = new Date();
@@ -115,14 +116,20 @@ export class CalendarViewPage {
   getTodayMeetingSchedule() {
     this.schedules = [];
     let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "my").subscribe(data => {
-      // console.log("Meeting:", JSON.stringify(data));
-      data.forEach(itm => {
-        this.schedules.push(this.meetingService.buildMeeting(itm));
-      });
+
+    this.meetingService.getMeetings(userEmail, "my").subscribe(response => {
+      if (response.result === "OK") {
+        response.data.forEach(itm => {
+          if (itm.type === "meeting") {
+            this.schedules.push(this.meetingService.buildMeeting(itm));
+          }
+        });
+      } else {
+        this.alertUser("Retrieve My Schedule data failed.", response.messsage);
+      }
     }, error => {
-      this.schedules = [];
       console.log("Error", error);
+      this.alertUser("Retrieve My Schedule data failed.", error);
     });
   }
 
@@ -164,6 +171,15 @@ export class CalendarViewPage {
       weekCal.monthYear = this.getDateFormated(weekCal.weekDays[0].date, "MMMM YYYY").toUpperCase();
     }
     return weekCal;
+  }
+
+  alertUser(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 }
 

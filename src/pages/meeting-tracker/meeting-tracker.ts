@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import * as moment from "moment";
 import { MeetingDetailsPage } from "../meeting-details/meeting-details";
 import { SendCommentPage } from "../send-comment/send-comment";
@@ -71,6 +71,7 @@ export class MeetingTrackerPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private alertCtrl: AlertController,
     private meetingService: MeetingService) {
 
   }
@@ -86,7 +87,11 @@ export class MeetingTrackerPage {
     let profilePage = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
     // get meeting details
     this.meetingService.getMeetingById(meeting.id).subscribe(response => {
-      this.navCtrl.push(profilePage, { meetingData: response, type: "tracker" });
+      if (response.result === "OK") {
+        this.navCtrl.push(profilePage, { meetingData: response.data, type: "tracker" });
+      } else {
+        this.alertUser("Retrieve Meeting data failed.", response.message);
+      }
     });
   }
 
@@ -101,7 +106,11 @@ export class MeetingTrackerPage {
     let commentPage = this.navCtrl.getViews().find(itm => itm.name === "SendCommentPage") || SendCommentPage;
     // get meeting details
     this.meetingService.getMeetingById(meeting.id).subscribe(response => {
-    this.navCtrl.push(commentPage, { meetingData: response });
+      if (response.result === "OK") {
+        this.navCtrl.push(commentPage, { meetingData: response.data });
+      } else {
+        this.alertUser("Retrieve Meeting data failed.", response.message);
+      }
     });
   }
   /**
@@ -110,6 +119,15 @@ export class MeetingTrackerPage {
   getDateFormated(value: string, format: string): string {
     if (value === "All dates") return "All Dates";
     return moment(value).format(format);
+  }
+
+  alertUser(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 
