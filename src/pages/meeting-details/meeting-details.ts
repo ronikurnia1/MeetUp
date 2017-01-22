@@ -38,13 +38,13 @@ export class MeetingDetailsPage {
     event.preventDefault();
 
     this.meetingService.acceptInvitation(this.meeting.id, this.globalVars.getValue("userData"))
-      .subscribe(data => {
+      .subscribe(response => {
         let message: string = "";
         // console.log("Response:", data);
-        if (data.Result === "OK") {
+        if (response.result === "OK") {
           message = "You have accepted the invitation.";
         } else {
-          message = data.Message;
+          message = response.message;
         }
         let toast = this.toastCtrl.create({
           message: message,
@@ -55,7 +55,7 @@ export class MeetingDetailsPage {
           // if accepting invitation success
           // then publish event to notify to remove item from invitation
           // and then get back to the previous page 
-          if (data.Result === "OK") {
+          if (response.result === "OK") {
             this.events.publish("meeting:acceptInvitationSuccess", this.meeting)
             this.navCtrl.pop();
           }

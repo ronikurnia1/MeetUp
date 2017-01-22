@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, PopoverController, Events, Platform } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, AlertController, Events, Platform } from 'ionic-angular';
 import { PopoverPage } from "../user-profile/popover";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
@@ -39,7 +39,8 @@ export class PickUserPage {
     private events: Events,
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService,
-    private platform: Platform) {
+    private platform: Platform,
+    private alertCtrl: AlertController) {
 
     this.title = "All Attendees";
     this.group = "allAttendees";
@@ -80,8 +81,12 @@ export class PickUserPage {
    */
   searchUser() {
     this.users = [];
-    this.meetingService.getUsers(this.group, this.keywords).subscribe(data => {
-      data.forEach(itm => this.users.push(itm));
+    this.meetingService.getUsers(this.group, this.keywords).subscribe(response => {
+      if (response.result === "OK") {
+        this.users = response.data;
+      } else {
+        this.alertUser("Retrieve users failed.", response.message);
+      }
     });
   }
 
@@ -95,9 +100,15 @@ export class PickUserPage {
   userSelected(user: any) {
     event.stopPropagation();
     event.preventDefault();
-    // console.log("View meeting details.");
-    let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
-    this.navCtrl.push(arrangeMeeting, { selectedUser: user }, { animate: true });
+    if (this.navParams.get("partyType")) {
+      // pick-up with callback
+      this.navParams.get("callback")({ selectedUser: user, partyType: this.navParams.get("partyType") }).then(() => {
+        this.navCtrl.pop();
+      })
+    } else {
+      let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
+      this.navCtrl.push(arrangeMeeting, { selectedUser: user }, { animate: true });
+    }
   }
 
   ionViewDidLoad() {
@@ -106,6 +117,15 @@ export class PickUserPage {
 
   ionViewWillUnload() {
     this.events.unsubscribe(this.filterUserMenu);
+  }
+
+  alertUser(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }

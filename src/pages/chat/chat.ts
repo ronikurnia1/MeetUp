@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, Tabs } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Tabs } from 'ionic-angular';
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
@@ -17,7 +17,7 @@ export class ChatPage {
     public navParams: NavParams,
     private meetingService: MeetingService,
     private globalVars: GlobalVarsService,
-    private toastCtrl: ToastController) {
+    private alertCtrl: AlertController) {
 
     this.users = [];
     this.getChatList();
@@ -32,12 +32,7 @@ export class ChatPage {
     // this.navCtrl.push(chatDetails, { meetingData: response });
     // });
     let tabs: Tabs = this.navCtrl.parent;
-    let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage");
-    if (chatDetails) {
-      console.log("Exist");
-    } else {
-      chatDetails = ChatDetailsPage;
-    }
+    let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage") || ChatDetailsPage;
     tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
 
     // let toast = this.toastCtrl.create({
@@ -61,7 +56,11 @@ export class ChatPage {
   getChatList() {
     this.users = [];
     this.meetingService.getChatList(this.globalVars.getValue("userData").email).subscribe(response => {
-      response.data.forEach(itm => this.users.push(itm));
+      if (response.result === "OK") {
+        this.users = response.data;
+      } else {
+        this.alertUser("Retrieve chat data failed.", response.message);
+      }
     });
   }
 
@@ -72,5 +71,15 @@ export class ChatPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatPage');
   }
+
+  alertUser(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
 
 }

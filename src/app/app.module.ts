@@ -38,6 +38,8 @@ import { PostMeetingSurveyPage } from "../pages/post-meeting-survey/post-meeting
 import { ChatDetailsPage } from "../pages/chat-details/chat-details";
 import { FindUserPage } from "../pages/find-user/find-user";
 import { AdminArrangeMeetingPage } from "../pages/admin-arrange-meeting/admin-arrange-meeting";
+import { AnnouncementPage } from "../pages/announcement/announcement";
+import { AnnouncementDetailsPage } from "../pages/announcement-details/announcement-details";
 
 // export function provideStorage() {
 //   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: '__mydb' })
@@ -75,7 +77,9 @@ import { AdminArrangeMeetingPage } from "../pages/admin-arrange-meeting/admin-ar
     PostMeetingSurveyPage,
     ChatDetailsPage,
     FindUserPage,
-    AdminArrangeMeetingPage
+    AdminArrangeMeetingPage,
+    AnnouncementPage,
+    AnnouncementDetailsPage
   ],
   imports: [
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
@@ -111,7 +115,9 @@ import { AdminArrangeMeetingPage } from "../pages/admin-arrange-meeting/admin-ar
     PostMeetingSurveyPage,
     ChatDetailsPage,
     FindUserPage,
-    AdminArrangeMeetingPage
+    AdminArrangeMeetingPage,
+    AnnouncementPage,
+    AnnouncementDetailsPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

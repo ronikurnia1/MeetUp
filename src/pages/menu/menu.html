@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar clear>
     <img src="assets/logo/logo.png">
-    <ion-item bp-layout="flex" no-lines (click)="navigateToPage(userProfilePage)">
+    <ion-item bp-layout="flex" no-lines (click)="menuSelected(userProfilePage)">
       <ion-avatar item-left bp-layout="fit">
         <img [src]="user.avatar">
       </ion-avatar>
@@ -12,9 +12,9 @@
     </ion-item>
   </ion-toolbar>
 </ion-header>
-<ion-content padding-left padding-right padding-bottom>
+<ion-content padding>
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="navigateToPage(item.page)" icon-left>
+    <button ion-item *ngFor="let item of items" (click)="menuSelected(item.page)" icon-left>
       <ion-icon [name]="item.icon" [ngStyle]="{'color': item.color}" item-left></ion-icon>
       {{ item.title }}
     </button>

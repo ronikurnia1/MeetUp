@@ -1,16 +1,14 @@
 page-admin-arrange-meeting {
     .title-md {
-        left: -30px;
+        left: -26px;
         position: relative;
     }
     .back-button.show-back-button {
         z-index: 1000;
     }
-
     .item-block {
         width: inherit;
     }
-
     .label-md .selection {
         margin-left: 6px;
         padding-right: 20px;
@@ -19,32 +17,42 @@ page-admin-arrange-meeting {
         margin-left: 12px;
         padding-right: 15px;
     }
-
-    .select-md {
-        width: 100%;
-        padding-left: 8px;
+    .text-input-md, .text-input-ios {
+        margin-left: 0;
     }
-    .select-ios {
+    .select-ios, .select-md {
         width: 100%;
-        padding: 11px 8px 8px 8px;
+        padding: 11px 8px 8px 0;
     }
     ion-select {
         max-width: 100%;
     }
-
-    .input-ios .text-input {
-        padding-right: 10px;
-        padding-left: 8px;
-    }
-
    .radio-button {
        transform: scale(1.2);
        margin-left: 8px;
        margin-top: 4px;
-   }
-   .radio-label {
+    }
+    .radio-label {
        position:relative;
        top: -2px;
        margin-left: 8px;
-   }
+    }
+    item-md.item-block .item-inner {
+       padding-right: 0;
+    }
+    .add-button {
+        font-size: 30px;
+        position: relative;
+        left: -20px;
+        top: 4px;
+    }
+    .add-person {
+        border: 1px solid #387ef5;
+        border-radius: 6px;
+        padding: 8px;
+    }
+
+    .label-md, .label-ios {
+        margin: 8px 8px 8px 0;
+    }
 }

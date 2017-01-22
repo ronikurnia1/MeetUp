@@ -12,4 +12,7 @@ page-chat {
     .item-md ion-thumbnail[item-left] {
         margin: 0 16px 0 0;
     }
+    .list-ios > .item-block:first-child {
+        border-top: none;
+    }
 }

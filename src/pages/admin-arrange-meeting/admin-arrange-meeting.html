@@ -1,21 +1,50 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Arrange Meeting</ion-title>
-</ion-navbar>
+  </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-item no-lines class="meeting">
-    <div bp-layout="flex">
+
+  <ion-item no-lines (click)="pickUpUser('firstParty')">
+    <div bp-layout="flex center middle" class="add-person" *ngIf="!form.controls.firstParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <ion-img [src]="recipient.avatar"></ion-img>
+        <ion-img src="assets/icon/avatar.png"></ion-img>
+        <ion-icon color="primary" class="add-button" name="add"></ion-icon>
+      </ion-avatar>
+    </div>
+    <div class="meeting" bp-layout="flex" *ngIf="form.controls.firstParty.valid">
+      <ion-avatar item-left bp-layout="fit">
+        <ion-img [src]="form.controls.firstParty.value.avatar"></ion-img>
       </ion-avatar>
       <div margin-left bp-layout="fill">
-        <div class="wrap-text bold-text">{{recipient.title}} {{recipient.fullName}}</div>
-        <div class="wrap-text">{{recipient.company}}&nbsp;</div>
-        <div class="wrap-text">{{recipient.country}}&nbsp;</div>
+        <div class="wrap-text bold-text">{{form.controls.firstParty.value.title}} {{form.controls.firstParty.value.fullName}}</div>
+        <div class="wrap-text">{{form.controls.firstParty.value.company}}&nbsp;</div>
+        <div class="wrap-text">{{form.controls.firstParty.value.country}}&nbsp;</div>
       </div>
     </div>
   </ion-item>
+  <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.firstParty.valid && submitAttempt">First party is required.</div>
+
+  <ion-item no-lines (click)="pickUpUser('secondParty')">
+    <div bp-layout="flex center middle" class="add-person" *ngIf="!form.controls.secondParty.valid">
+      <ion-avatar item-left bp-layout="fit">
+        <ion-img src="assets/icon/avatar.png"></ion-img>
+        <ion-icon color="primary" class="add-button" name="add"></ion-icon>
+      </ion-avatar>
+    </div>
+    <div class="meeting" bp-layout="flex" *ngIf="form.controls.secondParty.valid">
+      <ion-avatar item-left bp-layout="fit">
+        <ion-img [src]="form.controls.secondParty.value.avatar"></ion-img>
+      </ion-avatar>
+      <div margin-left bp-layout="fill">
+        <div class="wrap-text bold-text">{{form.controls.secondParty.value.title}} {{form.controls.secondParty.value.fullName}}</div>
+        <div class="wrap-text">{{form.controls.secondParty.value.company}}&nbsp;</div>
+        <div class="wrap-text">{{form.controls.secondParty.value.country}}&nbsp;</div>
+      </div>
+    </div>
+  </ion-item>
+  <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.secondParty.valid && submitAttempt">Second party is required.</div>
+
   <div class="bold-text" margin-top padding-left>Subject</div>
   <form [formGroup]="form" (ngSubmit)="sendInvitation()" novalidate>
     <ion-item class="meeting" padding-right>
@@ -29,19 +58,21 @@
       <ion-input formControlName="customSubject" type="text" placeholder="Type your subject"></ion-input>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.customSubject.valid && form.controls.customSubject.enabled && (form.controls.customSubject.dirty || submitAttempt)">Your subject is required.</div>
-    
-    
+
+
     <div padding-left margin-top class="meeting bold-text">Schedule</div>
     <ion-item class="meeting" no-lines>
-      <input (click)="scheduleOptionSelected('bestTimeSlot')" class="radio-button" type="radio" [checked]="scheduleOption === 'bestTimeSlot'" name="scheduleOption" id="bestTimeSlot">
-      <label class="radio-label"for="bestTimeSlot">Best time slot</label>
+      <input (click)="scheduleOptionSelected('bestTimeSlot')" class="radio-button" type="radio" [checked]="scheduleOption === 'bestTimeSlot'"
+        name="scheduleOption" id="bestTimeSlot">
+      <label class="radio-label" for="bestTimeSlot">Best time slot</label>
     </ion-item>
     <div margin-left [class.bold-text]="scheduleOption === 'bestTimeSlot'">
       <div margin-left>{{getDateFormated(bestTimeSlot.date,'dddd, DD MMMM YYYY')}}</div>
       <div margin-left>{{bestTimeSlot.startTime}}-{{bestTimeSlot.endTime}}</div>
     </div>
     <ion-item class="meeting" no-lines>
-      <input (click)="scheduleOptionSelected('manualTime')" class="radio-button" type="radio" [checked]="scheduleOption !== 'bestTimeSlot'" name="scheduleOption" id="manualTime">
+      <input (click)="scheduleOptionSelected('manualTime')" class="radio-button" type="radio" [checked]="scheduleOption !== 'bestTimeSlot'"
+        name="scheduleOption" id="manualTime">
       <label class="radio-label" for="manualTime">Select manually</label>
     </ion-item>
     <ion-item *ngIf="scheduleOption !== 'bestTimeSlot'" class="meeting" margin-left padding-right>
@@ -66,7 +97,7 @@
     <ion-item class="meeting" padding-right>
       <ion-textarea elastic placeholder="Remarks" formControlName="remarks"></ion-textarea>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.remarks.valid  && (form.controls.remarks.dirty || submitAttempt)">Location is required.</div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.remarks.valid  && (form.controls.remarks.dirty || submitAttempt)">Remarks is required.</div>
     <div margin>
       <button ion-button full type="submit">
       <ion-icon name="send"></ion-icon>&nbsp;&nbsp;Send Invitation

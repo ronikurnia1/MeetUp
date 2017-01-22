@@ -18,7 +18,7 @@ export class MeetingService {
     /**
      * get users based on given group & keywords
      */
-    getUsers(group?: string, keywords?: string): Observable<any[]> {
+    getUsers(group?: string, keywords?: string): Observable<any> {
         // TODO:
         let groupQuery = group ? "?group=" + group : "";
         let queryString = groupQuery ? (keywords ? "&keywords=" + keywords : "")
@@ -34,7 +34,7 @@ export class MeetingService {
     /**
      * get meeting locations
      */
-    getLocations(): Observable<any[]> {
+    getLocations(): Observable<any> {
         // TODO:
         // return this.http.get(this.globalVars.getValue("apiUrl") + "/GetLocations")
         //     .map((response: Response) => { response.json() }).catch(this.handleError);
@@ -46,7 +46,7 @@ export class MeetingService {
     /**
      * get meeting locations
      */
-    getSubjects(): Observable<any[]> {
+    getSubjects(): Observable<any> {
         // TODO:
         // return this.http.get(this.globalVars.getValue("apiUrl") + "/GetSubjects")
         //     .map((response: Response) => { response.json() }).catch(this.handleError);
@@ -70,7 +70,7 @@ export class MeetingService {
     /**
      * get today's meeting data of certain userName
      */
-    getMeetings(userEmail: string, type: string): Observable<any[]> {
+    getMeetings(userEmail: string, type: string): Observable<any> {
         // TODO:
         // let request = "GetMeetings?type=" + type + "&email=" + userEmail;
         // return this.http.get(this.globalVars.getValue("apiUrl") + request)
@@ -223,6 +223,31 @@ export class MeetingService {
         // return this.http.post(this.globalVars.getValue("apiUrl") + "SubmitScanedBadge", scanedBadge)
         //     .map((response: Response) => { response.json() }).catch(this.handleError);
         return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/submit-scaned-badge.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+
+    /**
+     * Get message list
+     */
+    getMessageList() {
+        // TODO:
+        let request = "GetMessageList";
+        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-messages.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+    /**
+     * Get message details by id
+     */
+    getMessageById(messageId: string) {
+        // TODO:
+        let request = "GetMessages?id=" + messageId;
+        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-message-details.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 

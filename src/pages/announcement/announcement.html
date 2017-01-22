@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Message</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+
+  <ion-list [virtualScroll]="messages" approxItemHeight="45px">
+    <ion-item *virtualItem="let message" class="meeting" (click)="viewMessage(message)">
+      <div class="bold-text">{{message.title}}</div>
+      <p>{{getDateFormated(message.date, 'DD MMM YY')}} - {{message.preview}}</p>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

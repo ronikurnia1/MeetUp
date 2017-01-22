@@ -1,50 +1,53 @@
-[
-    {
-        "name": "Room 1",
-        "value": "room1"
-    },
-    {
-        "name": "Room 2",
-        "value": "room2"
-    },
-    {
-        "name": "Room 3",
-        "value": "room3"
-    },
-    {
-        "name": "Room 4",
-        "value": "room4"
-    },
-    {
-        "name": "Room 5",
-        "value": "room5"
-    },
-    {
-        "name": "Room 6",
-        "value": "room6"
-    },
-    {
-        "name": "Room 7",
-        "value": "room7"
-    },
-    {
-        "name": "Room 8",
-        "value": "room8"
-    },
-    {
-        "name": "Room 9",
-        "value": "room9"
-    },
-    {
-        "name": "Room 10",
-        "value": "room10"
-    },
-    {
-        "name": "Room 11",
-        "value": "room11"
-    },
-    {
-        "name": "Room 12",
-        "value": "room12"
-    }
-]
+{
+    "result": "OK",
+    "data": [
+        {
+            "name": "Room 1",
+            "value": "room1"
+        },
+        {
+            "name": "Room 2",
+            "value": "room2"
+        },
+        {
+            "name": "Room 3",
+            "value": "room3"
+        },
+        {
+            "name": "Room 4",
+            "value": "room4"
+        },
+        {
+            "name": "Room 5",
+            "value": "room5"
+        },
+        {
+            "name": "Room 6",
+            "value": "room6"
+        },
+        {
+            "name": "Room 7",
+            "value": "room7"
+        },
+        {
+            "name": "Room 8",
+            "value": "room8"
+        },
+        {
+            "name": "Room 9",
+            "value": "room9"
+        },
+        {
+            "name": "Room 10",
+            "value": "room10"
+        },
+        {
+            "name": "Room 11",
+            "value": "room11"
+        },
+        {
+            "name": "Room 12",
+            "value": "room12"
+        }
+    ]
+}

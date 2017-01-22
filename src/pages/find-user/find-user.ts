@@ -33,13 +33,17 @@ export class FindUserPage {
     // this.meetingService.getMeetingById(meeting.id).subscribe(response => {
     // this.navCtrl.push(chatDetails, { meetingData: response });
     // });
-    let tabs: Tabs = this.navCtrl.parent;
-    let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage");
-    if (chatDetails) {
-      console.log("Exist");
-    } else {
-      chatDetails = ChatDetailsPage;
-    }
-    tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
+
+    // close the current page
+    this.navCtrl.pop({ animate: true }).then(value => {
+      let tabs: Tabs = this.navCtrl.parent;
+      let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage");
+      if (chatDetails) {
+        console.log("Exist");
+      } else {
+        chatDetails = ChatDetailsPage;
+      }
+      tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
+    });
   }
 }

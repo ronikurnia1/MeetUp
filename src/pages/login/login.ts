@@ -94,18 +94,15 @@ export class LoginPage {
             let encryptedUserData: string = this.crypto.encrypt(JSON.stringify(loginResponse.userProfile));
             localStorage.setItem("userData", encryptedUserData);
           }
-          // check if Tabs already exist
-          let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage");
-          if (tabsPage) {
-            console.log("TabsPage exists");
-            this.app.getRootNav().push(tabsPage);
-          } else {
-            console.log("TabsPage not exists");
-            this.app.getRootNav().push(TabsPage);
-          }
           // reset the form
           this.submitAttempt = false;
           this.loginForm.reset();
+
+          // check if Tabs already exist
+          let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage") || TabsPage;
+          // this.app.getRootNav().push(tabsPage);
+          this.app.getRootNav().setRoot(tabsPage, null, { animate: true });
+
         } else {
           let toast = this.toastCtrl.create({
             message: loginResponse.Message,

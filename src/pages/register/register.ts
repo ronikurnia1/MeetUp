@@ -104,11 +104,11 @@ export class RegisterPage {
   callApiRegistration() {
     console.log("registration:", JSON.stringify(this.registerForm.value));
     // Call backend Registration API
-    this.authService.registerUser(this.registerForm.value).subscribe(registerResponse => {
-      if (registerResponse.result === "OK") {
+    this.authService.registerUser(this.registerForm.value).subscribe(response => {
+      if (response.result === "OK") {
         // put user"s data into globalVars
         let userData = {
-          id: registerResponse.userId,
+          id: response.userId,
           title: this.registerForm.controls["title"].value,
           avatar: this.registerForm.controls["avatar"].value,
           fullName: this.registerForm.controls["fullName"].value,
@@ -128,12 +128,12 @@ export class RegisterPage {
       }
       // show toast
       let toast = this.toastCtrl.create({
-        message: registerResponse.message,
+        message: response.message,
         duration: 3000,
         position: "bottom"
       });
       toast.present().then(data => {
-        if (registerResponse.result === "OK") {
+        if (response.result === "OK") {
           // reset the form
           this.submitAttempt = false;
           this.registerForm.reset();

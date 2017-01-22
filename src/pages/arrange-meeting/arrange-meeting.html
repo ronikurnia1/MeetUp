@@ -66,7 +66,7 @@
     <ion-item class="meeting" padding-right>
       <ion-textarea elastic placeholder="Remarks" formControlName="remarks"></ion-textarea>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.remarks.valid  && (form.controls.remarks.dirty || submitAttempt)">Location is required.</div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.remarks.valid  && (form.controls.remarks.dirty || submitAttempt)">Remarks is required.</div>
     <div margin>
       <button ion-button full type="submit">
       <ion-icon name="send"></ion-icon>&nbsp;&nbsp;Send Invitation

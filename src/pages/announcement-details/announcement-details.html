@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{message.title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <img [src]="message.image">
+  <div>
+    {{getDateFormated(message.date, 'DD MMMM YYYY')}}
+    <p *ngFor="let item of message.paragrpahs">{{item}}</p>
+  </div>
+
+</ion-content>

@@ -4,6 +4,7 @@ import { GlobalVarsService } from "../../providers/global-vars-service";
 
 import { ScanAttendancePage } from "../scan-attendance/scan-attendance";
 import { UserProfilePage } from "../user-profile/user-profile";
+import { AnnouncementPage } from "../announcement/announcement";
 
 import { LoginPage } from "../login/login";
 
@@ -34,6 +35,7 @@ export class MenuPage {
   limitedMenus = [
     {
       "title": "Announcement/Message",
+      "page": AnnouncementPage,
       "icon": "megaphone",
       "color": "#4CAF50"
     }
@@ -86,13 +88,6 @@ export class MenuPage {
     this.prepareMenus();
   }
 
-  navigateToPage(page) {
-    // console.log("Navigation:", page);
-    // Publish menu selected event    
-    //this.events.publish(this.menuSelectedEvent, { page: page, params: null });
-    this.menuSelected(page);
-  }
-
   /**
    * Handle menu pressed
    */
@@ -105,16 +100,11 @@ export class MenuPage {
         // remove userData
         localStorage.clear();
         // move to the defaut tabs
-        this.tabs.select(0);
-        let loginView = this.app.getRootNav().getViews().find(itm => itm.name === "LoginPage")
-        if (loginView) {
-          console.log("login page exist");
-          this.app.getRootNav().push(loginView, null, navOptions);
-        }
-        else {
-          console.log("no login page");
-          this.app.getRootNav().push(page, null, navOptions);
-        }
+        // this.tabs.select(0);
+
+        let loginPage = this.app.getRootNav().getViews().find(itm => itm.name === "LoginPage") || page;
+        //this.app.getRootNav().push(loginPage, null, navOptions);
+        this.app.getRootNav().setRoot(loginPage, null, navOptions);
       } else {
         // others than login page
         // check if page exist
@@ -138,9 +128,10 @@ export class MenuPage {
     let userType: string = this.user.userType;
     this.items = [];
 
-    switch (userType) {
+    switch (userType.toLowerCase()) {
       case "admin":
-      case "IPI staff": {
+      case "ipi staff":
+      case "event organizer": {
         this.items = this.fullMenus.concat(this.sharedMenus);
         break;
       }

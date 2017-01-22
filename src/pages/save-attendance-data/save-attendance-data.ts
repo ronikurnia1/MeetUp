@@ -21,7 +21,7 @@ export class SaveAttendanceDataPage {
     event.preventDefault();
     event.stopPropagation();
     // TODO: mapping the scanned data & save it to server
-    this.meetingService.saveAttendanceRegistration(this.profile).subscribe(response => {
+    this.meetingService.saveAttendanceRegistration(this.profile).subscribe(response => {      
       let toast = this.toastCtrl.create({
         message: response.message,
         duration: 3000,

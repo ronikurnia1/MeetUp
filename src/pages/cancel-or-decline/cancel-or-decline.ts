@@ -34,13 +34,13 @@ export class CancelOrDeclinePage {
     this.submitAttempt = true;
     if (this.reason.trim().length === 0) return;
     this.meetingService.declineInvitation(this.meeting.id, this.globalVars.getValue("userData").email, this.reason)
-      .subscribe(data => {
+      .subscribe(response => {
         let message: string = "";
         // console.log("Response:", data);
-        if (data.Result === "OK") {
+        if (response.result === "OK") {
           message = "You have declined the invitation.";
         } else {
-          message = data.Message;
+          message = response.message;
         }
         let toast = this.toastCtrl.create({
           message: message,
@@ -51,7 +51,7 @@ export class CancelOrDeclinePage {
           // if accepting invitation success
           // then publish event to notify to remove item from invitation
           // and then get back to the previous page 
-          if (data.Result === "OK") {
+          if (response.result === "OK") {
             this.events.publish("meeting:declineInvitationSuccess", this.meeting)
             this.navCtrl.pop().then(data => {
               // Close if Meeting Details page are openned
@@ -72,13 +72,13 @@ export class CancelOrDeclinePage {
     this.submitAttempt = true;
     if (this.reason.trim().length === 0) return;
     this.meetingService.withdrawAcceptedMeeting(this.meeting.id, this.globalVars.getValue("userData").email, this.reason)
-      .subscribe(data => {
+      .subscribe(response => {
         let message: string = "";
         // console.log("Response:", data);
-        if (data.Result === "OK") {
+        if (response.result === "OK") {
           message = "You have canceled the meeting.";
         } else {
-          message = data.Message;
+          message = response.message;
         }
         let toast = this.toastCtrl.create({
           message: message,
@@ -88,7 +88,7 @@ export class CancelOrDeclinePage {
         toast.present().then(value => {
           // then publish event to notify to remove item from schedule
           // and then get back to the previous page 
-          if (data.Result === "OK") {
+          if (response.result === "OK") {
             this.events.publish("meeting:withdrawMeetingSuccess", this.meeting)
             this.navCtrl.pop();
           }
@@ -103,13 +103,13 @@ export class CancelOrDeclinePage {
     this.submitAttempt = true;
     if (this.reason.trim().length === 0) return;
     this.meetingService.cancelMeeting(this.meeting.id, this.reason)
-      .subscribe(data => {
+      .subscribe(response => {
         let message: string = "";
         // console.log("Response:", data);
-        if (data.Result === "OK") {
+        if (response.result === "OK") {
           message = "You have canceled the meeting.";
         } else {
-          message = data.Message;
+          message = response.message;
         }
         let toast = this.toastCtrl.create({
           message: message,
@@ -120,7 +120,7 @@ export class CancelOrDeclinePage {
           // if canel meeting success
           // then publish event to notify to remove item from hosting
           // and then get back to the previous page 
-          if (data.Result === "OK") {
+          if (response.result === "OK") {
             this.events.publish("meeting:cancelMeetingSuccess", this.meeting)
             this.navCtrl.pop().then(data => {
               // Close if Meeting Details page are openned

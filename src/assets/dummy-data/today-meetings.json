@@ -1,135 +1,138 @@
-[
-    {
-        "id": "23434",
-        "subject": "Meeting Subject A",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "10:00-12:00",
-        "location": "Room #1 Table A",
-        "meetingWith": {
-            "id": "33434",
-            "fullName": "John Snow",
-            "company": "Multi TechVision Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+{
+    "result": "OK",
+    "data": [
+        {
+            "id": "23434",
+            "subject": "Meeting Subject A",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "10:00-12:00",
+            "location": "Room #1 Table A",
+            "meetingWith": {
+                "id": "33434",
+                "fullName": "John Snow",
+                "company": "Multi TechVision Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Pending"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Pending"
-    },
-    {
-        "id": "234345",
-        "subject": "Meeting Subject B",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "10:00-12:00",
-        "location": "Room #2 Table B",
-        "meetingWith": {
-            "id": "33435",
-            "fullName": "Richard Wind",
-            "company": "DataSmart Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+        {
+            "id": "234345",
+            "subject": "Meeting Subject B",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "10:00-12:00",
+            "location": "Room #2 Table B",
+            "meetingWith": {
+                "id": "33435",
+                "fullName": "Richard Wind",
+                "company": "DataSmart Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Confirmed"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Confirmed"
-    },
-    {
-        "id": "23439032",
-        "subject": "Lunch",
-        "type": "blocktime",
-        "date": "2017-01-05",
-        "time": "09:30-10:30"
-    },
-    {
-        "id": "23434832",
-        "subject": "Meeting Subject C",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "09:30-10:30",
-        "location": "Room #3 Table C",
-        "meetingWith": {
-            "id": "33435",
-            "fullName": "Richard Wind",
-            "company": "DataSmart Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+        {
+            "id": "23439032",
+            "subject": "Lunch",
+            "type": "blocktime",
+            "date": "2017-01-05",
+            "time": "09:30-10:30"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Pending"
-    },
-    {
-        "id": "4523434",
-        "subject": "Meeting Subject D",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "13:00-14:00",
-        "location": "Room #4 Table D",
-        "meetingWith": {
-            "id": "33434",
-            "fullName": "John Snow",
-            "company": "Multi TechVision Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+        {
+            "id": "23434832",
+            "subject": "Meeting Subject C",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "09:30-10:30",
+            "location": "Room #3 Table C",
+            "meetingWith": {
+                "id": "33435",
+                "fullName": "Richard Wind",
+                "company": "DataSmart Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Pending"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Declined"
-    },
-    {
-        "id": "23434",
-        "subject": "Meeting Subject E",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "14:00-15:30",
-        "location": "Room #5 Table E",
-        "meetingWith": {
-            "id": "33435",
-            "fullName": "Richard Wind",
-            "company": "DataSmart Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+        {
+            "id": "4523434",
+            "subject": "Meeting Subject D",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "13:00-14:00",
+            "location": "Room #4 Table D",
+            "meetingWith": {
+                "id": "33434",
+                "fullName": "John Snow",
+                "company": "Multi TechVision Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Declined"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Declined"
-    },
-    {
-        "id": "23445434",
-        "subject": "Meeting Subject F",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "15:30-16:30",
-        "location": "Room #6 Table F",
-        "meetingWith": {
-            "id": "33434",
-            "fullName": "John Snow",
-            "company": "Multi TechVision Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+        {
+            "id": "23434",
+            "subject": "Meeting Subject E",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "14:00-15:30",
+            "location": "Room #5 Table E",
+            "meetingWith": {
+                "id": "33435",
+                "fullName": "Richard Wind",
+                "company": "DataSmart Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Declined"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Pending"
-    },
-    {
-        "id": "23483434",
-        "subject": "Meeting Subject G",
-        "type": "meeting",
-        "date": "2017-01-05",
-        "time": "11:00-12:00",
-        "location": "Room #10 Table G",
-        "meetingWith": {
-            "id": "33434",
-            "fullName": "John Snow",
-            "company": "Multi TechVision Pte Ltd",
-            "country": "Singpore",
-            "title": "Mr.",
-            "avatar": "assets/icon/avatar.png"
+        {
+            "id": "23445434",
+            "subject": "Meeting Subject F",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "15:30-16:30",
+            "location": "Room #6 Table F",
+            "meetingWith": {
+                "id": "33434",
+                "fullName": "John Snow",
+                "company": "Multi TechVision Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Pending"
         },
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "status": "Confirmed"
-    }
-]
+        {
+            "id": "23483434",
+            "subject": "Meeting Subject G",
+            "type": "meeting",
+            "date": "2017-01-05",
+            "time": "11:00-12:00",
+            "location": "Room #10 Table G",
+            "meetingWith": {
+                "id": "33434",
+                "fullName": "John Snow",
+                "company": "Multi TechVision Pte Ltd",
+                "country": "Singpore",
+                "title": "Mr.",
+                "avatar": "assets/icon/avatar.png"
+            },
+            "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+            "status": "Confirmed"
+        }
+    ]
+}

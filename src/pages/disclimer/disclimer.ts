@@ -22,9 +22,9 @@ export class DisclimerPage {
       paragraphs: []
     };
     // get content
-    authService.getDisclimer(subject).subscribe(data => {
-      for (let p in data.paragraphs) {
-        this.disclimer.paragraphs.push(data.paragraphs[p]);
+    authService.getDisclimer(subject).subscribe(response => {
+      for (let p in response.data.paragraphs) {
+        this.disclimer.paragraphs.push(response.data.paragraphs[p]);
       }
     });
   }

@@ -41,12 +41,12 @@ export class ArrangeMeetingPage {
     private toastCtrl: ToastController) {
 
     this.meetingService.getSubjects().subscribe(response => {
-      this.technologies = response;
+      this.technologies = response.data;
 
     });
     
     this.meetingService.getLocations().subscribe(response => {
-      this.locations = response;
+      this.locations = response.data;
     });
 
     this.recipient = navParams.get("selectedUser");
@@ -99,6 +99,7 @@ export class ArrangeMeetingPage {
         }
       });
     }
+
     // do the trick to resolve issue: UI doesn't get updated
     this.zone.run(() => {
       this.form.updateValueAndValidity({ onlySelf: true });

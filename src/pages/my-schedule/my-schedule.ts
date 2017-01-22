@@ -19,6 +19,7 @@ import { BarcodeScanner } from "ionic-native";
 import { AuthService } from "../../providers/auth-service";
 import { ScanBadgePage } from "../scan-badge/scan-badge";
 import { PopoverPage } from "../user-profile/popover";
+import { AdminArrangeMeetingPage } from "../admin-arrange-meeting/admin-arrange-meeting";
 
 
 @Component({
@@ -143,8 +144,11 @@ export class MySchedulePage {
   ionViewWillEnter() {
     let userType: string = this.globalVars.getValue("userData").userType;
     // console.log("user type:", userType);
+    // this.showScanBadge = userType.toLowerCase() === "exhibitor" || userType.toLowerCase() === "speaker";
+    // console.log("show scan:", this.showScanBadge);
     this.zone.run(() => {
       this.showScanBadge = userType.toLowerCase() === "exhibitor" || userType.toLowerCase() === "speaker";
+      console.log("show scan:", this.showScanBadge);
     });
   }
 
@@ -199,24 +203,19 @@ export class MySchedulePage {
     console.log("Accept Meeting.");
 
     this.meetingService.acceptInvitation(meeting.id, this.globalVars.getValue("userData").email)
-      .subscribe(data => {
+      .subscribe(response => {
         let message: string = "";
         // console.log("Response:", data);
-        if (data.Result === "OK") {
+        if (response.result === "OK") {
           message = "You have accepted the invitation.";
           // remove the invitaion
           setTimeout(() => {
             this.removeInvitaion(meeting);
           }, 2000);
         } else {
-          message = data.Message;
+          message = response.message;
         }
-        let toast = this.toastCtrl.create({
-          message: message,
-          duration: 3000,
-          position: "bottom"
-        });
-        toast.present();
+        this.showToast(message);
       });
   }
 
@@ -238,9 +237,24 @@ export class MySchedulePage {
   arrangeMeeting(eventData: Event) {
     event.stopPropagation();
     event.preventDefault();
-    // console.log("Arrange Meeting.");
-    let pickUser = this.navCtrl.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
-    this.navCtrl.push(pickUser);
+    //check the user type
+    let userType: string = this.globalVars.getValue("userData").userType;
+
+    switch (userType.toLowerCase()) {
+      case "admin":
+      case "ipi staff":
+      case "event organizer": {
+        let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "AdminArrangeMeetingPage") || AdminArrangeMeetingPage;
+        this.navCtrl.push(arrangeMeeting);
+        break;
+      }
+      default: {
+        let pickUser = this.navCtrl.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
+        this.navCtrl.push(pickUser);
+        break;
+      }
+    }
+
   }
 
   /**
@@ -271,17 +285,22 @@ export class MySchedulePage {
   getTodayMeetingSchedule() {
     this.schedules = [];
     let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "my").subscribe(data => {
+    this.meetingService.getMeetings(userEmail, "my").subscribe(response => {
       // console.log("Meeting:", JSON.stringify(data));
-      data.forEach(itm => {
-        this.schedules.push(this.meetingService.buildMeeting(itm));
-      });
-      let numberOfMeeting = this.schedules.filter(itm => itm.type === "meeting").length;
-      this.totalMeeting = numberOfMeeting.toString();
-      this.totalMeeting += numberOfMeeting > 1 ? " meetings" : " meeting";
+      if (response.result === "OK") {
+        response.data.forEach(itm => {
+          this.schedules.push(this.meetingService.buildMeeting(itm));
+        });
+        let numberOfMeeting = this.schedules.filter(itm => itm.type === "meeting").length;
+        this.totalMeeting = numberOfMeeting.toString();
+        this.totalMeeting += numberOfMeeting > 1 ? " meetings" : " meeting";
+      } else {
+        this.alertUser("Retrieve My Schedule data failed.", response.messsage);
+      }
     }, error => {
       this.schedules = [];
       console.log("Error", error);
+      this.alertUser("Retrieve My Schedule data failed.", error);
     });
   }
 
@@ -292,16 +311,21 @@ export class MySchedulePage {
   getMeetingInvitaions() {
     this.fullInvitations = [];
     let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "invited").subscribe(data => {
-      data.forEach(itm => {
-        if (itm.type === "meeting") {
-          this.fullInvitations.push(this.meetingService.buildMeeting(itm));
-        }
-      });
-      this.invitations = this.fullInvitations.slice();
+    this.meetingService.getMeetings(userEmail, "invited").subscribe(response => {
+      if (response.result === "OK") {
+        response.data.forEach(itm => {
+          if (itm.type === "meeting") {
+            this.fullInvitations.push(this.meetingService.buildMeeting(itm));
+          }
+        });
+        this.invitations = this.fullInvitations.slice();
+      } else {
+        this.alertUser("Retrieve Invitations data failed.", response.messsage);
+      }
     }, error => {
       this.fullInvitations = [];
       console.log("Error", error);
+      this.alertUser("Retrieve Invitations data failed.", error);
     });
   }
 
@@ -311,16 +335,21 @@ export class MySchedulePage {
   getHostedMeetings() {
     this.fullHostings = [];
     let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "hosting").subscribe(data => {
-      data.forEach(itm => {
-        if (itm.type === "meeting") {
-          this.fullHostings.push(this.meetingService.buildMeeting(itm));
-        }
-      });
-      this.hostings = this.fullHostings.slice();
+    this.meetingService.getMeetings(userEmail, "hosting").subscribe(response => {
+      if (response.result === "OK") {
+        response.data.forEach(itm => {
+          if (itm.type === "meeting") {
+            this.fullHostings.push(this.meetingService.buildMeeting(itm));
+          }
+        });
+        this.hostings = this.fullHostings.slice();
+      } else {
+        this.alertUser("Retrieve Sent data failed.", response.messsage);
+      }
     }, error => {
       this.fullHostings = [];
       console.log("Error", error);
+      this.alertUser("Retrieve Sent data failed.", error);
     });
   }
 
@@ -411,8 +440,8 @@ export class MySchedulePage {
 
   scanQrCode() {
 
-    // get person data
-    // this is for testing only
+    // // get person data
+    // // this is for testing only
     // this.authService.getProfile("").subscribe(response => {
     //   if (response.result === "OK") {
     //     let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
@@ -437,23 +466,13 @@ export class MySchedulePage {
             let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
             this.navCtrl.push(page, { profile: response.profile }, { animate: true });
           } else {
-            let alert = this.alertCtrl.create({
-              title: "Failed to get profile",
-              subTitle: response.message,
-              buttons: ['OK']
-            });
-            alert.present();
+            this.alertUser("Failed to get profile.", response.message);
           }
         });
       }
     }, (err) => {
       console.log("Error:", err);
-      let alert = this.alertCtrl.create({
-        title: "Scan failed",
-        subTitle: err,
-        buttons: ['OK']
-      });
-      alert.present();
+      this.alertUser("Scan failed.", err);
     });
   }
 
@@ -500,4 +519,22 @@ export class MySchedulePage {
     return moment(value).format(format);
   }
 
+
+  alertUser(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  showToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: "bottom"
+    });
+    toast.present();
+  }
 }

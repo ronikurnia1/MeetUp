@@ -9,12 +9,13 @@ import { MenuPage } from "../menu/menu";
   templateUrl: "tabs.html"
 })
 export class TabsPage {
-  defaultPage = MySchedulePage;
+  mySchedulePage = MySchedulePage;
   notificationPage = NotificationPage;
   chatPage = ChatPage;
   menuPage = MenuPage;
 
   constructor(private navCtrl: NavController) {
+    // default index
   }
 
   reloadRootPage(index: number, page: any) {
@@ -24,5 +25,6 @@ export class TabsPage {
     let pageToLoad = tabs.getByIndex(index).getViews().find(itm => itm.name === page.name) || page;
     tabs.getByIndex(index).setRoot(pageToLoad, null, { animate: true });
   }
+
 
 }

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NavController, NavParams, ToastController } from "ionic-angular";
 import * as moment from "moment";
 import { MeetingService } from "../../providers/meeting-service";
-
+import { PickUserPage } from "../pick-user/pick-user";
 
 @Component({
   selector: 'page-admin-arrange-meeting',
@@ -11,7 +11,6 @@ import { MeetingService } from "../../providers/meeting-service";
 })
 export class AdminArrangeMeetingPage {
 
-  private recipient: any;
   private subjectSelectOptions = { title: "Subject" };
   private locationSelectOptions = { title: "Location" };
 
@@ -42,15 +41,14 @@ export class AdminArrangeMeetingPage {
     private toastCtrl: ToastController) {
 
     this.meetingService.getSubjects().subscribe(response => {
-      this.technologies = response;
+      this.technologies = response.data;
 
     });
-    
+
     this.meetingService.getLocations().subscribe(response => {
-      this.locations = response;
+      this.locations = response.data;
     });
 
-    this.recipient = navParams.get("selectedUser");
     // TODO: get this value from Backend
     this.bestTimeSlot = {
       date: moment(new Date()).format("YYYY-MM-DD"),
@@ -67,7 +65,8 @@ export class AdminArrangeMeetingPage {
 
     // build form
     this.form = this.formBuilder.group({
-      recipient: [this.recipient],
+      firstParty: [null, Validators.required],
+      secondParty: [null, Validators.required],
       subject: ["", Validators.required],
       customSubject: ["", Validators.required],
       date: [this.bestTimeSlot.date, Validators.required],
@@ -79,6 +78,20 @@ export class AdminArrangeMeetingPage {
     this.scheduleOption = "bestTimeSlot";
     this.form.controls["customSubject"].disable({ onlySelf: true });
   }
+
+  pickUpUser(party: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    let pickUser = this.navCtrl.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
+    this.navCtrl.push(pickUser, { callback: this.pickupCallback, partyType: party }, { animate: true });
+  }
+
+  pickupCallback = (givenData) => {
+    return new Promise((resolve, reject) => {
+      this.form.controls[givenData.partyType].setValue(givenData.selectedUser);
+      resolve();
+    });
+  };
 
   sendInvitation() {
     // console.log("data:", JSON.stringify(this.form.value));
@@ -94,21 +107,20 @@ export class AdminArrangeMeetingPage {
         toast.present();
         if (response.result === "OK") {
           // go back to the previous screen
-          this.navCtrl.pop({ animate: true }).then(value => {
-            this.navCtrl.pop({ animate: true });
-          });
+          this.navCtrl.pop({ animate: true });
         }
       });
     }
-    // do the trick to resolve issue: UI doesn't get updated
-    this.zone.run(() => {
-      this.form.updateValueAndValidity({ onlySelf: true });
-    });
+
+    // // do the trick to resolve issue: UI doesn't get updated
+    // this.zone.run(() => {
+    //   this.form.updateValueAndValidity({ onlySelf: true });
+    // });
   }
 
 
   ionViewDidLoad() {
-    console.log("ionViewDidLoad ArrangeMeetingPage");
+    // console.log("ionViewDidLoad ArrangeMeetingPage");
   }
 
   scheduleOptionSelected(value: string) {

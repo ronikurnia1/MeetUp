@@ -1,5 +1,5 @@
 <ion-tabs selectedIndex="0">
-  <ion-tab [root]="defaultPage" (ionSelect)="reloadRootPage(0,defaultPage)" tabIcon="calendar" tabTitle="Meeting"></ion-tab>
+  <ion-tab [root]="mySchedulePage" (ionSelect)="reloadRootPage(0,mySchedulePage)" tabIcon="calendar" tabTitle="Meeting"></ion-tab>
   <ion-tab [root]="notificationPage" (ionSelect)="reloadRootPage(1,notificationPage)" tabIcon="notifications" tabTitle="Notification"></ion-tab>
   <ion-tab [root]="chatPage" (ionSelect)="reloadRootPage(2,chatPage)" tabIcon="chatboxes" tabTitle="Chat"></ion-tab>
   <ion-tab [root]="menuPage" (ionSelect)="reloadRootPage(3,menuPage)" tabIcon="more" tabTitle="More"></ion-tab>

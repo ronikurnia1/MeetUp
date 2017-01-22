@@ -58,7 +58,7 @@ export class RescheduleMeetingPage {
     };
 
     this.meetingService.getLocations().subscribe(response => {
-      this.locations = response;
+      this.locations = response.data;
     });
 
     // build form
@@ -99,13 +99,13 @@ export class RescheduleMeetingPage {
       };
 
       this.meetingService.rescheduleMeeting(rescheduleData)
-        .subscribe(data => {
+        .subscribe(response => {
           let message: string = "";
           // console.log("Response:", data);
-          if (data.Result === "OK") {
+          if (response.result === "OK") {
             message = "You have resecheduled the meeting.";
           } else {
-            message = data.Message;
+            message = response.message;
           }
           let toast = this.toastCtrl.create({
             message: message,
@@ -116,7 +116,7 @@ export class RescheduleMeetingPage {
             // if rescheduling success
             // then publish event to notify to udate item either on hosting or schedule
             // and then get back to the previous page 
-            if (data.Result === "OK") {
+            if (response.result === "OK") {
               this.events.publish("meeting:rescheduleSuccess", this.meeting)
               this.navCtrl.pop();
             }

@@ -1,4 +1,4 @@
 {
-    "Result": "OK",
-    "Message": "Error Message"
+    "result": "OK",
+    "message": "Error Message"
 }
