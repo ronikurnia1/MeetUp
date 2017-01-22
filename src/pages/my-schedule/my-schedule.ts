@@ -1,5 +1,9 @@
 import { Component, NgZone } from "@angular/core";
-import { App, NavController, NavParams, ToastController, Events, Tabs, AlertController } from "ionic-angular";
+import {
+  App, NavController, NavParams, ToastController,
+  Events, Tabs, AlertController, PopoverController,
+  Platform
+} from "ionic-angular";
 import * as moment from "moment";
 import { Meeting } from "../../domain/meeting";
 import { MeetingService } from "../../providers/meeting-service";
@@ -14,6 +18,7 @@ import { PickUserPage } from "../pick-user/pick-user";
 import { BarcodeScanner } from "ionic-native";
 import { AuthService } from "../../providers/auth-service";
 import { ScanBadgePage } from "../scan-badge/scan-badge";
+import { PopoverPage } from "../user-profile/popover";
 
 
 @Component({
@@ -29,7 +34,7 @@ export class MySchedulePage {
   private tabs: Tabs;
   private showScanBadge: boolean = false;
 
-  public section: string = "my-schedule";
+  public section: string = "My Schedule";
 
   public scheduleDate: string;
   public totalMeeting: string;
@@ -44,6 +49,18 @@ export class MySchedulePage {
   public filterInvitation: string = "";
   public filterHosting: string = "";
 
+  private statusFilter: string = "All";
+  private filterStatusMenu: "menu:filterStatus"
+
+
+  private statusFilters = [
+    { title: "All", param: "all", eventName: this.filterStatusMenu },
+    { title: "Pending", param: "pending", eventName: this.filterStatusMenu },
+    { title: "Confirmed", param: "confirmed", eventName: this.filterStatusMenu },
+    { title: "Cancelled", param: "cancelled", eventName: this.filterStatusMenu }
+  ];
+
+
   constructor(
     public app: App,
     public navCtrl: NavController,
@@ -54,7 +71,9 @@ export class MySchedulePage {
     private zone: NgZone,
     private events: Events,
     private alertCtrl: AlertController,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private popoverCtrl: PopoverController,
+    private platform: Platform) {
 
     // Hold reference to the Tabs
     this.tabs = navCtrl.parent;
@@ -79,6 +98,42 @@ export class MySchedulePage {
       // remove appropriate schedule
       this.removeSchedule(meetingData);
     });
+
+    // subscribe to the PopoverPage
+    events.subscribe(this.filterStatusMenu, (menu) => {
+      //console.log("menu", menu);
+      this.handleFilter(menu);
+    });
+
+  }
+
+  handleFilter(menu: any) {
+    this.statusFilter = menu.title;
+    console.log("active filter:", menu.param);
+  }
+
+  // segmentChange(event: any) {
+  //   console.log("event:", event);
+  //   this.section = event.value;
+  // }
+
+  filterStatus() {
+    if (this.section !== "Sent") return;
+    // display popover
+    let popover = this.popoverCtrl.create(PopoverPage, this.statusFilters);
+    let left = this.platform.is("android") ? (this.platform.width() / 2) - 125 : (this.platform.width() / 2);
+    let top = this.platform.is("android") ? 34 : 22;
+    let ev = {
+      target: {
+        getBoundingClientRect: () => {
+          return {
+            top: top,
+            left: left
+          };
+        }
+      }
+    };
+    popover.present({ ev });
   }
 
   ionViewDidLoad() {
@@ -100,6 +155,7 @@ export class MySchedulePage {
     this.events.unsubscribe(this.declineInvitaionSuccess);
     this.events.unsubscribe(this.cancelMeetingSuccess);
     this.events.unsubscribe(this.withdrawMeetingSuccess);
+    this.events.unsubscribe(this.filterStatusMenu);
   }
 
   cancelMeeting(data: Meeting) {

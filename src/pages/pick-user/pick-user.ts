@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, PopoverController, Events } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, Events, Platform } from 'ionic-angular';
 import { PopoverPage } from "../user-profile/popover";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
@@ -38,7 +38,8 @@ export class PickUserPage {
     private popoverCtrl: PopoverController,
     private events: Events,
     private globalVars: GlobalVarsService,
-    private meetingService: MeetingService) {
+    private meetingService: MeetingService,
+    private platform: Platform) {
 
     this.title = "All Attendees";
     this.group = "allAttendees";
@@ -57,7 +58,20 @@ export class PickUserPage {
     let menus = this.globalVars.getValue("userData").userType.toLowerCase() === "Delegates" ?
       this.deletegeFilter : this.nonDeletegeFilter;
     let popover = this.popoverCtrl.create(PopoverPage, menus);
-    popover.present({ ev: event });
+
+    let left = this.platform.is("android") ? (this.platform.width() / 2) - 125 : (this.platform.width() / 2);
+    let top = this.platform.is("android") ? 34 : 22;
+    let ev = {
+      target: {
+        getBoundingClientRect: () => {
+          return {
+            top: top,
+            left: left
+          };
+        }
+      }
+    };
+    popover.present({ ev });
   }
 
 

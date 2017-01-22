@@ -5,7 +5,11 @@
                 <ion-icon name="list-box"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-title>My Schedule</ion-title>
+        <ion-title (click)="filterStatus()">
+            {{section}}
+            <ion-icon *ngIf="section === 'Sent'" name="arrow-dropdown"></ion-icon>
+            <div *ngIf="section === 'Sent'" class="sub-title">{{statusFilter}}</div>
+        </ion-title>
         <ion-buttons right>
             <button clear color="primary" ion-button icon-only (click)="arrangeMeeting($event)">
                 <ion-icon name="add-circle"></ion-icon>
@@ -13,22 +17,22 @@
         </ion-buttons>
     </ion-toolbar>
     <ion-segment [(ngModel)]="section">
-        <ion-segment-button value="my-schedule">
+        <ion-segment-button value="My Schedule">
             My Schedule
         </ion-segment-button>
-        <ion-segment-button value="invitations">
+        <ion-segment-button value="Invitations">
             Invitations
         </ion-segment-button>
-        <ion-segment-button value="hosting">
+        <ion-segment-button value="Sent">
             Sent
         </ion-segment-button>
     </ion-segment>
     <ion-toolbar no-border>
-        <ion-searchbar [value]="filterInvitation" (ionInput)="filterInvitations($event)" *ngIf="section === 'invitations'"></ion-searchbar>
-        <ion-searchbar [value]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'hosting'"></ion-searchbar>
-        <p class="primary-title" *ngIf="section === 'my-schedule'">{{scheduleDate}}</p>
-        <p class="secondary-title" *ngIf="section === 'my-schedule'">You have {{totalMeeting}}</p>
-        <button no-lines (click)="viewCalendar($event)" icon-only large ion-button clear icon-left *ngIf="section === 'my-schedule'">
+        <ion-searchbar [value]="filterInvitation" (ionInput)="filterInvitations($event)" *ngIf="section === 'Invitations'"></ion-searchbar>
+        <ion-searchbar [value]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'Sent'"></ion-searchbar>
+        <p class="primary-title" *ngIf="section === 'My Schedule'">{{scheduleDate}}</p>
+        <p class="secondary-title" *ngIf="section === 'My Schedule'">You have {{totalMeeting}}</p>
+        <button no-lines (click)="viewCalendar($event)" icon-only large ion-button clear icon-left *ngIf="section === 'My Schedule'">
             <ion-icon name="calendar"></ion-icon>
         </button>
     </ion-toolbar>
@@ -36,7 +40,7 @@
 <ion-content padding>
 
     <div [ngSwitch]="section">
-        <ion-list *ngSwitchCase="'my-schedule'">
+        <ion-list *ngSwitchCase="'My Schedule'">
             <ion-item *ngFor="let meeting of schedules" (click)="viewMeetingDetails(meeting, 'my-schedule')" class="meeting">
                 <div bp-layout="flex margin-bottom">
                     <div bp-layout="fit margin-right--sm">{{meeting.time}}</div>
@@ -48,7 +52,7 @@
             </ion-item>
         </ion-list>
 
-        <ion-list *ngSwitchCase="'invitations'">
+        <ion-list *ngSwitchCase="'Invitations'">
             <ion-item *ngFor="let meeting of invitations" (click)="viewMeetingDetails(meeting, 'invitation')" class="meeting">
                 <div bp-layout="flex">
                     <ion-avatar item-left bp-layout="fit margin-right--sm">
@@ -70,7 +74,7 @@
                         <button ion-button clear icon-only class="text-on-bottom" (click)="acceptMeeting(meeting)" margin>
                             <ion-icon name="checkbox-outline" color="secondary"></ion-icon>
                             <span class="meeting" ion-text color="secondary">Accept</span>
-                        </button> 
+                        </button>
                         <button ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)" margin>
                             <ion-icon name="time" color="primary"></ion-icon>
                             <span class="meeting" ion-text color="primary">Reschedule</span>
@@ -81,7 +85,7 @@
             </ion-item>
         </ion-list>
 
-        <ion-list *ngSwitchCase="'hosting'">
+        <ion-list *ngSwitchCase="'Sent'">
             <ion-item *ngFor="let meeting of hostings" (click)="viewMeetingDetails(meeting, 'hosted')" class="meeting">
                 <div bp-layout="flex">
                     <ion-avatar item-left bp-layout="fit margin-right--sm">
@@ -96,11 +100,13 @@
                 </div>
                 <div margin-top margin-bottom bp-layout="row center">
                     <ion-buttons>
-                        <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)" margin>
+                        <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)"
+                            margin>
                             <ion-icon name="time"></ion-icon>
                             <span class="meeting" ion-text color="primary">Reschedule</span>
                         </button>
-                        <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)" margin>
+                        <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)"
+                            margin>
                             <ion-icon color="danger" name="remove-circle"></ion-icon>
                             <span class="meeting" ion-text color="danger">Cancel Meeting</span>
                         </button>

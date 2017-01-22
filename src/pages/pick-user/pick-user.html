@@ -1,14 +1,10 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
+    <ion-title (click)="filterUser($event)">
       Pick User
+      <ion-icon name="arrow-dropdown"></ion-icon>
       <div class="sub-title">{{title}}</div>
     </ion-title>
-    <ion-buttons right>
-      <button clear color="primary" ion-button icon-only (click)="filterUser($event)">
-        <ion-icon name="funnel"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
   <ion-toolbar no-border>
     <ion-searchbar (ionInput)="searchUser()" [(value)]="keywords"></ion-searchbar>
