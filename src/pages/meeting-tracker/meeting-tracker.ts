@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import * as moment from "moment";
 import { MeetingDetailsPage } from "../meeting-details/meeting-details";
-import { SendCommentPage } from "../send-comment/send-comment";
 import { MeetingService } from "../../providers/meeting-service";
 
 @Component({
@@ -22,15 +21,14 @@ export class MeetingTrackerPage {
   ];
 
   public meetingTracker = {
-    invited: 12,
-    hosted: 9,
-    meets: 7,
-    leads: 5,
+    leads: 12,
+    sent: 9,
+    invited: 7,
     meetings: [
       {
         subject: "Meeting Subject A",
         rate: 2.5,
-        meetingWith: {
+        meetWith: {
           fullName: "David Wezilsky",
           title: "Mr.", company: "DigiLight Inc.", country: "USA",
           avatar: "assets/icon/avatar.png"
@@ -39,7 +37,7 @@ export class MeetingTrackerPage {
       {
         subject: "Meeting Subject B",
         rate: 3.5,
-        meetingWith: {
+        meetWith: {
           fullName: "Mellani Lee",
           title: "Mrs.", company: "DataSwift Corp.", country: "USA",
           avatar: "assets/icon/avatar.png"
@@ -48,7 +46,7 @@ export class MeetingTrackerPage {
       {
         subject: "Meeting Subject D",
         rate: 0,
-        meetingWith: {
+        meetWith: {
           fullName: "Jonas Brozikov",
           title: "Mr.", company: "Vision Bits AB", country: "Sweden",
           avatar: "assets/icon/avatar.png"
@@ -57,7 +55,7 @@ export class MeetingTrackerPage {
       {
         subject: "Meeting Subject E",
         rate: 4,
-        meetingWith: {
+        meetWith: {
           fullName: "Michael Marlon",
           title: "Mr.", company: "MapByte Pte Ltd.", country: "Singapore",
           avatar: "assets/icon/avatar.png"
@@ -95,24 +93,7 @@ export class MeetingTrackerPage {
     });
   }
 
-  stopEvent() {
-    event.stopPropagation();
-    event.preventDefault();
-  }
 
-  viewComment(meeting: any) {
-    event.stopPropagation();
-    event.preventDefault();
-    let commentPage = this.navCtrl.getViews().find(itm => itm.name === "SendCommentPage") || SendCommentPage;
-    // get meeting details
-    this.meetingService.getMeetingById(meeting.id).subscribe(response => {
-      if (response.result === "OK") {
-        this.navCtrl.push(commentPage, { meetingData: response.data });
-      } else {
-        this.alertUser("Retrieve Meeting data failed.", response.message);
-      }
-    });
-  }
   /**
   * Date Format Helper
   */

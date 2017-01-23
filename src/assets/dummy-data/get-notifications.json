@@ -1,6 +1,29 @@
 {
     "result": "OK",
-    "data":[
-        
+    "data": [
+        {
+            "message": "You have 2 invitations! Check now!",
+            "date": "2017-01-23 09:30",
+            "type": "invitation",
+            "meetingId": ""
+        },
+        {
+            "message": "John Snow has cancelled the meeting",
+            "date": "2017-01-23 11:30",
+            "type": "meeting",
+            "meetingId": "4534545345"
+        },
+        {
+            "message": "John Snow has confirmed the meeting",
+            "date": "2017-01-22 12:30",
+            "type": "meeting",
+            "meetingId": "4534545345"
+        },
+        {
+            "message": "Invitation has been sent to John Snow!",
+            "date": "2017-01-22 14:30",
+            "type": "sent",
+            "meetingId": "4534545345"
+        }        
     ]
 }

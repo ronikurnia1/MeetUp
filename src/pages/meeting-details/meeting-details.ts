@@ -7,7 +7,7 @@ import { GlobalVarsService } from "../../providers/global-vars-service";
 import { CancelOrDeclinePage } from "../cancel-or-decline/cancel-or-decline";
 import { RescheduleMeetingPage } from "../reschedule-meeting/reschedule-meeting";
 import { UserProfilePage } from "../user-profile/user-profile";
-import { PostMeetingSurveyPage } from "../post-meeting-survey/post-meeting-survey";
+
 
 @Component({
   selector: "page-meeting-details",
@@ -16,6 +16,20 @@ import { PostMeetingSurveyPage } from "../post-meeting-survey/post-meeting-surve
 export class MeetingDetailsPage {
   public meeting: Meeting;
   public type: string;
+
+  // post meeting survey
+  private meetingRate: string = "";
+  private comment: string = "";
+  private submitAttempt: boolean = false;
+  private selectedComment: string = "";
+
+  private commentTemplates = {
+    text1: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    text2: "Curabitur ut auctor neque, et placerat nibh.",
+    text3: "Morbi ac magna commodo, tristique arcu quis, varius lorem.",
+    text4: "Vivamus pulvinar ante quam, et dapibus ante pharetra sit amet."
+  }
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private meetingService: MeetingService,
@@ -84,15 +98,51 @@ export class MeetingDetailsPage {
     this.navCtrl.push(reschedule, { meetingData: this.meeting });
   }
 
-  postMeetingSurvey(meetingId: string) {
+  postMeetingSurvey() {
     event.stopPropagation();
     event.preventDefault();
-    let survey = this.navCtrl.getViews().find(itm => itm.name === "PostMeetingSurveyPage") || PostMeetingSurveyPage;
-    this.navCtrl.push(survey, { meetingId: meetingId });
+    this.submitAttempt = true;
+    if (this.comment.trim().length >= 2 && this.meetingRate.trim().length !== 0) {
+      this.meetingService.portMeetingSurvey({
+        meetingId: this.meeting.id,
+        meetingRate: this.meetingRate,
+        comment: this.comment
+      }).subscribe(response => {
+        let message: string = "";
+        if (response.result === "OK") {
+          message = "Feedback has been sent successfully.";
+        } else {
+          message = response.message;
+        }
+        let toast = this.toastCtrl.create({
+          message: message,
+          duration: 3000,
+          position: "bottom"
+        });
+        toast.present().then(value => {
+          // if accepting invitation success
+          // then publish event to notify to remove item from invitation
+          // and then get back to the previous page 
+          if (response.result === "OK") {
+            this.navCtrl.pop();
+          }
+        });
+      });
+    }
+  }
+
+  rateMeetingAs(value: string) {
+    this.meetingRate = value;
+    console.log("Rate:", value);
+  }
+
+  selectComment(value: string) {
+    this.selectedComment = value;
+    this.comment = this.commentTemplates[value];
   }
 
   ionViewDidLoad() {
-    console.log("ionViewDidLoad MeetingInvitationPage");
+    // console.log("ionViewDidLoad MeetingInvitationPage");
   }
 
 

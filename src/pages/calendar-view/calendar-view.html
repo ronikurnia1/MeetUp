@@ -11,7 +11,7 @@
 
 <ion-content padding-left padding-right>
 
-  <ion-slides #calendarSlides (ionDidChange)="onSlideChanged($event)" [options]="slideOptions">
+  <ion-slides #calendarSlides [loop]="false" [initialSlide]="2" (ionSlideDidChange)="onSlideChanged($event)">
     <ion-slide>
       <div bp-layout="row center middle gutter-none padding-top--sm margin-top--sm">
         <div bp-layout="col">

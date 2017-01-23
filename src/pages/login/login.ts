@@ -124,7 +124,7 @@ export class LoginPage {
       this.authService.resetPassword(this.loginForm.controls["email"].value)
         .subscribe(data => {
           let toast = this.toastCtrl.create({
-            message: data.Message,
+            message: data.message,
             duration: 4000,
             position: "bottom"
           });

@@ -20,11 +20,6 @@ export class CalendarViewPage {
   public nextWeekCal: WeekCalendar;
   public next2WeeksCal: WeekCalendar;
 
-  public slideOptions = {
-    initialSlide: 2,
-    loop: false
-  };
-
   public blocking = {
     timeStarts: "",
     timeEnds: ""

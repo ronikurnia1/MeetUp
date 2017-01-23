@@ -5,35 +5,10 @@
 </ion-header>
 <ion-content padding>
   <ion-list>
-    <ion-item class="meeting">
+    <ion-item class="meeting" *ngFor="let notif of notifications" (click)="viewDetails()">
       <ion-icon color="primary" name="alert" item-left></ion-icon>
-      <div class="wrap-text">You have 5 invitations! Check now!</div>
-      <div class="wrap-text smaller">5 minutes ago</div>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-icon color="primary" name="alert" item-left></ion-icon>
-      <div class="wrap-text">You have 5 invitations! Check now!</div>
-      <div class="wrap-text smaller">5 minutes ago</div>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-icon color="primary" name="alert" item-left></ion-icon>
-      <div class="wrap-text">You have 5 invitations! Check now!</div>
-      <div class="wrap-text smaller">5 minutes ago</div>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-icon color="primary" name="alert" item-left></ion-icon>
-      <div class="wrap-text">You have 5 invitations! Check now!</div>
-      <div class="wrap-text smaller">5 minutes ago</div>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-icon color="primary" name="alert" item-left></ion-icon>
-      <div class="wrap-text">You have 5 invitations! Check now!</div>
-      <div class="wrap-text smaller">5 minutes ago</div>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-icon color="primary" name="alert" item-left></ion-icon>
-      <div class="wrap-text">You have 5 invitations! Check now!</div>
-      <div class="wrap-text smaller">5 minutes ago</div>
+      <div class="wrap-text">{{notif.message}}</div>
+      <div class="wrap-text smaller">{{getDateFormated(notif.date)}}</div>
     </ion-item>
   </ion-list>
 </ion-content>

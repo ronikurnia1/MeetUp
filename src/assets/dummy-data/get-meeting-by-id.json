@@ -16,6 +16,7 @@
             "avatar": "assets/icon/avatar.png"
         },
         "followUp": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
-        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis."
+        "remarks": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt at diam id faucibus. Donec sit amet consequat erat. In quis viverra turpis.",
+        "status": "Pending"
     }
 }

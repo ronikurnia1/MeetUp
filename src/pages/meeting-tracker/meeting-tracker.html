@@ -13,6 +13,14 @@
   </ion-item>
 
   <div bp-layout="row center middle gutter-none margin-left margin-right">
+    <div bp-layout="col 12">
+      <div class="tile">
+        <div>{{meetingTracker.leads}}</div>
+        <div class="tile-info">Leads</div>
+      </div>
+    </div>
+  </div>
+  <div bp-layout="row center middle gutter-none margin-left margin-right">
     <div bp-layout="col 6">
       <div class="tile">
         <div>{{meetingTracker.invited}}</div>
@@ -21,22 +29,8 @@
     </div>
     <div bp-layout="col 6">
       <div class="tile">
-        <div>{{meetingTracker.hosted}}</div>
-        <div class="tile-info">Hosted</div>
-      </div>
-    </div>
-  </div>
-  <div bp-layout="row center middle gutter-none margin-left margin-right">
-    <div bp-layout="col 6">
-      <div class="tile">
-        <div>{{meetingTracker.meets}}</div>
-        <div class="tile-info">Meets</div>
-      </div>
-    </div>
-    <div bp-layout="col 6">
-      <div class="tile">
-        <div>{{meetingTracker.leads}}</div>
-        <div class="tile-info">Leads</div>
+        <div>{{meetingTracker.sent}}</div>
+        <div class="tile-info">Sent</div>
       </div>
     </div>
   </div>
@@ -44,18 +38,14 @@
   <ion-list padding>
     <ion-item *ngFor="let meeting of meetingTracker.meetings" (click)="viewMeetingDetail(meeting)">
       <div bp-layout="flex">
-        <ion-avatar item-left bp-layout="fit">
-          <img [src]="meeting.meetingWith.avatar">
+        <ion-avatar item-left bp-layout="fit col">
+          <img [src]="meeting.meetWith.avatar">
         </ion-avatar>
-        <div margin-left class="meeting" bp-layout="fill">
-          <rating (click)="stopEvent()" [(ngModel)]="meeting.rate"></rating>
+        <div margin-left class="meeting" bp-layout="fill col">
           <div class="wrap-text bold-text">{{meeting.subject}}</div>
-          <div class="wrap-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
-          <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
-          <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
-        </div>
-        <div bp-layout="fit">
-          <ion-icon color="primary" name="chatbubbles" (click)="viewComment(meeting)"></ion-icon>
+          <div class="wrap-text">{{meeting.meetWith.title}} {{meeting.meetWith.fullName}}</div>
+          <div class="wrap-text">{{meeting.meetWith.company}}&nbsp;</div>
+          <div class="wrap-text">{{meeting.meetWith.country}}&nbsp;</div>
         </div>
       </div>
     </ion-item>

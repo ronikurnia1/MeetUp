@@ -9,4 +9,13 @@ page-meeting-details {
     [icon-only] ion-icon {
         padding: 0 .2em;
     }
+    [bp-layout^='col'] {
+        padding: 0 8px 0px 8px;
+    }
+    .input-ios .text-input {
+        padding-right: 8px;
+    }
+    .item-ios {
+        padding-left: 0;
+    }
 }

@@ -33,8 +33,6 @@ import { PickUserPage } from "../pages/pick-user/pick-user";
 import { ArrangeMeetingPage } from "../pages/arrange-meeting/arrange-meeting";
 import { ScanBadgePage } from "../pages/scan-badge/scan-badge";
 import { SaveAttendanceDataPage } from "../pages/save-attendance-data/save-attendance-data";
-import { SendCommentPage } from "../pages/send-comment/send-comment";
-import { PostMeetingSurveyPage } from "../pages/post-meeting-survey/post-meeting-survey";
 import { ChatDetailsPage } from "../pages/chat-details/chat-details";
 import { FindUserPage } from "../pages/find-user/find-user";
 import { AdminArrangeMeetingPage } from "../pages/admin-arrange-meeting/admin-arrange-meeting";
@@ -73,8 +71,6 @@ import { AnnouncementDetailsPage } from "../pages/announcement-details/announcem
     ArrangeMeetingPage,
     ScanBadgePage,
     SaveAttendanceDataPage,
-    SendCommentPage,
-    PostMeetingSurveyPage,
     ChatDetailsPage,
     FindUserPage,
     AdminArrangeMeetingPage,
@@ -111,8 +107,6 @@ import { AnnouncementDetailsPage } from "../pages/announcement-details/announcem
     ArrangeMeetingPage,
     ScanBadgePage,
     SaveAttendanceDataPage,
-    SendCommentPage,
-    PostMeetingSurveyPage,
     ChatDetailsPage,
     FindUserPage,
     AdminArrangeMeetingPage,

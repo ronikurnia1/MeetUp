@@ -79,6 +79,20 @@ export class MeetingService {
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
+
+    /**
+     * get today's meeting data of certain userName
+     */
+    getNotifications(userEmail: string): Observable<any> {
+        // TODO:
+        // let request = "GetNotifications?email=" + userEmail;
+        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-notifications.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+
     /**
      * get meeting details by id
      */
@@ -250,6 +264,18 @@ export class MeetingService {
         return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-message-details.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
+
+    /**
+     * Post meeting survey
+     */
+    portMeetingSurvey(meetingFeeback: any): Observable<any> {
+        // TODO:
+        // return this.http.post(this.globalVars.getValue("apiUrl") + "PostMeetingSurvey", meetingFeeback)
+        //     .map((response: Response) => { response.json() }).catch(this.handleError);
+        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/post-metting-survey.json")
+            .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
 
     /**
     * Handle HTTP error

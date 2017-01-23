@@ -23,7 +23,7 @@
     <div margin-top margin-bottom>{{meeting.location}}</div>
     <div *ngIf="type === 'tracker'" margin-top class="bold-text">Follow Up Plan</div>
     <div *ngIf="type === 'tracker'" class="wrap-text">{{meeting.followUp}}</div>
-    <div class="status {{meeting.status}}">{{meeting.status}}</div>
+    <div *ngIf="type !== 'tracker'" class="status {{meeting.status}}">{{meeting.status}}</div>
     <div margin-top class="bold-text">Remarks</div>
     <div class="wrap-text">{{meeting.remarks}}</div>
   </div>
@@ -50,17 +50,52 @@
       </button>
     </ion-buttons>
     <ion-buttons *ngIf="type === 'hosted'" padding-right>
-      <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()" margin>
+      <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()"
+        margin>
         <ion-icon name="time"></ion-icon>
         <span class="meeting" ion-text color="primary">Reschedule</span>
       </button>
-      <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()" margin>
+      <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()"
+        margin>
         <ion-icon color="danger" name="remove-circle"></ion-icon>
         <span class="meeting" ion-text color="danger">Cancel Meeting</span>
       </button>
     </ion-buttons>
   </div>
-  <div padding>
-    <button *ngIf="type === 'tracker'" (click)="postMeetingSurvey(meeting.id)" ion-button full>Post Meeting Survey</button>
+  <div padding-right padding-left *ngIf="type === 'tracker'">
+    <div class="bold-text">How was the meeting?</div>
+    <div bp-layout="row fill">
+      <div bp-layout="col 4">
+        <button small [outline]="meetingRate !== 'good'" block ion-button (click)="rateMeetingAs('good')">Good</button>
+      </div>
+      <div bp-layout="col 4">
+        <button small [outline]="meetingRate !== 'netral'" block ion-button (click)="rateMeetingAs('netral')">Netral</button>
+      </div>
+      <div bp-layout="col 4">
+        <button small [outline]="meetingRate !== 'bad'" block ion-button (click)="rateMeetingAs('bad')">Bad</button>
+      </div>
+    </div>
+    <div ion-text class="small-text" color="danger" *ngIf="(submitAttempt && meetingRate.trim().length === 0)">Meeting's' rate is required.</div>
+    <ion-item class="meeting">
+      <ion-textarea placeholder="Comment" [(ngModel)]="comment"></ion-textarea>
+    </ion-item>
+    <div ion-text class="small-text" color="danger" *ngIf="(submitAttempt && comment.trim().length <= 1)">Comment is required.</div>
+
+    <div bp-layout="row flex" padding-top padding-bottom>
+      <div bp-layout="col 3">
+        <button small [outline]="selectedComment !== 'text1'" block ion-button (click)="selectComment('text1')">Text 1</button>
+      </div>
+      <div bp-layout="col 3">
+        <button small [outline]="selectedComment !== 'text2'" block ion-button (click)="selectComment('text2')">Text 2</button>
+      </div>
+      <div bp-layout="col 3">
+        <button small [outline]="selectedComment !== 'text3'" block ion-button (click)="selectComment('text3')">Text 3</button>
+      </div>
+      <div bp-layout="col 3">
+        <button small [outline]="selectedComment !== 'text4'" block ion-button (click)="selectComment('text4')">Text 4</button>
+      </div>
+    </div>
+
+    <button (click)="postMeetingSurvey()" ion-button full>Submit</button>
   </div>
 </ion-content>

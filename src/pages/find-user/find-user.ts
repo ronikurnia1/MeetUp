@@ -17,12 +17,21 @@ export class FindUserPage {
     private meetingService: MeetingService) {
 
     this.meetingService.getUsers().subscribe((response) => {
-      this.profiles = response;
+      this.profiles = response.data;
     });
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FindUserPage");
+  }
+
+
+  filterProfile(event: any) {
+    this.filterProfileValue = event.target.value || "";
+    this.profiles = [];
+    this.meetingService.getUsers("all", this.filterProfileValue).subscribe((response) => {
+      this.profiles = response.data;
+    });
   }
 
   openChat(profile: any) {
