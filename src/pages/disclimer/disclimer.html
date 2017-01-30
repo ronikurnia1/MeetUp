@@ -3,6 +3,6 @@
     <ion-title style="z-index:100">{{title}}</ion-title>
 </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <p margin class="justify" *ngFor="let item of disclimer.paragraphs">{{item}}</p>
+<ion-content padding class="meeting">
+  <div [innerHTML]="disclimer"></div>
 </ion-content>

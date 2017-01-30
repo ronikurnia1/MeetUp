@@ -10,15 +10,15 @@
 </ion-header>
 <ion-content padding>
 
-  <ion-list [virtualScroll]="users" approxItemHeight="45px">
-    <ion-item *virtualItem="let user" class="meeting" (click)="userSelected(user)">
+  <ion-list>
+    <ion-item *ngFor="let chat of chats | async" class="meeting" (click)="selectChat(chat)">
       <ion-avatar item-left>
-        <ion-img [src]="user.avatar"></ion-img>
+        <img [src]="chat.avatar">
       </ion-avatar>
-      <div class="bold-text">{{user.title}} {{user.fullName}}</div>
-      <div>Last chat text</div>
+      <div class="bold-text">{{chat.title}} {{chat.fullName}}</div>
+      <div class="truncate">{{chat.lastMessage}}</div>
+      <div class="small-text">{{getDateFormated(chat.timeStamp)}}</div>
     </ion-item>
-
   </ion-list>
 
 </ion-content>

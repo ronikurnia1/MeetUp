@@ -1,44 +1,38 @@
 <ion-header>
   <ion-navbar>
     <ion-title (click)="openProfile()">
-      {{profile.fullName}}
+      {{receiver.fullName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding #myContent>
 
-
-
-  <div class="message-wrapper disable-user-behavior">
-    <div>
+  <div class="message-wrapper disable-user-behavior" *ngFor="let msg of messages | async">
+    <div *ngIf="msg.sender === myId">
       <img class="profile-pic right" [src]="myAvatar">
       <div class="chat-bubble right">
-        <div class="message ng-binding" autolinker="">wererwerwerrwrwerv wer</div>
+        <div class="message" autolinker="">{{msg.message}}</div>
         <div class="message-detail">
-          <span class="bold ng-binding">Marty</span>,
-          <span am-time-ago="message.date">10 hours ago</span>
+          <span am-time-ago="message.date">{{getDateFormated(msg.timeStamp)}}</span>
         </div>
       </div>
     </div>
+
+    <div *ngIf="msg.sender !== myId">
+      <img class="profile-pic left" [src]="receiver.avatar">
+      <div class="chat-bubble left">
+        <div class="message" autolinker="">{{msg.message}}</div>
+        <div class="message-detail">
+          <span class="message-date">{{getDateFormated(msg.timeStamp)}}</span>
+        </div>
+      </div>
+    </div>
+
     <div class="cf"></div>
   </div>
 
-  <div class="message-wrapper disable-user-behavior">
-    <div>
-      <img class="profile-pic left" [src]="profile.avatar">
-      <div class="chat-bubble left">
-        <div class="message ng-binding" autolinker="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-          aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-        <div class="message-detail">
-          <span class="bold ng-binding">Venkman</span>,
-          <span am-time-ago="message.date">11 hours ago</span>
-        </div>
-      </div>
-    </div>
-    <div class="cf"></div>
-  </div>
 
 </ion-content>
 
@@ -47,11 +41,11 @@
   <div bp-layout="flex gutter-none">
     <div bp-layout="fill" class="input-message">
       <ion-item class="meeting">
-        <ion-textarea elastic placeholder="Type a message..."></ion-textarea>
+        <ion-textarea [(ngModel)]="messageToSend" elastic placeholder="Type a message..."></ion-textarea>
       </ion-item>
     </div>
     <div bp-layout="fix">
-      <button ion-button icon-only clear>
+      <button ion-button icon-only clear (click)="sendMessage()">
         <ion-icon color="primary" name="send"></ion-icon>
       </button>
     </div>

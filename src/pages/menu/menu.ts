@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { App, NavController, NavParams, Tabs, AlertController } from "ionic-angular";
+import { Component, NgZone, ViewChild } from "@angular/core";
+import { App, NavController, NavParams, Tabs, AlertController, Content } from "ionic-angular";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 
 import { ScanAttendancePage } from "../scan-attendance/scan-attendance";
@@ -16,6 +16,9 @@ export class MenuPage {
   private tabs: Tabs;
   private user: any;
   private userProfilePage: any;
+
+  @ViewChild("menuContent")
+  public content: Content;
 
   items = [];
 
@@ -78,6 +81,7 @@ export class MenuPage {
     private app: App,
     private navCtrl: NavController,
     private navParams: NavParams,
+    private zone: NgZone,
     private globalVars: GlobalVarsService,
     private alertCtrl: AlertController) {
 
@@ -125,6 +129,7 @@ export class MenuPage {
   prepareMenus() {
     //check the user type
     this.user = this.globalVars.getValue("userData");
+    // console.log("user",JSON.stringify(this.user));
     let userType: string = this.user.userType;
     this.items = [];
 
@@ -148,6 +153,11 @@ export class MenuPage {
     console.log("ionViewDidLoad MenuPage");
   }
   ionViewWillEnter() {
-    this.prepareMenus();
+    this.zone.run(() => {
+      this.prepareMenus();
+      // scroll to the bottom
+      this.content.scrollToTop(250);
+    });
+
   }
 }

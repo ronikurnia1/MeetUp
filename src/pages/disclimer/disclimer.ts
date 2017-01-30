@@ -8,24 +8,17 @@ import { AuthService } from "../../providers/auth-service";
 })
 export class DisclimerPage {
 
-  public title: string;
-  public disclimer: {
-    paragraphs: Array<string>
-  };
+  private title: string;
+  private disclimer: string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private authService: AuthService) {
-    let subject: string = navParams.get("subject");
-    this.title = subject.toLowerCase() === "terms" ? "Terms of service" : "Privacy policy";
-    this.disclimer = {
-      paragraphs: []
-    };
+    let subject: string = navParams.get("subject").toLowerCase();
+    this.title = subject === "terms" ? "Terms of service" : "Privacy policy";
     // get content
     authService.getDisclimer(subject).subscribe(response => {
-      for (let p in response.data.paragraphs) {
-        this.disclimer.paragraphs.push(response.data.paragraphs[p]);
-      }
+      this.disclimer = response.content;
     });
   }
 

@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams, Tabs } from "ionic-angular";
 import { MeetingService } from "../../providers/meeting-service";
+import { GlobalVarsService } from "../../providers/global-vars-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
+import { FirebaseChatService } from "../../providers/firebase-chat-service";
 
 @Component({
   selector: "page-find-user",
@@ -12,8 +14,10 @@ export class FindUserPage {
   private profiles: any[];
   private filterProfileValue: string = "";
 
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
+  constructor(private navCtrl: NavController,
+    private navParams: NavParams,
+    private chatService: FirebaseChatService,
+    private globalVars: GlobalVarsService,
     private meetingService: MeetingService) {
 
     this.meetingService.getUsers().subscribe((response) => {
@@ -34,25 +38,20 @@ export class FindUserPage {
     });
   }
 
-  openChat(profile: any) {
+  openChat(receiver: any) {
     event.stopPropagation();
     event.preventDefault();
-    // let chatDetails = this.navCtrl.getViews().find(itm => itm.name === "ChatDetailsPage") || ChatDetailsPage;
-    // get chat details
-    // this.meetingService.getMeetingById(meeting.id).subscribe(response => {
-    // this.navCtrl.push(chatDetails, { meetingData: response });
-    // });
 
     // close the current page
     this.navCtrl.pop({ animate: true }).then(value => {
       let tabs: Tabs = this.navCtrl.parent;
-      let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage");
-      if (chatDetails) {
-        console.log("Exist");
-      } else {
-        chatDetails = ChatDetailsPage;
-      }
-      tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
+      let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage") || ChatDetailsPage;
+      tabs.parent.push(chatDetails, {
+        sender: this.globalVars.getValue("userData"),
+        receiver: receiver,
+        chatId: undefined
+      }, { animate: true });
     });
+
   }
 }

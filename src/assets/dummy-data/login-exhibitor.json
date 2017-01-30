@@ -11,9 +11,7 @@
         "position": "CTO",
         "mobile": "+61 8934 84394",
         "userType": "exhibitor",
-        "notifByEmail": true,
-        "notifBySms": true,
-        "notifByPush": false,
+        "notificationsMethods": "60841f3a-4acf-6092-98b9-ff00006fb7ad;62841f3a-4acf-6092-98b9-ff00006fb7ad",
         "isAdmin": false,
         "avatar": "https://randomuser.me/api/portraits/thumb/men/29.jpg",
         "about": "Lorem ipsum dolor sit amet, vestibulum non, vulputate sed litora eros nascetur, cubilia ut vel vitae. Viverra rutrum odio, volutpat elementum ornare sed nunc. Luctus praesent eget sit metus ipsum, urna imperdiet sed ultricies, ac nulla."

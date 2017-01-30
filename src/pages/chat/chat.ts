@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Tabs } from 'ionic-angular';
+import { AuthService } from "../../providers/auth-service";
+import * as moment from "moment";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
+import { FirebaseChatService } from "../../providers/firebase-chat-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
 import { FindUserPage } from "../find-user/find-user";
+import { AngularFireDatabase, FirebaseListObservable } from "angularfire2";
 
 @Component({
   selector: 'page-chat',
@@ -11,36 +15,35 @@ import { FindUserPage } from "../find-user/find-user";
 })
 export class ChatPage {
 
-  users: any[];
+  private chats: FirebaseListObservable<any[]>;
+  private myId: string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private authService: AuthService,
+    private chatService: FirebaseChatService,
+    private db: AngularFireDatabase,
     private meetingService: MeetingService,
     private globalVars: GlobalVarsService,
     private alertCtrl: AlertController) {
 
-    this.users = [];
+    this.myId = this.globalVars.getValue("userData").id;
     this.getChatList();
   }
 
-  userSelected(profile: any) {
+  selectChat(chat: any) {
     event.stopPropagation();
     event.preventDefault();
-    // let chatDetails = this.navCtrl.getViews().find(itm => itm.name === "ChatDetailsPage") || ChatDetailsPage;
-    // get chat details
-    // this.meetingService.getMeetingById(meeting.id).subscribe(response => {
-    // this.navCtrl.push(chatDetails, { meetingData: response });
-    // });
+
     let tabs: Tabs = this.navCtrl.parent;
     let chatDetails: any = tabs.parent.getViews().find(itm => itm.name === "ChatDetailsPage") || ChatDetailsPage;
-    tabs.parent.push(chatDetails, { profile: profile }, { animate: true });
 
-    // let toast = this.toastCtrl.create({
-    //   message: "Chat has not been implemented yet.",
-    //   duration: 3000,
-    //   position: "bottom"
-    // });
-    // toast.present();
+    tabs.parent.push(chatDetails, {
+      sender: this.globalVars.getValue("userData"),
+      receiver: chat,
+      chatId: chat.chatId
+    }, { animate: true });
+
   }
 
   findUser() {
@@ -54,14 +57,10 @@ export class ChatPage {
    * Get chat list
    */
   getChatList() {
-    this.users = [];
-    this.meetingService.getChatList(this.globalVars.getValue("userData").email).subscribe(response => {
-      if (response.result === "OK") {
-        this.users = response.data;
-      } else {
-        this.alertUser("Retrieve chat data failed.", response.message);
-      }
-    });
+    this.chats = this.db.list("users/" + this.myId + "/chatsWith", {
+      query: { orderByChild: "timeStamp" }
+    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    // this.chats = this.db.list("users/");
   }
 
   ionViewWillEnter() {
@@ -79,6 +78,13 @@ export class ChatPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  /**
+   * Date Format Helper
+   */
+  getDateFormated(value: Date): string {
+    return moment(value).fromNow();
   }
 
 

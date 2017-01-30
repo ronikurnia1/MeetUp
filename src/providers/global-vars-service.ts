@@ -39,8 +39,10 @@ export class GlobalVarsService {
      * get list of country
      */
     getCountries(): Observable<any> {
-        return this.http.get("assets/config/countries.json")
+        return this.http.get("assets/dummy-data/get-content-register.json")
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this["apiUrl"] + "GetContentRegister")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
     /**

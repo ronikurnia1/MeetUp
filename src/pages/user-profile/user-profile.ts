@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, PopoverController, Events } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, Events, ToastController } from 'ionic-angular';
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { PopoverPage } from "./popover";
 import { RegisterPage } from "../register/register";
@@ -22,6 +22,7 @@ export class UserProfilePage {
     public navParams: NavParams,
     private globalVars: GlobalVarsService,
     private popoverCtrl: PopoverController,
+    private toastCtrl: ToastController,
     private events: Events) {
 
     // Get profile
@@ -51,8 +52,25 @@ export class UserProfilePage {
   handleMenu(menu: any) {
     switch (menu.param) {
       case "editProfile": {
-        let page = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-        this.navCtrl.push(page, { title: "Edit Profile" }, { animate: true });
+
+        // prepareration
+        let countries: Array<any>;
+        let notifications: Array<any>;
+        this.globalVars.getCountries().subscribe(response => {
+          if (response.result === "OK") {
+            countries = response.countries;
+            notifications = response.notificationMethods;
+            let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
+            this.navCtrl.push(register, { title: "Edit Profile", countries: countries, notifications: notifications });
+          } else {
+            let toast = this.toastCtrl.create({
+              message: response.Message,
+              duration: 3000,
+              position: "bottom"
+            });
+            toast.present();
+          }
+        }, (error) => { console.log("Error:", error); });
         break;
       }
       case "changePassword": {

@@ -6,4 +6,13 @@ page-find-user {
     .back-button.show-back-button {
         z-index: 1000;
     }
+    .list-ios > .item-block:first-child {
+        border-top: none;
+    }
+    .list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+        border-bottom: none;
+    }    
+    .list-ios > .item-block:last-child .item-inner {
+        border-bottom: 0.55px solid #c8c7cc;
+    }    
 }

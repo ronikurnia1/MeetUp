@@ -8,13 +8,13 @@
   <ion-item no-lines (click)="pickUpUser('firstParty')">
     <div bp-layout="flex center middle" class="add-person" *ngIf="!form.controls.firstParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <ion-img src="assets/icon/avatar.png"></ion-img>
-        <ion-icon color="primary" class="add-button" name="add"></ion-icon>
+        <img src="assets/icon/avatar.png">
       </ion-avatar>
+      <ion-icon color="primary" class="add-button" name="add"></ion-icon>
     </div>
     <div class="meeting" bp-layout="flex" *ngIf="form.controls.firstParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <ion-img [src]="form.controls.firstParty.value.avatar"></ion-img>
+        <img [src]="form.controls.firstParty.value.avatar">
       </ion-avatar>
       <div margin-left bp-layout="fill">
         <div class="wrap-text bold-text">{{form.controls.firstParty.value.title}} {{form.controls.firstParty.value.fullName}}</div>
@@ -28,13 +28,13 @@
   <ion-item no-lines (click)="pickUpUser('secondParty')">
     <div bp-layout="flex center middle" class="add-person" *ngIf="!form.controls.secondParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <ion-img src="assets/icon/avatar.png"></ion-img>
-        <ion-icon color="primary" class="add-button" name="add"></ion-icon>
+        <img src="assets/icon/avatar.png">
       </ion-avatar>
+      <ion-icon color="primary" class="add-button" name="add"></ion-icon>
     </div>
     <div class="meeting" bp-layout="flex" *ngIf="form.controls.secondParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <ion-img [src]="form.controls.secondParty.value.avatar"></ion-img>
+        <img [src]="form.controls.secondParty.value.avatar">
       </ion-avatar>
       <div margin-left bp-layout="fill">
         <div class="wrap-text bold-text">{{form.controls.secondParty.value.title}} {{form.controls.secondParty.value.fullName}}</div>

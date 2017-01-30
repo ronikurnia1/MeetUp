@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar clear>
+  <ion-navbar>
     <img src="assets/logo/logo.png">
     <ion-item bp-layout="flex" no-lines (click)="menuSelected(userProfilePage)">
       <ion-avatar item-left bp-layout="fit">
@@ -10,9 +10,9 @@
         <div class="wrap-text">{{user.fullName}}</div>
       </div>
     </ion-item>
-  </ion-toolbar>
+  </ion-navbar>
 </ion-header>
-<ion-content padding>
+<ion-content padding #menuContent>
   <ion-list>
     <button ion-item *ngFor="let item of items" (click)="menuSelected(item.page)" icon-left>
       <ion-icon [name]="item.icon" [ngStyle]="{'color': item.color}" item-left></ion-icon>

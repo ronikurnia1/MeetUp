@@ -58,12 +58,24 @@ export class LoginPage {
   register() {
     event.preventDefault();
     event.stopPropagation();
-    let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage");
-    if (register) {
-      this.navCtrl.push(register, { title: "Register" });
-    } else {
-      this.navCtrl.push(RegisterPage, { title: "Register" });
-    }
+    // prepareration
+    let countries: Array<any>;
+    let notifications: Array<any>;
+    this.globalVars.getCountries().subscribe(response => {
+      if (response.result === "OK") {
+        countries = response.countries;
+        notifications = response.notificationMethods;
+        let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
+        this.navCtrl.push(register, { title: "Register", countries: countries, notifications: notifications });
+      } else {
+        let toast = this.toastCtrl.create({
+          message: response.Message,
+          duration: 3000,
+          position: "bottom"
+        });
+        toast.present();
+      }
+    }, (error) => { console.log("Error:", error); });
   }
 
   /**
@@ -102,10 +114,9 @@ export class LoginPage {
           let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage") || TabsPage;
           // this.app.getRootNav().push(tabsPage);
           this.app.getRootNav().setRoot(tabsPage, null, { animate: true });
-
         } else {
           let toast = this.toastCtrl.create({
-            message: loginResponse.Message,
+            message: loginResponse.message,
             duration: 3000,
             position: "bottom"
           });

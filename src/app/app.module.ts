@@ -4,6 +4,7 @@ import { MyApp } from "./app.component";
 import { MomentModule } from "angular2-moment";
 import { Ionic2RatingModule } from "ionic2-rating";
 //import { Storage } from "@ionic/storage";
+import { AngularFireModule } from "angularfire2";
 import { QRCodeModule } from "angular2-qrcode";
 
 import { EqualValidator } from "../providers/equal-validator";
@@ -43,6 +44,14 @@ import { AnnouncementDetailsPage } from "../pages/announcement-details/announcem
 //   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: '__mydb' })
 // }
 
+export const firebaseConfig = {
+  apiKey: "AIzaSyDtpFL8f_LKioxgdim8n3GCqNX_ZG6bqqk",
+  authDomain: "ipi-chat.firebaseapp.com",
+  databaseURL: "https://ipi-chat.firebaseio.com",
+  storageBucket: "ipi-chat.appspot.com",
+  messagingSenderId: "938935194124"
+};
+
 @NgModule({
   declarations: [
     Elastic,
@@ -79,7 +88,8 @@ import { AnnouncementDetailsPage } from "../pages/announcement-details/announcem
   ],
   imports: [
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
-    MomentModule, ProviderModule.forRoot(), QRCodeModule
+    MomentModule, ProviderModule.forRoot(), QRCodeModule,
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

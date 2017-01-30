@@ -1,8 +1,8 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, ViewChild } from "@angular/core";
 import {
   App, NavController, NavParams, ToastController,
   Events, Tabs, AlertController, PopoverController,
-  Platform
+  Platform, Content
 } from "ionic-angular";
 import * as moment from "moment";
 import { Meeting } from "../../domain/meeting";
@@ -61,6 +61,8 @@ export class MySchedulePage {
     { title: "Cancelled", param: "cancelled", eventName: this.filterStatusMenu }
   ];
 
+  @ViewChild("pageContent")
+  public content: Content;
 
   constructor(
     public app: App,
@@ -510,6 +512,11 @@ export class MySchedulePage {
     if (index > -1) {
       this.fullHostings.splice(index, 1);
     }
+  }
+
+  segmentChange() {
+    // scroll to the bottom
+    this.content.scrollToTop(250);
   }
 
   /**

@@ -24,6 +24,10 @@ export class TabsPage {
     // console.log("Root:", tabs.getByIndex(index).getViews().find(itm => itm.name === page.name));
     let pageToLoad = tabs.getByIndex(index).getViews().find(itm => itm.name === page.name) || page;
     tabs.getByIndex(index).setRoot(pageToLoad, null, { animate: true });
+    if (pageToLoad.instance.content) {
+      // scroll the content
+      pageToLoad.instance.content.scrollToTop(250);
+    }
   }
 
 

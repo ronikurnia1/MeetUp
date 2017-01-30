@@ -59,9 +59,8 @@
       <ion-label bp-layout="fit">
         <ion-icon color="primary" name="globe"></ion-icon>
       </ion-label>
-      <ion-select placeholder="Country" bp-layout="fill" [selectOptions]="{title: 'Select Country'}" class="selection" formControlName="country"
-        [class.value-unselected]="registerForm.controls['country'].value === ''" [class.value-selected]="registerForm.controls['country'].value !== ''">
-        <ion-option *ngFor="let country of countries" [value]="country.name">{{country.name}}</ion-option>
+      <ion-select placeholder="Country" bp-layout="fill" [selectOptions]="{title: 'Select Country'}" class="selection" formControlName="country">
+        <ion-option *ngFor="let country of countries" [value]="country.id">{{country.title}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item class="meeting">
@@ -80,17 +79,9 @@
     <ion-item no-lines class="meeting">
       <ion-label>Notify me by</ion-label>
     </ion-item>
-    <ion-item class="meeting">
-      <ion-label>Email notification</ion-label>
-      <ion-checkbox formControlName="notifByEmail" [(checked)]="registerForm.controls.notifByEmail.value"></ion-checkbox>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-label>SMS notification</ion-label>
-      <ion-checkbox formControlName="notifBySms" [(checked)]="registerForm.controls.notifBySms.value"></ion-checkbox>
-    </ion-item>
-    <ion-item class="meeting">
-      <ion-label>Push notification</ion-label>
-      <ion-checkbox formControlName="notifByPush" [(checked)]="registerForm.controls.notifByPush.value"></ion-checkbox>
+    <ion-item class="meeting" *ngFor="let notif of notifications">
+      <ion-label>{{notif.title}}</ion-label>
+      <ion-checkbox formControlName="{{notif.id}}" [checked]="registerForm.controls[notif.id].value"></ion-checkbox>
     </ion-item>
 
     <ion-item class="meeting" no-lines margin-top margin-bottom *ngIf="screenTitle.toLowerCase() === 'register'">

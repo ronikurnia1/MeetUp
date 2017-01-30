@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { Camera } from "ionic-native";
-import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from "@angular/forms";
 import { App, NavController, NavParams, AlertController, ToastController, ActionSheetController } from "ionic-angular";
 import { TabsPage } from "../tabs/tabs"; import { DisclimerPage } from "../disclimer/disclimer";
 import { GlobalVarsService } from "../../providers/global-vars-service";
@@ -17,7 +17,9 @@ import { AuthService } from "../../providers/auth-service";
 export class RegisterPage {
 
   private registerForm: FormGroup;
-  private countries: any;
+
+  private countries: Array<any>;
+  private notifications: Array<any>;
   private titles: any;
   private submitAttempt: boolean = false;
   private screenTitle: string;
@@ -36,6 +38,9 @@ export class RegisterPage {
     private changeDetec: ChangeDetectorRef) {
 
     this.screenTitle = navParams.get("title");
+    this.countries = navParams.get("countries");
+    this.notifications = navParams.get("notifications");
+
     this.buttonTitle = this.screenTitle.toLowerCase() === "register" ? "Register" : "Save";
 
     this.submitAttempt = false;
@@ -44,10 +49,6 @@ export class RegisterPage {
       { name: "Ms.", value: "ms." },
       { name: "Mrs.", value: "mrs." }
     ];
-    globalVars.getCountries().subscribe(data => {
-      this.countries = data;
-      // console.log("country:", JSON.stringify(this.countries));
-    });
 
     if (this.screenTitle.toLowerCase() === "register") {
       // build registration form
@@ -61,10 +62,12 @@ export class RegisterPage {
         confirmPassword: ["", Validators.required],
         country: ["", Validators.required],
         company: ["", Validators.required],
-        position: [""],
-        notifByEmail: [false],
-        notifBySms: [false],
-        notifByPush: [false]
+        userType: ["delegate"],
+        isAdmin: [false],
+        position: [""]
+      });
+      this.notifications.forEach(notif => {
+        this.registerForm.addControl(notif.id, new FormControl(false));
       });
     } else {
       let profile = this.globalVars.getValue("userData");
@@ -78,12 +81,15 @@ export class RegisterPage {
         email: [profile.email, Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
         country: [profile.country, Validators.required],
         company: [profile.company, Validators.required],
-        userType: [profile.userType, Validators.required],
-        position: [profile.position],
-        notifByEmail: [profile.notifByEmail],
-        notifBySms: [profile.notifBySms],
-        notifByPush: [profile.notifByPush],
+        userType: [profile.userType],
+        isAdmin: [profile.isAdmin],
+        position: [profile.position]
       });
+      this.notifications.forEach(notif => {
+        let value: boolean = (<string>profile.notificationsMethods).indexOf(notif.id) != -1;
+        this.registerForm.addControl(notif.id, new FormControl(value));
+      });
+
     }
   }
 
@@ -102,29 +108,16 @@ export class RegisterPage {
     }
   }
 
+
+
   callApiRegistration() {
-    console.log("registration:", JSON.stringify(this.registerForm.value));
+    //console.log("registration:", JSON.stringify(this.registerForm.value));
     // Call backend Registration API
-    this.authService.registerUser(this.registerForm.value).subscribe(response => {
+    let userData = this.getFormValue(this.registerForm);
+    this.authService.registerUser(userData).subscribe(response => {
       if (response.result === "OK") {
         // put user"s data into globalVars
-        let userData = {
-          id: response.userId,
-          title: this.registerForm.controls["title"].value,
-          avatar: this.registerForm.controls["avatar"].value,
-          fullName: this.registerForm.controls["fullName"].value,
-          email: this.registerForm.controls["email"].value,
-          company: this.registerForm.controls["company"].value,
-          country: this.registerForm.controls["country"].value,
-          position: this.registerForm.controls["position"].value,
-          mobile: this.registerForm.controls["mobile"].value,
-          userType: "delegeate",
-          isAdmin: false,
-          notifByEmail: this.registerForm.controls["notifByEmail"].value,
-          notifBySms: this.registerForm.controls["notifBySms"].value,
-          notifByPush: this.registerForm.controls["notifByPush"].value,
-          about: ""
-        };
+        userData["id"] = response.userId;
         this.globalVars.setValue("userData", userData);
       }
       // show toast
@@ -145,14 +138,8 @@ export class RegisterPage {
 
           // Redirect to my schedule page
           // check if Tabs already exist
-          let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage");
-          if (tabsPage) {
-            console.log("TabsPage exists");
-            this.app.getRootNav().push(tabsPage);
-          } else {
-            console.log("TabsPage not exists");
-            this.app.getRootNav().push(TabsPage);
-          }
+          let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage") || TabsPage;
+          this.app.getRootNav().push(tabsPage);
         }
       });
     });
@@ -161,26 +148,10 @@ export class RegisterPage {
   callApiProfileUpdate() {
     console.log("Update profile:", this.registerForm.value);
     // Call backend UpdateProfile API
+    let userData = this.getFormValue(this.registerForm);
     this.authService.updateProfile(this.registerForm.value).subscribe(response => {
       if (response.result === "OK") {
         // construct user data
-        let userData = {
-          id: this.registerForm.controls["id"].value,
-          title: this.registerForm.controls["title"].value,
-          avatar: this.registerForm.controls["avatar"].value,
-          fullName: this.registerForm.controls["fullName"].value,
-          email: this.registerForm.controls["email"].value,
-          company: this.registerForm.controls["company"].value,
-          country: this.registerForm.controls["country"].value,
-          position: this.registerForm.controls["position"].value,
-          mobile: this.registerForm.controls["mobile"].value,
-          userType: this.registerForm.controls["userType"].value,
-          notifByEmail: this.registerForm.controls["notifByEmail"].value,
-          notifBySms: this.registerForm.controls["notifBySms"].value,
-          notifByPush: this.registerForm.controls["notifByPush"].value,
-          about: ""
-        };
-        // put user"s data into globalVars
         this.globalVars.setValue("userData", userData);
       }
       // show toast
@@ -196,6 +167,34 @@ export class RegisterPage {
         }
       });
     });
+  }
+
+  getFormValue(form: FormGroup): any {
+    let userData = {
+      title: form.controls["title"].value,
+      avatar: form.controls["avatar"].value,
+      fullName: form.controls["fullName"].value,
+      email: form.controls["email"].value,
+      company: form.controls["company"].value,
+      country: form.controls["country"].value,
+      position: form.controls["position"].value,
+      mobile: form.controls["mobile"].value,
+      userType: form.controls["userType"].value,
+      isAdmin: form.controls["isAdmin"].value,
+      about: ""
+    };
+    let notifValues: string = "";
+    this.notifications.forEach(notif => {
+      if (form.controls[notif.id].value) {
+        notifValues += notif.id + ";";
+      }
+    });
+    userData["notificationsMethods"] = notifValues;
+    if (this.screenTitle.toLowerCase() === "register") {
+      userData["password"] = form.controls["password"].value;
+    }
+    console.log("Data", JSON.stringify(userData));
+    return userData;
   }
 
   ionViewDidLoad() {
@@ -217,6 +216,7 @@ export class RegisterPage {
             };
             Camera.getPicture(options).then((imageData) => {
               this.registerForm.controls["avatar"].setValue("data:image/jpg;base64," + imageData);
+              console.log("Avatar:", this.registerForm.controls["avatar"].value);
             }, (err) => {
               let alert = this.alertCtrl.create({
                 title: "Camera failed",
