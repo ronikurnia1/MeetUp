@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-item no-lines class="meeting" (click)="viewProfile()">
+  <ion-item padding-left no-lines class="meeting" (click)="viewProfile()">
     <div bp-layout="flex">
       <ion-avatar item-left bp-layout="fit">
         <img [src]="meeting.meetingWith.avatar">
@@ -75,7 +75,7 @@
         <button small [outline]="meetingRate !== 'bad'" block ion-button (click)="rateMeetingAs('bad')">Bad</button>
       </div>
     </div>
-    <div ion-text class="small-text" color="danger" *ngIf="(submitAttempt && meetingRate.trim().length === 0)">Meeting's' rate is required.</div>
+    <div ion-text class="small-text" color="danger" *ngIf="(submitAttempt && meetingRate.trim().length === 0)">Meeting's rate is required.</div>
     <ion-item class="meeting">
       <ion-textarea placeholder="Comment" [(ngModel)]="comment"></ion-textarea>
     </ion-item>

@@ -18,17 +18,16 @@ export class MeetingService {
     /**
      * get users based on given group & keywords
      */
-    getUsers(group?: string, keywords?: string): Observable<any> {
+    getUsers(keyword: string): Observable<any> {
         // TODO:
-        // let groupQuery = group ? "?group=" + group : "";
-        // let queryString = groupQuery ? (keywords ? "&keywords=" + keywords : "")
-        //     : (keywords ? "?keywords=" + keywords : "");
-
-        // let request = "MobileMeetingApi/GetEventUsers" + queryString;
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
+        console.log("keyword", keyword);
+        let queryString = "?userId=" + this.globalVars.getValue("userData").id
+            + "&keyword=" + keyword;
+        let request = "MobileMeetingApi/GetEventUsers" + queryString;
+        return this.http.get(this.globalVars.getValue("apiUrl") + request)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
     /**

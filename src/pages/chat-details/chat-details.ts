@@ -72,7 +72,7 @@ export class ChatDetailsPage {
   sendMessage() {
     if (this.messageToSend.trim().length < 1) return;
     if (this.chatId === undefined) {
-      console.log("Id", this.sender.id);
+      // console.log("Id", this.sender.id);
       this.chatService.getChatId(this.sender, this.receiver).then(response => {
         this.chatId = response;
         this.messages = this.db.list("messages/" + this.chatId);

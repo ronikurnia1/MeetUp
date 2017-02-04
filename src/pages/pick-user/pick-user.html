@@ -7,7 +7,7 @@
     </ion-title>
   </ion-navbar>
   <ion-toolbar no-border>
-    <ion-searchbar (ionInput)="searchUser()" [(value)]="keywords"></ion-searchbar>
+    <ion-searchbar (ionInput)="searchUser($event)" [(ngModel)]="keywords"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -15,7 +15,7 @@
   <ion-list [virtualScroll]="users" approxItemHeight="45px">
     <ion-item *virtualItem="let user" class="meeting" (click)="userSelected(user)">
       <ion-avatar item-left>
-        <ion-img [src]="user.avatar"></ion-img>
+        <ion-img [src]="user.avatar || 'assets/icon/avatar.png'"></ion-img>
       </ion-avatar>
       <div class="bold-text">{{user.title}} {{user.fullName}}</div>
       <div>{{user.company}}</div>

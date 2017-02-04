@@ -3,7 +3,7 @@
     <ion-title>Find User</ion-title>
   </ion-navbar>
   <ion-toolbar no-border>
-    <ion-searchbar [value]="filterProfileValue" (ionInput)="filterProfile($event)"></ion-searchbar>
+    <ion-searchbar (ionInput)="filterProfile($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -14,7 +14,7 @@
     <ion-item *virtualItem="let profile" class="meeting" (click)="openChat(profile)">
       <div bp-layout="flex">
         <ion-avatar item-left bp-layout="fit">
-          <img [src]="profile.avatar">
+          <img [src]="profile.avatar || 'assets/icon/avatar.png'">
         </ion-avatar>
         <div margin-left bp-layout="fill">
           <div class="wrap-text bold-text">{{profile.title}} {{profile.title}} {{profile.fullName}}</div>

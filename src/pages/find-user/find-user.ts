@@ -12,7 +12,6 @@ import { FirebaseChatService } from "../../providers/firebase-chat-service";
 export class FindUserPage {
 
   private profiles: any[];
-  private filterProfileValue: string = "";
 
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
@@ -20,8 +19,8 @@ export class FindUserPage {
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService) {
 
-    this.meetingService.getUsers().subscribe((response) => {
-      this.profiles = response.data;
+    this.meetingService.getUsers("").subscribe((response) => {
+      this.profiles = response.users;
     });
   }
 
@@ -31,10 +30,10 @@ export class FindUserPage {
 
 
   filterProfile(event: any) {
-    this.filterProfileValue = event.target.value || "";
+    let keywords: string = event.target.value || "";
     this.profiles = [];
-    this.meetingService.getUsers("all", this.filterProfileValue).subscribe((response) => {
-      this.profiles = response.data;
+    this.meetingService.getUsers(keywords).subscribe((response) => {
+      this.profiles = response.users;
     });
   }
 

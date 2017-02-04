@@ -18,17 +18,17 @@ export class PickUserPage {
 
   private deletegeFilter = [
     { title: "All Attendees", param: "allAttendees", eventName: this.filterUserMenu },
-    { title: "Exhibitors", param: "exhibitors", eventName: this.filterUserMenu },
-    { title: "Speakers", param: "speakers", eventName: this.filterUserMenu },
-    { title: "IPI Staff", param: "IpiStaff", eventName: this.filterUserMenu }
+    { title: "Exhibitors", param: "exhibitor", eventName: this.filterUserMenu },
+    { title: "Speakers", param: "speaker", eventName: this.filterUserMenu },
+    { title: "IPI Staff", param: "ipi-staff", eventName: this.filterUserMenu }
   ];
   private nonDeletegeFilter = [
     { title: "All Attendees", param: "allAttendees", eventName: this.filterUserMenu },
-    { title: "Delegates", param: "delegates", eventName: this.filterUserMenu },
-    { title: "Exhibitors", param: "exhibitors", eventName: this.filterUserMenu },
-    { title: "Speakers", param: "speakers", eventName: this.filterUserMenu },
-    { title: "IPI Staff", param: "IpiStaff", eventName: this.filterUserMenu },
-    { title: "Event Organizer", param: "eventOrganizer", eventName: this.filterUserMenu }
+    { title: "Delegates", param: "delegate", eventName: this.filterUserMenu },
+    { title: "Exhibitors", param: "exhibitor", eventName: this.filterUserMenu },
+    { title: "Speakers", param: "speaker", eventName: this.filterUserMenu },
+    { title: "IPI Staff", param: "ipi-staff", eventName: this.filterUserMenu },
+    { title: "Event Organizer", param: "event-organizer", eventName: this.filterUserMenu }
   ];
 
   users: any[];
@@ -51,7 +51,7 @@ export class PickUserPage {
       this.handleFilter(menu);
     });
     this.users = [];
-    this.searchUser();
+    this.searchUser({ target: { value: "" } });
   }
 
   filterUser(event: any) {
@@ -79,11 +79,17 @@ export class PickUserPage {
   /**
    * Get user based on group & keywords/filter
    */
-  searchUser() {
+  searchUser(event: any) {
+    let keywords = event.target.value || "";
     this.users = [];
-    this.meetingService.getUsers(this.group, this.keywords).subscribe(response => {
+    this.meetingService.getUsers(keywords).subscribe(response => {
       if (response.result === "OK") {
-        this.users = response.data;
+        // TODO: implement filtering
+        if (this.group !== "allAttendees") {
+          this.users = (response.users as any[]).filter(itm => itm.userTypeName === this.group);
+        } else {
+          this.users = response.users;
+        }
       } else {
         this.alertUser("Retrieve users failed.", response.message);
       }
@@ -94,7 +100,7 @@ export class PickUserPage {
     this.title = menu.title;
     this.group = menu.param;
     // do user searching
-    this.searchUser();
+    this.searchUser({ target: { value: this.keywords } });
   }
 
   userSelected(user: any) {

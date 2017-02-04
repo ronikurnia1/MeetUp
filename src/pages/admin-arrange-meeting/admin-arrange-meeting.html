@@ -14,7 +14,7 @@
     </div>
     <div class="meeting" bp-layout="flex" *ngIf="form.controls.firstParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <img [src]="form.controls.firstParty.value.avatar">
+        <img [src]="form.controls.firstParty.value.avatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div margin-left bp-layout="fill">
         <div class="wrap-text bold-text">{{form.controls.firstParty.value.title}} {{form.controls.firstParty.value.fullName}}</div>
@@ -34,7 +34,7 @@
     </div>
     <div class="meeting" bp-layout="flex" *ngIf="form.controls.secondParty.valid">
       <ion-avatar item-left bp-layout="fit">
-        <img [src]="form.controls.secondParty.value.avatar">
+        <img [src]="form.controls.secondParty.value.avatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div margin-left bp-layout="fill">
         <div class="wrap-text bold-text">{{form.controls.secondParty.value.title}} {{form.controls.secondParty.value.fullName}}</div>

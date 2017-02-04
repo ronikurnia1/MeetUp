@@ -7,7 +7,7 @@
   <ion-item no-lines class="meeting">
     <div bp-layout="flex">
       <ion-avatar item-left bp-layout="fit">
-        <img [src]="recipient.avatar">
+        <img [src]="recipient.avatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div margin-left bp-layout="fill">
         <div class="wrap-text bold-text">{{recipient.title}} {{recipient.fullName}}</div>
