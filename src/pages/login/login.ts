@@ -61,12 +61,14 @@ export class LoginPage {
     // prepareration
     let countries: Array<any>;
     let notifications: Array<any>;
+    let titles: Array<any>;
     this.globalVars.getCountries().subscribe(response => {
       if (response.result === "OK") {
         countries = response.countries;
         notifications = response.notificationMethods;
+        titles = response.titles;
         let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-        this.navCtrl.push(register, { title: "Register", countries: countries, notifications: notifications });
+        this.navCtrl.push(register, { title: "Register", countries: countries, titles: titles, notifications: notifications });
       } else {
         let toast = this.toastCtrl.create({
           message: response.Message,
@@ -99,6 +101,14 @@ export class LoginPage {
         if (loginResponse.result === "OK") {
           // console.log("login response:", loginResponse.userProfile);
           // put user's data into globalVars
+
+          // TODO: remove this later
+          loginResponse.userProfile["userType"] = "exhibitor";
+          if (loginResponse.userProfile["avatar"] === "") {
+            loginResponse.userProfile["avatar"] = "assets/icon/avatar.png";
+          }
+          // End of remove
+
           this.globalVars.setValue("userData", loginResponse.userProfile);
           if (this.loginForm.controls["rememberMe"].value) {
             // save encrypted user's data on storage

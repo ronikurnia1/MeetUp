@@ -10,8 +10,8 @@
 <ion-content padding #myContent>
 
   <div class="message-wrapper disable-user-behavior" *ngFor="let msg of messages | async">
-    <div *ngIf="msg.sender === myId">
-      <img class="profile-pic right" [src]="myAvatar">
+    <div *ngIf="msg.sender === sender.id">
+      <img class="profile-pic right" [src]="sender.avatar">
       <div class="chat-bubble right">
         <div class="message" autolinker="">{{msg.message}}</div>
         <div class="message-detail">
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div *ngIf="msg.sender !== myId">
+    <div *ngIf="msg.sender !== sender.id">
       <img class="profile-pic left" [src]="receiver.avatar">
       <div class="chat-bubble left">
         <div class="message" autolinker="">{{msg.message}}</div>

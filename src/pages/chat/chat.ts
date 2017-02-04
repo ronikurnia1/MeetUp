@@ -8,6 +8,8 @@ import { FirebaseChatService } from "../../providers/firebase-chat-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
 import { FindUserPage } from "../find-user/find-user";
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2";
+import { Observable } from "rxjs/Observable";
+
 
 @Component({
   selector: 'page-chat',
@@ -29,6 +31,7 @@ export class ChatPage {
 
     this.myId = this.globalVars.getValue("userData").id;
     this.getChatList();
+
   }
 
   selectChat(chat: any) {
@@ -60,11 +63,15 @@ export class ChatPage {
     this.chats = this.db.list("users/" + this.myId + "/chatsWith", {
       query: { orderByChild: "timeStamp" }
     }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-    // this.chats = this.db.list("users/");
+
   }
 
   ionViewWillEnter() {
     this.getChatList();
+  }
+
+  ionViewWillLeave() {
+
   }
 
   ionViewDidLoad() {

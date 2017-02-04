@@ -41,7 +41,9 @@ module.exports = {
   plugins: [
     ionicWebpackFactory.getIonicEnvironmentPlugin(),
     new webpack.ProvidePlugin({
-      __extends: 'typescript-extends'
+      __extends: 'typescript-extends',
+      $: "jquery",
+      jQuery: "jquery"
     })
   ],
 

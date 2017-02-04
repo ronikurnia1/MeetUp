@@ -13,4 +13,7 @@
  */
 
 /// <reference path="../typings/modules/crypto-js/index.d.ts" />
+interface JQuery {
+  mapplic(options?: any): any;
+};
 declare module "*";

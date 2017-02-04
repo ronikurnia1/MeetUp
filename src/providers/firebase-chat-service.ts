@@ -21,12 +21,13 @@ export class FirebaseChatService {
     }).key;
     let values = {};
     values["messages/" + chatId + "/" + messageKey + "/timeStamp"] = firebase.database.ServerValue.TIMESTAMP;
+
     values["users/" + sender.id + "/chatsWith/" + receiver.id] = {
       chatId: chatId,
       id: receiver.id,
       lastMessage: message,
       fullName: receiver.fullName,
-      title: receiver.title,
+      title: receiver.title || "",
       avatar: receiver.avatar || "assets/icon/avatar.png",
       visible: true,
       timeStamp: firebase.database.ServerValue.TIMESTAMP
@@ -36,7 +37,7 @@ export class FirebaseChatService {
       id: sender.id,
       lastMessage: message,
       fullName: sender.fullName,
-      title: sender.title,
+      title: sender.title || "",
       avatar: sender.avatar || "assets/icon/avatar.png",
       visible: true,
       timeStamp: firebase.database.ServerValue.TIMESTAMP

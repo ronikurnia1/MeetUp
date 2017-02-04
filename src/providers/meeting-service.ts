@@ -24,10 +24,10 @@ export class MeetingService {
         // let queryString = groupQuery ? (keywords ? "&keywords=" + keywords : "")
         //     : (keywords ? "?keywords=" + keywords : "");
 
-        // let request = "GetUsers" + queryString;
+        // let request = "MobileMeetingApi/GetEventUsers" + queryString;
         // return this.http.get(this.globalVars.getValue("apiUrl") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-users.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -36,9 +36,9 @@ export class MeetingService {
      */
     getLocations(): Observable<any> {
         // TODO:
-        // return this.http.get(this.globalVars.getValue("apiUrl") + "/GetLocations")
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "/GetLocations")
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-locations.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-locations.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -48,9 +48,9 @@ export class MeetingService {
      */
     getSubjects(): Observable<any> {
         // TODO:
-        // return this.http.get(this.globalVars.getValue("apiUrl") + "/GetSubjects")
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "/GetSubjects")
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-subjects.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-subjects.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -61,9 +61,9 @@ export class MeetingService {
     getChatList(email: string): Observable<any> {
         // TODO:
         // let request = "GetChatList?email=" + email;
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-chat-list.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-chat-list.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -73,9 +73,9 @@ export class MeetingService {
     getMeetings(userEmail: string, type: string): Observable<any> {
         // TODO:
         // let request = "GetMeetings?type=" + type + "&email=" + userEmail;
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/today-meetings.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/today-meetings.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -86,9 +86,9 @@ export class MeetingService {
     getNotifications(userEmail: string): Observable<any> {
         // TODO:
         // let request = "GetNotifications?email=" + userEmail;
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-notifications.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-notifications.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -99,9 +99,9 @@ export class MeetingService {
     getMeetingById(meetingId: string): Observable<any> {
         // TODO:
         // let request = "GetMeetingById?id=" + meetingId;
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-meeting-by-id.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-meeting-by-id.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -111,9 +111,9 @@ export class MeetingService {
     sendInvitation(invitaion: any): Observable<any> {
         // TODO:
         //let data = { meetingid: meetingId, recipientemail: userEmail, statusname: "accepted" };
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "SendInvitaion", invitaion)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "SendInvitaion", invitaion)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/send-invitation.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/send-invitation.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -124,9 +124,9 @@ export class MeetingService {
         userEmail: string): Observable<any> {
         // TODO:
         // let data = { meetingId: meetingId, recipientEmail: userEmail, statusName: "accepted" };
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateStatusMeeting", data)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", data)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/accept-invitation.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/accept-invitation.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
@@ -134,9 +134,9 @@ export class MeetingService {
      */
     rescheduleMeeting(rescheduleData: any): Observable<any> {
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateStatusMeeting", rescheduleData)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", rescheduleData)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/reschedule-meeting.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/reschedule-meeting.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
@@ -150,9 +150,9 @@ export class MeetingService {
         //     statusname: "rejected",
         //     reason: reason
         // };
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateStatusMeeting", data)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", data)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/decline-invitation.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/decline-invitation.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -162,9 +162,9 @@ export class MeetingService {
     cancelMeeting(meetingId: string, reason: string): Observable<any> {
         // TODO:
         // let data = { meetingId: meetingId, reason: reason };
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "CancelMyMeeting", data)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "CancelMyMeeting", data)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/cancel-meeting.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/cancel-meeting.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
@@ -179,9 +179,9 @@ export class MeetingService {
         //     statusname: "withdrawed",
         //     reason: reason
         // };
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateStatusMeeting", data)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", data)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/withdraw-accepted-meeting.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/withdraw-accepted-meeting.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -190,9 +190,9 @@ export class MeetingService {
      */
     saveAttendanceRegistration(profile: any): Observable<any> {
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "SaveAttendanceRegistration", profile)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "SaveAttendanceRegistration", profile)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/save-attendance-registration.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/save-attendance-registration.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -201,9 +201,9 @@ export class MeetingService {
      */
     createBlockTime(blockTime: any) {
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateBlcokTime", blockTime)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateBlcokTime", blockTime)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/create-blocktime.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/create-blocktime.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
@@ -212,9 +212,9 @@ export class MeetingService {
     updateBlockTime(blockTime: any): Observable<any> {
         // console.log("blocktime:", blockTime);
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateBlcokTime", blockTime)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateBlcokTime", blockTime)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/update-blocktime.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/update-blocktime.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -224,18 +224,18 @@ export class MeetingService {
     removeBlockTime(blockTime: any): Observable<any> {
         // console.log("blocktime:", blockTime);
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "RemoveBlcokTime", blockTime)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "RemoveBlcokTime", blockTime)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/remove-blocktime.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/remove-blocktime.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
 
     submitScanedBadge(scanedBadge: any) {
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "SubmitScanedBadge", scanedBadge)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "SubmitScanedBadge", scanedBadge)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/submit-scaned-badge.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/submit-scaned-badge.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -246,9 +246,9 @@ export class MeetingService {
     getMessageList() {
         // TODO:
         // let request = "GetMessageList";
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-messages.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-messages.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -258,9 +258,9 @@ export class MeetingService {
     getMessageById(messageId: string) {
         // TODO:
         // let request = "GetMessages?id=" + messageId;
-        // return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/get-message-details.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-message-details.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
@@ -269,9 +269,9 @@ export class MeetingService {
      */
     portMeetingSurvey(meetingFeeback: any): Observable<any> {
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrl") + "PostMeetingSurvey", meetingFeeback)
+        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "PostMeetingSurvey", meetingFeeback)
         //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/post-metting-survey.json")
+        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/post-metting-survey.json")
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 

@@ -5,7 +5,7 @@ import { GlobalVarsService } from "../../providers/global-vars-service";
 import { ScanAttendancePage } from "../scan-attendance/scan-attendance";
 import { UserProfilePage } from "../user-profile/user-profile";
 import { AnnouncementPage } from "../announcement/announcement";
-
+import { FloorPlanPage } from "../floor-plan/floor-plan";
 import { LoginPage } from "../login/login";
 
 @Component({
@@ -62,6 +62,7 @@ export class MenuPage {
     {
       "title": "Venue",
       "icon": "pin",
+      "page": FloorPlanPage,
       "color": "#4CAF50"
     },
     {
@@ -102,7 +103,7 @@ export class MenuPage {
       // login page
       if (page.name === "LoginPage") {
         // remove userData
-        localStorage.clear();
+        localStorage.removeItem("userData");
         // move to the defaut tabs
         // this.tabs.select(0);
 

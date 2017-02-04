@@ -1,0 +1,291 @@
+{
+	"mapwidth": "1000",
+	"mapheight": "600",
+	"categories": [
+		{
+			"id": "food",
+			"title": "Fast-foods & Restaurants",
+			"color": "#DF8D5E",
+			"show": "false"
+		},
+		{
+			"id": "dep",
+			"title": "Department Stores",
+			"color": "#72903A",
+			"show": "true"
+		},
+		{
+			"id": "clothing",
+			"title": "Clothing & Accessories",
+			"color": "#91BF39",
+			"show": "true"
+		},
+		{
+			"id": "health",
+			"title": "Health & Cosmetics",
+			"color": "#D84632",
+			"show": "true"
+		},
+		{
+			"id": "misc",
+			"title": "Miscellaneous",
+			"color": "#0C9591",
+			"show": "true"
+		}
+	],
+	"levels": [
+		{
+			"id": "basement-floor",
+			"title": "Basement",
+			"map": "assets/floor-plan/mall-underground.svg",
+			"minimap": "assets/floor-plan/mall-underground-mini.jpg",
+			"locations": [
+				{
+					"id": "gap",
+					"title": "GAP",
+					"about": "Lorem ipsum",
+					"description": "Lorem ipsum",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/gap.jpg",
+					"x": "0.3781",
+					"y": "0.4296"
+				},
+				{
+					"id": "petco",
+					"title": "Petco",
+					"about": "Lorem ipsum",
+					"description": "Lorem ipsum",
+					"category": "misc",
+					"thumbnail": "assets/floor-plan/thumbs/petco.jpg",
+					"x": "0.5163",
+					"y": "0.3050"
+				}
+			]
+		},
+		{
+			"id": "ground-floor",
+			"title": "Ground Floor",
+			"map": "assets/floor-plan/mall-ground.svg",
+			"minimap": "assets/floor-plan/mall-ground-mini.jpg",
+			"show": "true",
+			"locations": [
+				{
+					"id": "sears",
+					"title": "Sears",
+					"about": "Lorem ipsum dolor sit amet.",
+					"description": "<p>Recognizing the need is the primary condition for design.</p>",
+					"category": "dep",
+					"thumbnail": "assets/floor-plan/thumbs/sears.jpg",
+					"x": "0.7935",
+					"y": "0.2736",
+					"zoom": "3"
+				},
+				{
+					"id": "macys",
+					"title": "Macy's",
+					"description": "Macy's <i>department</i> store",
+					"category": "dep",
+					"thumbnail": "assets/floor-plan/thumbs/macys.jpg",
+					"x": "0.2021",
+					"y": "0.5847",
+					"zoom": "2"
+				},
+				{
+					"id": "jcpenney",
+					"title": "JCPenney",
+					"about": "Lorem ipsum",
+					"description": "JCPenney department store",
+					"category": "dep",
+					"thumbnail": "assets/floor-plan/thumbs/jcpenney.jpg",
+					"link": "http://codecanyon.net/user/sekler?ref=sekler",
+					"x": "0.6651",
+					"y": "0.6734",
+					"zoom": "3"
+				},
+				{
+					"id": "walgreens",
+					"title": "Walgreens",
+					"about": "Lorem ipsum",
+					"description": "At the corner of Happy & Healthy",
+					"category": "health",
+					"thumbnail": "assets/floor-plan/thumbs/walgreens.jpg",
+					"x": "0.4611",
+					"y": "0.5426"
+				},
+				{
+					"id": "sephora",
+					"title": "Sephora",
+					"about": "Lorem ipsum",
+					"description": "Makeup, fragrance, skincare",
+					"category": "health",
+					"thumbnail": "assets/floor-plan/thumbs/sephora.jpg",
+					"link": "http://codecanyon.net/user/sekler?ref=sekler",
+					"x": "0.7504",
+					"y": "0.5211"
+				},
+				{
+					"id": "belk",
+					"title": "Belk",
+					"about": "Lorem ipsum",
+					"description": "<p>Lorem ipsum</p><img src=\"assets/floor-plan/logo.png\" alt=\"Mapplic\">",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/belk.jpg",
+					"link": "http://codecanyon.net/user/sekler?ref=sekler",
+					"x": "0.3947",
+					"y": "0.5444"
+				},
+				{
+					"id": "hnm",
+					"title": "H&M",
+					"about": "Lorem ipsum",
+					"description": "Lorem ipsum",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/hm.jpg",
+					"x": "0.5431",
+					"y": "0.5240"
+				},
+				{
+					"id": "oldnavy",
+					"title": "Old Navy",
+					"about": "Lorem ipsum",
+					"description": "Lorem ipsum",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/oldnavy.jpg",
+					"x": "0.3688",
+					"y": "0.3909"
+				},
+				{
+					"id": "sportchek",
+					"title": "Sport Chek",
+					"about": "Lorem ipsum",
+					"description": "<img src=\"assets/floor-plan/logo.png\" alt=\"Mapplic\"><p>Lorem ipsum</p>",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/sportchek.jpg",
+					"x": "0.6243",
+					"y": "0.3055"
+				},
+				{
+					"id": "starbucks",
+					"title": "Starbucks",
+					"about": "Lorem ipsum",
+					"description": "The coffee company",
+					"category": "food",
+					"thumbnail": "assets/floor-plan/thumbs/starbucks.jpg",
+					"x": "0.6445",
+					"y": "0.4478"
+				},
+				{
+					"id": "zara",
+					"title": "Zara",
+					"about": "Lorem ipsum",
+					"description": "<img src=\"assets/floor-plan/logo.png\" alt=\"Mapplic\"><p>Lorem ipsum</p>",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/zara.jpg",
+					"link": "http://codecanyon.net/user/sekler?ref=sekler",
+					"x": "0.4785",
+					"y": "0.3173"
+				}
+			]
+		},
+		{
+			"id": "first-floor",
+			"title": "First Floor",
+			"map": "assets/floor-plan/mall-level1.svg",
+			"minimap": "assets/floor-plan/mall-level1-mini.jpg",
+			"locations": [
+				{
+					"id": "applebees",
+					"title": "Applebee's",
+					"about": "Lorem ipsum",
+					"description": "See you tomorrow",
+					"category": "food",
+					"thumbnail": "assets/floor-plan/thumbs/applebees.jpg",
+					"x": "0.7465",
+					"y": "0.2769"
+				},
+				{
+					"id": "kfc",
+					"title": "KFC",
+					"about": "Lorem ipsum",
+					"description": "Kentucky Fried Chicken",
+					"category": "food",
+					"thumbnail": "assets/floor-plan/thumbs/kfc.jpg",
+					"x": "0.7488",
+					"y": "0.4997"
+				},
+				{
+					"id": "mcdonalds",
+					"title": "McDonald's",
+					"about": "Lorem ipsum",
+					"description": "Additional information",
+					"category": "food",
+					"thumbnail": "assets/floor-plan/thumbs/mcdonalds.jpg",
+					"link": "http://codecanyon.net/user/sekler?ref=sekler",
+					"x": "0.7374",
+					"y": "0.3918"
+				},
+				{
+					"id": "pizzahut",
+					"title": "Pizza Hut",
+					"about": "Lorem ipsum",
+					"description": "Make it great",
+					"category": "food",
+					"thumbnail": "assets/floor-plan/thumbs/pizzahut.jpg",
+					"x": "0.6267",
+					"y": "0.3151"
+				},
+				{
+					"id": "subway",
+					"title": "Subway",
+					"about": "Lorem ipsum",
+					"description": "Eat fresh.",
+					"category": "food",
+					"thumbnail": "assets/floor-plan/thumbs/subway.jpg",
+					"x": "0.7092",
+					"y": "0.5232"
+				},
+				{
+					"id": "cvs",
+					"title": "CVS Pharmacy",
+					"about": "Lorem ipsum",
+					"description": "Lorem ipsum <a href=\"http://www.codecanyon.net\">dolor sit</a> amet, consectetur.",
+					"category": "health",
+					"thumbnail": "assets/floor-plan/thumbs/cvs.jpg",
+					"link": "http://codecanyon.net/user/sekler?ref=sekler",
+					"x": "0.5104",
+					"y": "0.2771"
+				},
+				{
+					"id": "pullnbear",
+					"title": "Pull & Bear",
+					"about": "Lorem ipsum",
+					"description": "Lorem ipsum",
+					"category": "clothing",
+					"thumbnail": "assets/floor-plan/thumbs/pullbear.jpg",
+					"x": "0.4846",
+					"y": "0.3246"
+				},
+				{
+					"id": "amc",
+					"title": "AMC Theatres",
+					"about": "Lorem ipsum",
+					"description": "Additional information",
+					"category": "misc",
+					"thumbnail": "assets/floor-plan/thumbs/amc.jpg",
+					"x": "0.6640",
+					"y": "0.6426"
+				},
+				{
+					"id": "atnt",
+					"title": "AT&T",
+					"about": "Lorem ipsum",
+					"description": "Additional information",
+					"category": "misc",
+					"thumbnail": "assets/floor-plan/thumbs/att.jpg",
+					"x": "0.3750",
+					"y": "0.5391"
+				}
+			]
+		}
+	]
+}

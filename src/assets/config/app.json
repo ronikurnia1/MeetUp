@@ -1,3 +1,4 @@
 {
-    "apiUrl": "assets/"
+    "apiUrlDummy": "assets/",
+    "apiUrl": "http://116.12.199.25:8093/api/MobileUserApi/"   
 }

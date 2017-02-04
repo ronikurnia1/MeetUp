@@ -56,12 +56,14 @@ export class UserProfilePage {
         // prepareration
         let countries: Array<any>;
         let notifications: Array<any>;
+        let titles: Array<any>;
         this.globalVars.getCountries().subscribe(response => {
           if (response.result === "OK") {
             countries = response.countries;
             notifications = response.notificationMethods;
+            titles = response.titles;
             let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-            this.navCtrl.push(register, { title: "Edit Profile", countries: countries, notifications: notifications });
+            this.navCtrl.push(register, { title: "Edit Profile", countries: countries, titles: titles, notifications: notifications });
           } else {
             let toast = this.toastCtrl.create({
               message: response.Message,

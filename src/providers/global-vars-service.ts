@@ -9,13 +9,20 @@ import "rxjs/Rx";
 @Injectable()
 export class GlobalVarsService {
 
+    private config = {
+        apiUrlDummy: "assets/",
+        apiUrl: "http://116.12.199.25:8093/api/",
+        apiUrlProxy:"/api/",
+        firebaseUser: "roniku@gmail.com",
+        firebasePwd: "St7465dsh!`+"
+    };
+
     constructor(private http: Http) {
-        // this.initialize().subscribe(data => {
-        //     for (let itm in data) {
-        //         this[itm] = data[itm];
-        //         console.log(itm, data[itm]);
-        //     }
-        // });
+
+        // initialize config
+        for (let itm in this.config) {
+            this[itm] = this.config[itm];
+        }
     }
 
     getValue(key: string): any {
@@ -26,22 +33,21 @@ export class GlobalVarsService {
         this[key] = value;
     }
 
-    /**
-     * initialize global variables
-     */
-    initialize(): Observable<any> {
-        return this.http.get("assets/config/app.json")
-            .map((response: Response) => response.json()).catch(this.handleError);
-    }
-
+    // /**
+    //  * initialize global variables
+    //  */
+    // initialize(): Observable<any> {
+    //     return this.http.get("assets/config/app.json")
+    //         .map((response: Response) => response.json()).catch(this.handleError);
+    // }
 
     /**
      * get list of country
      */
     getCountries(): Observable<any> {
-        return this.http.get("assets/dummy-data/get-content-register.json")
+        return this.http.get(this["apiUrl"] + "MobileUserApi/GetContentRegister")
             .map((response: Response) => response.json()).catch(this.handleError);
-        // return this.http.get(this["apiUrl"] + "GetContentRegister")
+        // return this.http.get(this["apiUrl"] + "dummy-data/get-content-register.json")
         //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 

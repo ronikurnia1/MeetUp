@@ -27,16 +27,12 @@ export class AuthService {
     return this.authState !== null;
   }
 
-  signInWithPassword(email: string, password: string): firebase.Promise<FirebaseAuthState> {
-    let credential = { email: email, password: password };
+  loginToFirebase(): firebase.Promise<FirebaseAuthState> {
+    let credential = { email: this.globalVars.getValue("firebaseUser"), password: this.globalVars.getValue("firebasePwd") };
     return this.auth$.login(credential, { provider: AuthProviders.Password, method: AuthMethods.Password });
   }
 
-  signUp(email: string, password: string): firebase.Promise<FirebaseAuthState> {
-    return this.auth$.createUser({ email: email, password: password });
-  }
-
-  signOut(): void {
+  logOutFromFirebase(): void {
     this.auth$.logout();
   }
   /**
@@ -44,14 +40,20 @@ export class AuthService {
    */
   registerUser(registrationData: any): Observable<any> {
     // TODO:
-    // return this.http.post(this.globalVars.getValue("apiUrl") + "Register", registrationData)
-    //   .map((response: Response) => response.json()).catch(this.handleError);
-    return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/register-user.json")
+    return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/Register", registrationData)
       .map((response: Response) => {
-        this.authenticateUser(registrationData.email, registrationData.password).subscribe(authResponse => {
-        });
+        if (response.json().result === "OK") {
+          this.authenticateUser(registrationData.email, registrationData.password).subscribe(authResponse => {
+          });
+        }
         return response.json();
       }).catch(this.handleError);
+    // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/register-user.json")
+    //   .map((response: Response) => {
+    //     this.authenticateUser(registrationData.email, registrationData.password).subscribe(authResponse => {
+    //     });
+    //     return response.json();
+    //   }).catch(this.handleError);
   }
 
   /**
@@ -59,9 +61,9 @@ export class AuthService {
    */
   changePassword(changePassword: any): Observable<any> {
     // TODO:
-    return this.http.post(this.globalVars.getValue("apiUrl") + "ChangePassword", changePassword)
+    return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/ChangePassword", changePassword)
       .map((response: Response) => response.json()).catch(this.handleError);
-    // return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/change-password.json")
+    // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/change-password.json")
     //   .map((response: Response) => response.json()).catch(this.handleError);
   }
 
@@ -70,11 +72,11 @@ export class AuthService {
  */
   getProfile(profileId: string): Observable<any> {
     // TODO:
-    // let request = "GetProfile?id=" + profileId;
+    // let request = "MobileUserApi/GetProfile?id=" + profileId;
     // return this.http.get(this.globalVars.getValue("apiUrl") + request)
     //     .map((response: Response) => response.json()).catch(this.handleError);
     let request = "dummy-data/get-profile.json"
-    return this.http.get(this.globalVars.getValue("apiUrl") + request)
+    return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
       .map((response: Response) => response.json()).catch(this.handleError);
   }
 
@@ -84,10 +86,10 @@ export class AuthService {
    */
   updateProfile(profileData: any): Observable<any> {
     // TODO:
-    // return this.http.post(this.globalVars.getValue("apiUrl") + "UpdateProfile", profileData)
-    //   .map((response: Response) => response.json()).catch(this.handleError);
-    return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/update-profile.json")
+    return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/UpdateProfile", profileData)
       .map((response: Response) => response.json()).catch(this.handleError);
+    // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/update-profile.json")
+    //   .map((response: Response) => response.json()).catch(this.handleError);
   }
 
   /**
@@ -95,35 +97,33 @@ export class AuthService {
    */
   authenticateUser(email: string, password: string): Observable<any> {
     // TODO:
-    // return this.http.get("/api/Login?email=" + email + "&password=" + password)
-    //   .map((response: Response) => response.json()).catch(this.handleError);
-
-    let responseFile = email.toLowerCase().indexOf("admin") > -1 ?
-      "login-admin.json" : "login-exhibitor.json";
-    return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/" + responseFile)
+    return this.http.get(this.globalVars.getValue("apiUrl") + "MobileUserApi/Login?email=" + email + "&password=" + password)
       .map((response: Response) => {
         // If OK then login/signUp to Firebase        
         if (response.json().result === "OK") {
-          this.signInWithPassword("roniku@gmail.com", "StartNewDay!").then((result) => {
+          this.loginToFirebase().then((result) => {
             console.log("Firebase authenticated:", this.authenticated);
           }, (error) => {
             console.log("Firebase login error:", error.message);
-            // Sign up to firebase
-            // this.signUp(email, password).then((a) => {
-            //   console.log("Firebase authenticated:", this.authenticated);
-            //   this.db.object("users/" + response.json().userProfile.id).set({
-            //     avatar: response.json().userProfile.avatar,
-            //     fullName: response.json().userProfile.fullName,
-            //     chats: { dummy: true }
-            //   });
-            //   // a.auth.updateProfile({ displayName: response.json().userProfile.fullName, photoURL: response.json().userProfile.avatar });
-            // }, (signUperror) => {
-            //   console.log("error:", signUperror.message);
-            // });
           });
         }
         return response.json();
       }).catch(this.handleError);
+
+    // let responseFile = email.toLowerCase().indexOf("admin") > -1 ?
+    //   "login-admin.json" : "login-exhibitor.json";
+    // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/" + responseFile)
+    //   .map((response: Response) => {
+    //     // If OK then login/signUp to Firebase        
+    //     if (response.json().result === "OK") {
+    //       this.loginToFirebase().then((result) => {
+    //         console.log("Firebase authenticated:", this.authenticated);
+    //       }, (error) => {
+    //         console.log("Firebase login error:", error.message);
+    //       });
+    //     }
+    //     return response.json();
+    //   }).catch(this.handleError);
   }
 
   /**
@@ -131,9 +131,9 @@ export class AuthService {
    */
   resetPassword(email: string): Observable<any> {
     // TODO:
-    // return this.http.post(this.globalVars.getValue("apiUrl") + "ForgotPassword", { email: email })
+    // return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/ForgotPassword", { email: email })
     //   .map((response: Response) => response.json()).catch(this.handleError);
-    return this.http.get(this.globalVars.getValue("apiUrl") + "dummy-data/forgetpassword.json")
+    return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/forgetpassword.json")
       .map((response: Response) => response.json()).catch(this.handleError);
   }
 
@@ -143,12 +143,12 @@ export class AuthService {
    */
   getDisclimer(subject: string): Observable<any> {
     // TODO:
-    // let request = subject === "terms" ? "GetTermsOfService" : "GetPrivacyPolicy";
-    // return this.http.get(this.globalVars.getValue("apiUrl") + request)
-    //   .map((response: Response) => response.json()).catch(this.handleError);
-    let request = "dummy-data/disclimer.json"
+    let request = subject === "terms" ? "MobileUserApi/GetTermsOfService" : "MobileUserApi/GetPrivacyPolicy";
     return this.http.get(this.globalVars.getValue("apiUrl") + request)
       .map((response: Response) => response.json()).catch(this.handleError);
+    // let request = "dummy-data/disclimer.json"
+    // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
+    //   .map((response: Response) => response.json()).catch(this.handleError);
   }
   /**
   * Handle HTTP error

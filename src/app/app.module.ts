@@ -39,6 +39,7 @@ import { FindUserPage } from "../pages/find-user/find-user";
 import { AdminArrangeMeetingPage } from "../pages/admin-arrange-meeting/admin-arrange-meeting";
 import { AnnouncementPage } from "../pages/announcement/announcement";
 import { AnnouncementDetailsPage } from "../pages/announcement-details/announcement-details";
+import { FloorPlanPage } from "../pages/floor-plan/floor-plan";
 
 // export function provideStorage() {
 //   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: '__mydb' })
@@ -84,7 +85,8 @@ export const firebaseConfig = {
     FindUserPage,
     AdminArrangeMeetingPage,
     AnnouncementPage,
-    AnnouncementDetailsPage
+    AnnouncementDetailsPage,
+    FloorPlanPage
   ],
   imports: [
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
@@ -121,7 +123,8 @@ export const firebaseConfig = {
     FindUserPage,
     AdminArrangeMeetingPage,
     AnnouncementPage,
-    AnnouncementDetailsPage
+    AnnouncementDetailsPage,
+    FloorPlanPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

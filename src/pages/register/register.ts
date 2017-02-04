@@ -40,15 +40,11 @@ export class RegisterPage {
     this.screenTitle = navParams.get("title");
     this.countries = navParams.get("countries");
     this.notifications = navParams.get("notifications");
+    this.titles = navParams.get("titles");
 
     this.buttonTitle = this.screenTitle.toLowerCase() === "register" ? "Register" : "Save";
 
     this.submitAttempt = false;
-    this.titles = [
-      { name: "Mr.", value: "mr." },
-      { name: "Ms.", value: "ms." },
-      { name: "Mrs.", value: "mrs." }
-    ];
 
     if (this.screenTitle.toLowerCase() === "register") {
       // build registration form
@@ -86,7 +82,10 @@ export class RegisterPage {
         position: [profile.position]
       });
       this.notifications.forEach(notif => {
-        let value: boolean = (<string>profile.notificationsMethods).indexOf(notif.id) != -1;
+        let value: boolean = false;
+        if (profile.notificationsMethods) {
+          value = (<string>profile.notificationsMethods).indexOf(notif.id) != -1;
+        }
         this.registerForm.addControl(notif.id, new FormControl(value));
       });
 
@@ -118,7 +117,7 @@ export class RegisterPage {
       if (response.result === "OK") {
         // put user"s data into globalVars
         userData["id"] = response.userId;
-        this.globalVars.setValue("userData", userData);
+        this.globalVars.setValue("userData", userData);        
       }
       // show toast
       let toast = this.toastCtrl.create({

@@ -1,10 +1,11 @@
-import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { NavController, NavParams, Content } from 'ionic-angular';
 import * as moment from "moment";
 import { UserProfilePage } from "../user-profile/user-profile";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2";
 import { FirebaseChatService } from "../../providers/firebase-chat-service";
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'page-chat-details',
@@ -21,48 +22,48 @@ export class ChatDetailsPage {
   private sender: any;
 
   private inputRow: number = 4;
-  private myAvatar: string;
-  private myId: string;
 
   private chatId: string;
 
   private messages: FirebaseListObservable<any[]>;
   private messageToSend: string = "";
 
+  private firebaseSubs: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private chatService: FirebaseChatService,
     private db: AngularFireDatabase,
+    private zone: NgZone,
     private globalVars: GlobalVarsService) {
 
     this.receiver = navParams.get("receiver");
     this.sender = navParams.get("sender");
 
-    // dummy
-    this.receiver.id = this.sender.id === "38923443" ? "356437903" : "38923443";
-
-    this.myAvatar = this.sender.avatar;
-    this.myId = this.sender.id;
-
     this.chatId = this.navParams.get("chatId");
+
+    this.ionViewWillEnter();
+
+  }
+
+  ionViewWillEnter() {
     if (this.chatId !== undefined) {
       this.messages = this.db.list("messages/" + this.chatId);
-      this.messages.subscribe(data => {
+      this.firebaseSubs = this.messages.subscribe(data => {
         // scroll to the bottom
         this.content.scrollToBottom(250);
       });
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ChatDetailsPage');
-  }
-
   // ionViewDidEnter() {
   //   this.content.scrollToBottom(300);
   // }
 
+  ionViewWillLeave() {
+    this.firebaseSubs.unsubscribe();
+  }
   openProfile() {
     let profilePage: any = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
     this.navCtrl.push(profilePage, { profile: this.receiver }, { animate: true });
@@ -71,15 +72,18 @@ export class ChatDetailsPage {
   sendMessage() {
     if (this.messageToSend.trim().length < 1) return;
     if (this.chatId === undefined) {
+      console.log("Id", this.sender.id);
       this.chatService.getChatId(this.sender, this.receiver).then(response => {
         this.chatId = response;
         this.messages = this.db.list("messages/" + this.chatId);
-        this.messages.subscribe(data => {
+        this.firebaseSubs = this.messages.subscribe(data => {
           // scroll to the bottom
           this.content.scrollToBottom(250);
         });
         this.chatService.sendMessage(this.chatId, this.sender, this.receiver, this.messageToSend);
-        this.messageToSend = "";
+        this.zone.run(() => {
+          this.messageToSend = "";
+        });
 
       }).catch(error => {
         console.log("sendMessage error:", error);
@@ -87,7 +91,9 @@ export class ChatDetailsPage {
     }
     else {
       this.chatService.sendMessage(this.chatId, this.sender, this.receiver, this.messageToSend);
-      this.messageToSend = "";
+      this.zone.run(() => {
+        this.messageToSend = "";
+      });
     }
   }
 

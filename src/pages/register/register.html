@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title style="z-index: 100">{{screenTitle}}</ion-title>
-</ion-navbar>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
@@ -17,7 +17,7 @@
         <ion-icon color="primary" name="medal"></ion-icon>
       </ion-label>
       <ion-select placeholder="Title" bp-layout="fill" [selectOptions]="{title: 'Select title'}" class="selection" formControlName="title">
-        <ion-option *ngFor="let title of titles" [value]="title.name">{{title.name}}</ion-option>
+        <ion-option *ngFor="let title of titles" [value]="title.title">{{title.title}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item class="meeting">
@@ -33,7 +33,7 @@
       </ion-label>
       <ion-input formControlName="mobile" type="text" placeholder="Mobile"></ion-input>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.mobile.valid  && (registerForm.controls.mobile.dirty || submitAttempt)">Full Name is required.</div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.mobile.valid  && (registerForm.controls.mobile.dirty || submitAttempt)">Mobile no is required.</div>
     <ion-item class="meeting">
       <ion-label>
         <ion-icon color="primary" name="mail"></ion-icon>
