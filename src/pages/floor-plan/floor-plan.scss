@@ -24,8 +24,8 @@ page-floor-plan {
     }
 
     /* Preloader & Error */
-    .mapplic-element.mapplic-loading { background: url(/assets/floor-plan/images/loader.gif) no-repeat center; }
-    .mapplic-element.mapplic-error { background: url(/assets/floor-plan/images/error-icon.png) no-repeat center; }
+    .mapplic-element.mapplic-loading { background: url(../assets/floor-plan/images/loader.gif) no-repeat center; }
+    .mapplic-element.mapplic-error { background: url(../assets/floor-plan/images/error-icon.png) no-repeat center; }
 
     .mapplic-element > * {
         opacity: 1;
@@ -47,7 +47,7 @@ page-floor-plan {
     }
 
     :-webkit-full-screen .mapplic-fullscreen-button {
-        background-image: url(/assets/floor-plan/images/fullscreen-exit.png);
+        background-image: url(../assets/floor-plan/images/fullscreen-exit.png);
     }
 
     /* Map container */
@@ -97,16 +97,16 @@ page-floor-plan {
     /* IE Fix END */
 
     .mapplic-map.mapplic-zoomable .mapplic-map-image {
-        cursor: url(/assets/floor-plan/images/openhand.cur), default;
+        cursor: url(../assets/floor-plan/images/openhand.cur), default;
     }
 
     .mapplic-map.mapplic-zoomable.mapplic-dragging .mapplic-map-image {
-        cursor: url(/assets/floor-plan/images/closedhand.cur), move;
+        cursor: url(../assets/floor-plan/images/closedhand.cur), move;
     }
 
     /* Pin types */
     .mapplic-pin {
-        background-image: url(/assets/floor-plan/images/pin.png);
+        background-image: url(../assets/floor-plan/images/pin.png);
         background-size: 18px 24px;
         background-repeat: no-repeat;
         background-position: center;
@@ -124,7 +124,7 @@ page-floor-plan {
     }
 
     .mapplic-pin.iconpin {
-        background-image: url(/assets/floor-plan/images/pin-large.png);
+        background-image: url(../assets/floor-plan/images/pin-large.png);
         background-size: 30px 42px;
         color: #fff;
         font-size: 14px;
@@ -137,17 +137,17 @@ page-floor-plan {
         margin-left: -15px;
     }
 
-    .mapplic-pin.orange { background-image: url(/assets/floor-plan/images/pin-orange.png); }
-    .mapplic-pin.yellow { background-image: url(/assets/floor-plan/images/pin-yellow.png); }
-    .mapplic-pin.green { background-image: url(/assets/floor-plan/images/pin-green.png); }
-    .mapplic-pin.blue { background-image: url(/assets/floor-plan/images/pin-blue.png); }
-    .mapplic-pin.purple { background-image: url(/assets/floor-plan/images/pin-purple.png); }
+    .mapplic-pin.orange { background-image: url(../assets/floor-plan/images/pin-orange.png); }
+    .mapplic-pin.yellow { background-image: url(../assets/floor-plan/images/pin-yellow.png); }
+    .mapplic-pin.green { background-image: url(../assets/floor-plan/images/pin-green.png); }
+    .mapplic-pin.blue { background-image: url(../assets/floor-plan/images/pin-blue.png); }
+    .mapplic-pin.purple { background-image: url(../assets/floor-plan/images/pin-purple.png); }
 
-    .mapplic-pin.iconpin.orange { background-image: url(/assets/floor-plan/images/pin-orange-large.png); }
-    .mapplic-pin.iconpin.yellow { background-image: url(/assets/floor-plan/images/pin-yellow-large.png); }
-    .mapplic-pin.iconpin.green { background-image: url(/assets/floor-plan/images/pin-green-large.png); }
-    .mapplic-pin.iconpin.blue { background-image: url(/assets/floor-plan/images/pin-blue-large.png); }
-    .mapplic-pin.iconpin.purple { background-image: url(/assets/floor-plan/images/pin-purple-large.png); }
+    .mapplic-pin.iconpin.orange { background-image: url(../assets/floor-plan/images/pin-orange-large.png); }
+    .mapplic-pin.iconpin.yellow { background-image: url(../assets/floor-plan/images/pin-yellow-large.png); }
+    .mapplic-pin.iconpin.green { background-image: url(../assets/floor-plan/images/pin-green-large.png); }
+    .mapplic-pin.iconpin.blue { background-image: url(../assets/floor-plan/images/pin-blue-large.png); }
+    .mapplic-pin.iconpin.purple { background-image: url(../assets/floor-plan/images/pin-purple-large.png); }
 
     .mapplic-pin.circular {
         background-image: none;
@@ -312,8 +312,8 @@ page-floor-plan {
 
     /* Clear Button */
     .mapplic-clear-button {
-        background-color: #fff;
-        background-image: url(/assets/floor-plan/images/reset.png);
+        background-color: rgba(255, 255, 255, 0.5);
+        background-image: url(../assets/floor-plan/images/reset.png);
         background-size: 16px 16px;
         background-repeat: no-repeat;
         background-position: center;
@@ -341,7 +341,7 @@ page-floor-plan {
     }
 
     .mapplic-zoom-buttons a {
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.5);
         background-repeat: no-repeat;
         background-position: center;
         border: 1px solid #eee;
@@ -362,18 +362,18 @@ page-floor-plan {
     }
 
     .mapplic-zoom-buttons a.mapplic-disabled {
-        background-color: #eee;
+        background-color: rgba(255, 255, 255, 0.5);
         cursor: default;
     }
 
     a.mapplic-zoomin-button {
-        background-image: url(/assets/floor-plan/images/plus.png);
+        background-image: url(../assets/floor-plan/images/plus.png);
         background-size: 10px 10px;
         border-radius: 2px 2px 0 0;
     }
 
     a.mapplic-zoomout-button {
-        background-image: url(/assets/floor-plan/images/minus.png);
+        background-image: url(../assets/floor-plan/images/minus.png);
         background-size: 10px 10px;
         border-radius: 0 0 2px 2px;
         border-top: none;
@@ -382,7 +382,7 @@ page-floor-plan {
     /* Fullscreen Button */
     .mapplic-fullscreen-button {
         background-color: #fff;
-        background-image: url(/assets/floor-plan/images/fullscreen.png);
+        background-image: url(../assets/floor-plan/images/fullscreen.png);
         background-repeat: no-repeat;
         background-position: center;
         border: 1px solid #eee;
@@ -398,7 +398,7 @@ page-floor-plan {
 
     /* Levels */
     .mapplic-levels {
-        border-bottom: 1px solid #eee;
+        border: 1px solid #eee;
         border-radius: 2px;
         position: absolute;
         top: 0;
@@ -415,7 +415,7 @@ page-floor-plan {
     }
 
     .mapplic-levels-select {
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.5);
         border: none;
         border-radius: 0;
         color: #666;
@@ -429,7 +429,7 @@ page-floor-plan {
     }
 
     .mapplic-levels a {
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.5);
         background-repeat: no-repeat;
         background-position: center;
         cursor: pointer;
@@ -443,18 +443,18 @@ page-floor-plan {
     }
 
     .mapplic-levels .mapplic-levels-up {
-        background-image: url(/assets/floor-plan/images/arrow-up.png);
+        background-image: url(../assets/floor-plan/images/arrow-up.png);
         background-size: 8px 4px;
     }
 
     .mapplic-levels .mapplic-levels-down {
-        background-image: url(/assets/floor-plan/images/arrow-down.png);
+        background-image: url(../assets/floor-plan/images/arrow-down.png);
         background-size: 8px 4px;
         bottom: 0;
     }
 
     .mapplic-levels a.mapplic-disabled {
-        background-color: #eee;
+        background-color: rgba(255, 255, 255, 0.5);
         cursor: default;
     }
 
@@ -485,7 +485,7 @@ page-floor-plan {
     }
 
     .mapplic-search-input {
-        background-image: url(/assets/floor-plan/images/viewer.png);
+        background-image: url(../assets/floor-plan/images/viewer.png);
         background-size: 17px 16px;
         background-repeat: no-repeat;
         background-position: 8px;
@@ -512,7 +512,7 @@ page-floor-plan {
     }
 
     .mapplic-search-clear {
-        background-image: url(/assets/floor-plan/images/cross.png);
+        background-image: url(../assets/floor-plan/images/cross.png);
         background-size: 8px 8px;
         background-repeat: no-repeat;
         background-color: transparent;
@@ -747,7 +747,7 @@ page-floor-plan {
     }
 
     .mapplic-tooltip-close {
-        background-image: url(/assets/floor-plan/images/cross.png);
+        background-image: url(../assets/floor-plan/images/cross.png);
         background-position: center;
         background-repeat: no-repeat;
         background-size: 8px 8px;
@@ -888,45 +888,45 @@ page-floor-plan {
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
         .mapplic-search-clear,
         .mapplic-tooltip-close {
-            background-image: url(/assets/floor-plan/images/cross.png);
+            background-image: url(../assets/floor-plan/images/cross.png);
         }
 
         .mapplic-levels .mapplic-levels-up {
-            background-image: url(/assets/floor-plan/images/arrow-up.png);
+            background-image: url(../assets/floor-plan/images/arrow-up.png);
         }
 
         .mapplic-levels .mapplic-levels-down {
-            background-image: url(/assets/floor-plan/images/arrow-down.png);
+            background-image: url(../assets/floor-plan/images/arrow-down.png);
         }
 
         a.mapplic-zoomin-button {
-            background-image: url(/assets/floor-plan/images/plus.png);
+            background-image: url(../assets/floor-plan/images/plus.png);
         }
 
         a.mapplic-zoomout-button {
-            background-image: url(/assets/floor-plan/images/minus.png);
+            background-image: url(../assets/floor-plan/images/minus.png);
         }
 
         .mapplic-search-input {
-            background-image: url(/assets/floor-plan/images/viewer.png);
+            background-image: url(../assets/floor-plan/images/viewer.png);
         }
 
-        .mapplic-pin { background-image: url(/assets/floor-plan/images/pin.png); }
-        .mapplic-pin.orange { background-image: url(/assets/floor-plan/images/pin-orange.png); }
-        .mapplic-pin.yellow { background-image: url(/assets/floor-plan/images/pin-yellow.png); }
-        .mapplic-pin.green { background-image: url(/assets/floor-plan/images/pin-green.png); }
-        .mapplic-pin.blue { background-image: url(/assets/floor-plan/images/pin-blue.png); }
-        .mapplic-pin.purple { background-image: url(/assets/floor-plan/images/pin-purple.png); }
+        .mapplic-pin { background-image: url(../assets/floor-plan/images/pin.png); }
+        .mapplic-pin.orange { background-image: url(../assets/floor-plan/images/pin-orange.png); }
+        .mapplic-pin.yellow { background-image: url(../assets/floor-plan/images/pin-yellow.png); }
+        .mapplic-pin.green { background-image: url(../assets/floor-plan/images/pin-green.png); }
+        .mapplic-pin.blue { background-image: url(../assets/floor-plan/images/pin-blue.png); }
+        .mapplic-pin.purple { background-image: url(../assets/floor-plan/images/pin-purple.png); }
 
-        .mapplic-pin.iconpin { background-image: url(/assets/floor-plan/images/pin-large.png); }
-        .mapplic-pin.iconpin.orange { background-image: url(/assets/floor-plan/images/pin-orange-large.png); }
-        .mapplic-pin.iconpin.yellow { background-image: url(/assets/floor-plan/images/pin-yellow-large.png); }
-        .mapplic-pin.iconpin.green { background-image: url(/assets/floor-plan/images/pin-green-large.png); }
-        .mapplic-pin.iconpin.blue { background-image: url(/assets/floor-plan/images/pin-blue-large.png); }
-        .mapplic-pin.iconpin.purple { background-image: url(/assets/floor-plan/images/pin-purple-large.png); }
+        .mapplic-pin.iconpin { background-image: url(../assets/floor-plan/images/pin-large.png); }
+        .mapplic-pin.iconpin.orange { background-image: url(../assets/floor-plan/images/pin-orange-large.png); }
+        .mapplic-pin.iconpin.yellow { background-image: url(../assets/floor-plan/images/pin-yellow-large.png); }
+        .mapplic-pin.iconpin.green { background-image: url(../assets/floor-plan/images/pin-green-large.png); }
+        .mapplic-pin.iconpin.blue { background-image: url(../assets/floor-plan/images/pin-blue-large.png); }
+        .mapplic-pin.iconpin.purple { background-image: url(../assets/floor-plan/images/pin-purple-large.png); }
 
         .mapplic-clear-button {
-            background-image: url(/assets/floor-plan/images/reset.png);
+            background-image: url(../assets/floor-plan/images/reset.png);
         }
     }
 

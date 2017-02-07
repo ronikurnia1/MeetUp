@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams, Tabs } from "ionic-angular";
+import { NavController, LoadingController, NavParams, Tabs } from "ionic-angular";
 import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
@@ -15,26 +15,39 @@ export class FindUserPage {
 
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
+    private loadCtrl: LoadingController,
     private chatService: FirebaseChatService,
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService) {
 
-    this.meetingService.getUsers("").subscribe((response) => {
-      this.profiles = response.users;
-    });
+    this.getUserForChat("", "", "");
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FindUserPage");
   }
 
+  getUserForChat(userTypeId: string, industryId: string, keywords: string) {
+    let loader = this.loadCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
+
+    this.meetingService.getUsersForChat(userTypeId, industryId, keywords).subscribe((response) => {
+      this.profiles = response.users;
+    }, error => {
+
+    }, () => {
+      loader.dismissAll();
+    });
+
+  }
+
 
   filterProfile(event: any) {
     let keywords: string = event.target.value || "";
     this.profiles = [];
-    this.meetingService.getUsers(keywords).subscribe((response) => {
-      this.profiles = response.users;
-    });
+    this.getUserForChat("", "", keywords);
   }
 
   openChat(receiver: any) {

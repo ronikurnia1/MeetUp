@@ -17,8 +17,7 @@ export class FloorPlanPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad', $(this.floorPlan.nativeElement).html());
-
+    //console.log('ionViewDidLoad', $(this.floorPlan.nativeElement).html());
     let map = $(this.floorPlan.nativeElement).mapplic({
       source: 'assets/floor-plan/mall.json',	// Using mall.json file as map data
       sidebar: true, 			// Enable sidebar
@@ -26,28 +25,26 @@ export class FloorPlanPage {
       markers: false, 		// Disable markers
       fillcolor: false, 		// Disable default fill color
       fullscreen: true, 		// Enable fullscreen 
-      maxscale: 3 			// Setting maxscale to 3
+      maxscale: 3 			// Setting maxscale to 3      
     });
 
 
-    // jQuery('.usage').click(function (e) {
+    // $('.usage').click(function (e) {
     //   e.preventDefault();
-    //   jQuery.$('.editor-window').slideToggle(200);
+    //   $('.editor-window').slideToggle(200);
     // });
 
-    // jQuery(document).on('mousemove', '.mapplic-layer', function (e) {
-    //   var map = jQuery('.mapplic-map');
+    // $(document).on('mousemove', '.mapplic-layer', function (e) {
+    //   var map = $('.mapplic-map');
     //   let x = ((e.pageX - map.offset().left) / map.width()).toString();
     //   let y = ((e.pageY - map.offset().top) / map.height()).toString();
-    //   jQuery('.mapplic-coordinates-x').text(parseFloat(x).toFixed(4));
-    //   jQuery('.mapplic-coordinates-y').text(parseFloat(y).toFixed(4));
+    //   $('.mapplic-coordinates-x').text(parseFloat(x).toFixed(4));
+    //   $('.mapplic-coordinates-y').text(parseFloat(y).toFixed(4));
     // });
 
-    // jQuery('.editor-window .window-mockup').click(function () {
-    //   jQuery('.editor-window').slideUp(200);
+    // $('.editor-window .window-mockup').click(function () {
+    //   $('.editor-window').slideUp(200);
     // });
-
-
   }
 
 

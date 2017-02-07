@@ -86,7 +86,7 @@ export class AuthService {
    */
   updateProfile(profileData: any): Observable<any> {
     // TODO:
-    return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/UpdateProfile", profileData)
+    return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/Update", profileData)
       .map((response: Response) => response.json()).catch(this.handleError);
     // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/update-profile.json")
     //   .map((response: Response) => response.json()).catch(this.handleError);
@@ -97,7 +97,11 @@ export class AuthService {
    */
   authenticateUser(email: string, password: string): Observable<any> {
     // TODO:
-    return this.http.get(this.globalVars.getValue("apiUrl") + "MobileUserApi/Login?email=" + email + "&password=" + password)
+    let data = {
+      email: email,
+      password: password
+    };
+    return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/Login", data)
       .map((response: Response) => {
         // If OK then login/signUp to Firebase        
         if (response.json().result === "OK") {

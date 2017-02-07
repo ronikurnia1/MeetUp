@@ -20,7 +20,6 @@ export class MeetingService {
      */
     getUsers(keyword: string): Observable<any> {
         // TODO:
-        console.log("keyword", keyword);
         let queryString = "?userId=" + this.globalVars.getValue("userData").id
             + "&keyword=" + keyword;
         let request = "MobileMeetingApi/GetEventUsers" + queryString;
@@ -30,15 +29,31 @@ export class MeetingService {
         //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
+
+    /**
+     * get users for chatting
+     */
+    getUsersForChat(userTypeId: string, industryId: string, keyword: string): Observable<any> {
+        // TODO:
+        let queryString = "?userId=" + this.globalVars.getValue("userData").id +
+            "&userTypeId=" + userTypeId + "&industryId=" + industryId + "&keyword=" + keyword;
+        let request = "MobileUserApi/GetUsersChat" + queryString;
+        return this.http.get(this.globalVars.getValue("apiUrl") + request)
+            .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+
     /**
      * get meeting locations
      */
     getLocations(): Observable<any> {
         // TODO:
-        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "/GetLocations")
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-locations.json")
+        return this.http.get(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/GetLocations")
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-locations.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
 
@@ -47,10 +62,10 @@ export class MeetingService {
      */
     getSubjects(): Observable<any> {
         // TODO:
-        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "/GetSubjects")
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-subjects.json")
+        return this.http.get(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/GetAllMeetings")
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-subjects.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
 
@@ -107,13 +122,23 @@ export class MeetingService {
     /**
      * Send meeting invitation
      */
-    sendInvitation(invitaion: any): Observable<any> {
+    sendInvitation(invitation: any): Observable<any> {
         // TODO:
-        //let data = { meetingid: meetingId, recipientemail: userEmail, statusname: "accepted" };
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "SendInvitaion", invitaion)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/send-invitation.json")
+        let data = {
+            startTime: invitation.date + " " + invitation.startTime,
+            endTime: invitation.date + " " + invitation.endTime,
+            subject: invitation.subject === "Other" ? invitation.customSubject : invitation.subject,
+            initiatorEmail: this.globalVars.getValue("userData").email,
+            locationId: invitation.location,
+            recipientEmails: invitation.recipient.email,
+            remarks: invitation.remarks
+        };
+        //console.log("Data:", JSON.stringify(data));
+
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/CreateMeeting", data)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/send-invitation.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
     /**

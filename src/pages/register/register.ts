@@ -5,6 +5,7 @@ import { App, NavController, NavParams, AlertController, ToastController, Action
 import { TabsPage } from "../tabs/tabs"; import { DisclimerPage } from "../disclimer/disclimer";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { AuthService } from "../../providers/auth-service";
+import { CryptoService } from "../../providers/crypto-service";
 
 /**
  * This page is used for registration 
@@ -29,6 +30,7 @@ export class RegisterPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private app: App,
+    private crypto: CryptoService,
     private formBuilder: FormBuilder,
     private globalVars: GlobalVarsService,
     private authService: AuthService,
@@ -50,13 +52,15 @@ export class RegisterPage {
       // build registration form
       this.registerForm = formBuilder.group({
         avatar: ["assets/icon/avatar.png"],
-        title: [""],
+        titleTitle: [""],
+        titleId: [""],
         fullName: ["", Validators.required],
         mobile: ["", Validators.required],
         email: ["", Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
         password: ["", Validators.required],
         confirmPassword: ["", Validators.required],
-        country: ["", Validators.required],
+        countryId: ["", Validators.required],
+        countryTitle: [""],
         company: ["", Validators.required],
         userType: ["delegate"],
         isAdmin: [false],
@@ -67,15 +71,18 @@ export class RegisterPage {
       });
     } else {
       let profile = this.globalVars.getValue("userData");
+      // console.log("Profile:", profile);
       // build update user profile form
       this.registerForm = formBuilder.group({
         id: [profile.id],
         avatar: [profile.avatar || "assets/icon/avatar.png"],
-        title: [profile.title],
+        titleTitle: [profile.titleTitle],
+        titleId: [profile.titleId],
         fullName: [profile.fullName, Validators.required],
         mobile: [profile.mobile, Validators.required],
         email: [profile.email, Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
-        country: [profile.country, Validators.required],
+        countryId: [profile.countryId, Validators.required],
+        countryTitle: [profile.countryTitle],
         company: [profile.company, Validators.required],
         userType: [profile.userType],
         isAdmin: [profile.isAdmin],
@@ -93,11 +100,19 @@ export class RegisterPage {
   }
 
 
+  contryChange(event: any) {
+    this.registerForm.controls["countryTitle"].setValue(this.countries.find(itm => itm.id === event).title);
+    //console.log("Country", this.registerForm.controls["countryTitle"].value);
+  }
+
+  titleChange(event: any) {
+    this.registerForm.controls["titleTitle"].setValue(this.titles.find(itm => itm.id === event).title);
+  }
+
   register() {
     event.preventDefault();
     event.stopPropagation();
     this.submitAttempt = true;
-
     if (this.registerForm.valid) {
       if (this.screenTitle.toLowerCase() === "register") {
         this.callApiRegistration();
@@ -117,7 +132,7 @@ export class RegisterPage {
       if (response.result === "OK") {
         // put user"s data into globalVars
         userData["id"] = response.userId;
-        this.globalVars.setValue("userData", userData);        
+        this.globalVars.setValue("userData", this.registerForm.value);
       }
       // show toast
       let toast = this.toastCtrl.create({
@@ -145,17 +160,23 @@ export class RegisterPage {
   }
 
   callApiProfileUpdate() {
-    console.log("Update profile:", this.registerForm.value);
+    // console.log("Update profile:", this.registerForm.value);
     // Call backend UpdateProfile API
     let userData = this.getFormValue(this.registerForm);
     this.authService.updateProfile(this.registerForm.value).subscribe(response => {
       if (response.result === "OK") {
         // construct user data
-        this.globalVars.setValue("userData", userData);
+        this.globalVars.setValue("userData", this.registerForm.value);
+        if (localStorage.getItem("userData")) {
+          // save encrypted user's data on storage
+          // for remembering
+          let encryptedUserData: string = this.crypto.encrypt(JSON.stringify(this.registerForm.value));
+          localStorage.setItem("userData", encryptedUserData);
+        }
       }
       // show toast
       let toast = this.toastCtrl.create({
-        message: response.message,
+        message: response.message || "Profile has been updated successfully.",
         duration: 3000,
         position: "bottom"
       });
@@ -165,17 +186,25 @@ export class RegisterPage {
           this.navCtrl.pop();
         }
       });
+    }, error => {
+      // show toast
+      let toast = this.toastCtrl.create({
+        message: error,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
     });
   }
 
   getFormValue(form: FormGroup): any {
     let userData = {
-      title: form.controls["title"].value,
+      titleId: form.controls["titleId"].value,
       avatar: form.controls["avatar"].value,
       fullName: form.controls["fullName"].value,
       email: form.controls["email"].value,
       company: form.controls["company"].value,
-      country: form.controls["country"].value,
+      country: form.controls["countryId"].value,
       position: form.controls["position"].value,
       mobile: form.controls["mobile"].value,
       userType: form.controls["userType"].value,

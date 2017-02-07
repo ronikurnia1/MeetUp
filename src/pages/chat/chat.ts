@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Tabs } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, Tabs } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
 import * as moment from "moment";
 import { GlobalVarsService } from "../../providers/global-vars-service";
@@ -22,6 +22,7 @@ export class ChatPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private loadCtrl: LoadingController,
     private authService: AuthService,
     private chatService: FirebaseChatService,
     private db: AngularFireDatabase,
@@ -31,7 +32,6 @@ export class ChatPage {
 
     this.myId = this.globalVars.getValue("userData").id;
     this.getChatList();
-
   }
 
   selectChat(chat: any) {
@@ -60,14 +60,20 @@ export class ChatPage {
    * Get chat list
    */
   getChatList() {
+    let loader = this.loadCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
+
     this.chats = this.db.list("users/" + this.myId + "/chatsWith", {
       query: { orderByChild: "timeStamp" }
     }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-
+    this.chats.subscribe(response => {
+      loader.dismissAll();
+    });
   }
 
   ionViewWillEnter() {
-    this.getChatList();
   }
 
   ionViewWillLeave() {

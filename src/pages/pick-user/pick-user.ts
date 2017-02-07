@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, PopoverController, AlertController, Events, Platform } from 'ionic-angular';
+import {
+  NavController, NavParams, LoadingController, Platform,
+  PopoverController, Events, AlertController, ToastController
+} from 'ionic-angular';
 import { PopoverPage } from "../user-profile/popover";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
@@ -34,13 +37,13 @@ export class PickUserPage {
   users: any[];
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    private popoverCtrl: PopoverController,
-    private events: Events,
+    public navParams: NavParams, private toastCtrl: ToastController,
+    private loadCtrl: LoadingController,
+    private events: Events, private platform: Platform,
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService,
-    private platform: Platform,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController) {
 
     this.title = "All Attendees";
     this.group = "allAttendees";
@@ -80,6 +83,11 @@ export class PickUserPage {
    * Get user based on group & keywords/filter
    */
   searchUser(event: any) {
+    let loader = this.loadCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
+
     let keywords = event.target.value || "";
     this.users = [];
     this.meetingService.getUsers(keywords).subscribe(response => {
@@ -93,6 +101,16 @@ export class PickUserPage {
       } else {
         this.alertUser("Retrieve users failed.", response.message);
       }
+      loader.dismissAll();
+    }, error => {
+      loader.dismissAll();
+      // show toast
+      let toast = this.toastCtrl.create({
+        message: error,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
     });
   }
 

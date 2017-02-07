@@ -107,7 +107,7 @@ export class LoginPage {
           if (loginResponse.userProfile["avatar"] === "") {
             loginResponse.userProfile["avatar"] = "assets/icon/avatar.png";
           }
-          // End of remove
+          // END TODO
 
           this.globalVars.setValue("userData", loginResponse.userProfile);
           if (this.loginForm.controls["rememberMe"].value) {
@@ -132,6 +132,13 @@ export class LoginPage {
           });
           toast.present();
         }
+      }, error => {
+        let toast = this.toastCtrl.create({
+          message: error,
+          duration: 3000,
+          position: "bottom"
+        });
+        toast.present();
       });
   }
 

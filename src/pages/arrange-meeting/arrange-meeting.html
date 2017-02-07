@@ -21,7 +21,7 @@
     <ion-item class="meeting" padding-right>
       <ion-select formControlName="subject" placeholder="Select technology" (ionChange)="updateSubject($event)" [selectOptions]="subjectSelectOptions"
         class="selection">
-        <ion-option *ngFor="let tech of technologies" [value]="tech.name">{{tech.name}}</ion-option>
+        <ion-option *ngFor="let tech of technologies" [value]="tech.subject">{{tech.subject}}</ion-option>
       </ion-select>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.subject.valid  && (form.controls.subject.dirty || submitAttempt)">Subject is required.</div>
@@ -59,7 +59,7 @@
 
     <ion-item class="meeting" padding-right>
       <ion-select formControlName="location" placeholder="Location" [selectOptions]="locationSelectOptions" class="selection">
-        <ion-option *ngFor="let loc of locations" [value]="loc.name">{{loc.name}}</ion-option>
+        <ion-option *ngFor="let loc of locations" [value]="loc.id">{{loc.title}}</ion-option>
       </ion-select>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.location.valid  && (form.controls.location.dirty || submitAttempt)">Location is required.</div>

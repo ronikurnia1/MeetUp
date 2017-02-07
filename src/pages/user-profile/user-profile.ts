@@ -72,7 +72,15 @@ export class UserProfilePage {
             });
             toast.present();
           }
-        }, (error) => { console.log("Error:", error); });
+        }, (error) => {
+          // show toast
+          let toast = this.toastCtrl.create({
+            message: error,
+            duration: 3000,
+            position: "bottom"
+          });
+          toast.present();
+        });
         break;
       }
       case "changePassword": {

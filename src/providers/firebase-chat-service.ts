@@ -14,6 +14,7 @@ export class FirebaseChatService {
   }
 
   sendMessage(chatId: string, sender: any, receiver: any, message: string): firebase.Promise<void> {
+    receiver.id = receiver.userId || receiver.id;
     let messageKey = this.db.list("messages/" + chatId).push({
       message: message,
       sender: sender.id,
@@ -22,9 +23,9 @@ export class FirebaseChatService {
     let values = {};
     values["messages/" + chatId + "/" + messageKey + "/timeStamp"] = firebase.database.ServerValue.TIMESTAMP;
 
-    values["users/" + sender.id + "/chatsWith/" + receiver.userId] = {
+    values["users/" + sender.id + "/chatsWith/" + receiver.id] = {
       chatId: chatId,
-      id: receiver.userId,
+      id: receiver.id,
       lastMessage: message,
       fullName: receiver.fullName,
       title: receiver.title || "",
@@ -32,7 +33,7 @@ export class FirebaseChatService {
       visible: true,
       timeStamp: firebase.database.ServerValue.TIMESTAMP
     };
-    values["users/" + receiver.userId + "/chatsWith/" + sender.id] = {
+    values["users/" + receiver.id + "/chatsWith/" + sender.id] = {
       chatId: chatId,
       id: sender.id,
       lastMessage: message,
@@ -46,9 +47,10 @@ export class FirebaseChatService {
   }
 
   getChatId(sender: any, receiver: any): Promise<any> {
+    receiver.id = receiver.id || receiver.userId;
     return new Promise((resolve, error) => {
       let chatId: string;
-      this.db.object("users/" + sender.id + "/chatsWith/" + receiver.userId).take(1).subscribe(data => {
+      this.db.object("users/" + sender.id + "/chatsWith/" + receiver.id).take(1).subscribe(data => {
         if (data.$value) {
           // get existing chatId
           chatId = data.$value.chatId;
@@ -57,7 +59,7 @@ export class FirebaseChatService {
           let chat = {};
           chat["members"] = {};
           chat["members"][sender.id] = true;
-          chat["members"][receiver.userId] = true;
+          chat["members"][receiver.id] = true;
           chatId = this.db.list("chats").push(chat).key;
         }
         resolve(chatId);

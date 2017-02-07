@@ -15,7 +15,7 @@
   <ion-list [virtualScroll]="users" approxItemHeight="45px">
     <ion-item *virtualItem="let user" class="meeting" (click)="userSelected(user)">
       <ion-avatar item-left>
-        <ion-img [src]="user.avatar || 'assets/icon/avatar.png'"></ion-img>
+        <img [src]="user.avatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div class="bold-text">{{user.title}} {{user.fullName}}</div>
       <div>{{user.company}}</div>

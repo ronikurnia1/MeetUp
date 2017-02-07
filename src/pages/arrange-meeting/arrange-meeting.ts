@@ -1,6 +1,6 @@
 import { Component, NgZone } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NavController, NavParams, ToastController } from "ionic-angular";
+import { NavController, NavParams, ToastController, LoadingController } from "ionic-angular";
 import * as moment from "moment";
 import { MeetingService } from "../../providers/meeting-service";
 
@@ -35,19 +35,12 @@ export class ArrangeMeetingPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private loadCtrl: LoadingController,
     private formBuilder: FormBuilder,
     private zone: NgZone,
     private meetingService: MeetingService,
     private toastCtrl: ToastController) {
 
-    this.meetingService.getSubjects().subscribe(response => {
-      this.technologies = response.data;
-
-    });
-    
-    this.meetingService.getLocations().subscribe(response => {
-      this.locations = response.data;
-    });
 
     this.recipient = navParams.get("selectedUser");
     // TODO: get this value from Backend
@@ -77,13 +70,47 @@ export class ArrangeMeetingPage {
     });
     this.scheduleOption = "bestTimeSlot";
     this.form.controls["customSubject"].disable({ onlySelf: true });
+
+    this.getSuppotingData();
+  }
+
+
+  getSuppotingData() {
+    let loader = this.loadCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
+
+    this.meetingService.getSubjects().subscribe(response => {
+      this.technologies = response.data;
+      this.meetingService.getLocations().subscribe(response => {
+        this.locations = response.data;
+        loader.dismissAll();
+      }, error => {
+        loader.dismissAll();
+        let toast = this.toastCtrl.create({
+          message: error,
+          duration: 3000,
+          position: "bottom"
+        });
+        toast.present();
+      });
+    }, error => {
+      loader.dismissAll();
+      let toast = this.toastCtrl.create({
+        message: error,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
+    });
   }
 
   sendInvitation() {
     // console.log("data:", JSON.stringify(this.form.value));
     this.submitAttempt = true;
     if (this.form.valid) {
-      console.log("form valid");
+      // console.log("form valid");
       this.meetingService.sendInvitation(this.form.value).subscribe(response => {
         let toast = this.toastCtrl.create({
           message: response.message,

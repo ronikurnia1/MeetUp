@@ -16,8 +16,8 @@
       <ion-label bp-layout="fit">
         <ion-icon color="primary" name="medal"></ion-icon>
       </ion-label>
-      <ion-select placeholder="Title" bp-layout="fill" [selectOptions]="{title: 'Select title'}" class="selection" formControlName="title">
-        <ion-option *ngFor="let title of titles" [value]="title.title">{{title.title}}</ion-option>
+      <ion-select placeholder="Title" bp-layout="fill" [selectOptions]="{title: 'Select title'}" class="selection" formControlName="titleId">
+        <ion-option *ngFor="let title of titles" [value]="title.id">{{title.title}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item class="meeting">
@@ -59,7 +59,7 @@
       <ion-label bp-layout="fit">
         <ion-icon color="primary" name="globe"></ion-icon>
       </ion-label>
-      <ion-select placeholder="Country" bp-layout="fill" [selectOptions]="{title: 'Select Country'}" class="selection" formControlName="country">
+      <ion-select placeholder="Country" (ionChange)="contryChange($event)" bp-layout="fill" [selectOptions]="{title: 'Select Country'}" class="selection" formControlName="countryId">
         <ion-option *ngFor="let country of countries" [value]="country.id">{{country.title}}</ion-option>
       </ion-select>
     </ion-item>
