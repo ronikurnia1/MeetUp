@@ -1,21 +1,11 @@
 <ion-header>
-    <ion-toolbar no-border>
-        <ion-buttons left>
-            <button clear color="primary" ion-button icon-only (click)="openMeetingTracker($event)">
-                <ion-icon name="list-box"></ion-icon>
-            </button>
-        </ion-buttons>
+    <ion-navbar no-border>
         <ion-title (click)="filterStatus()">
             {{section}}
             <ion-icon *ngIf="section === 'Sent'" name="arrow-dropdown"></ion-icon>
             <div *ngIf="section === 'Sent'" class="sub-title">{{statusFilter}}</div>
         </ion-title>
-        <ion-buttons right>
-            <button clear color="primary" ion-button icon-only (click)="arrangeMeeting($event)">
-                <ion-icon name="add-circle"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-toolbar>
+    </ion-navbar>
     <ion-segment [(ngModel)]="section" (ionChange)="segmentChange()">
         <ion-segment-button value="My Schedule">
             My Schedule
@@ -30,11 +20,20 @@
     <ion-toolbar no-border>
         <ion-searchbar [value]="filterInvitation" (ionInput)="filterInvitations($event)" *ngIf="section === 'Invitations'"></ion-searchbar>
         <ion-searchbar [value]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'Sent'"></ion-searchbar>
-        <p class="primary-title" *ngIf="section === 'My Schedule'">{{scheduleDate}}</p>
-        <p class="secondary-title" *ngIf="section === 'My Schedule'">You have {{totalMeeting}}</p>
-        <button no-lines (click)="viewCalendar($event)" icon-only large ion-button clear icon-left *ngIf="section === 'My Schedule'">
-            <ion-icon name="calendar"></ion-icon>
-        </button>
+        <div bp-layout="row gutter-none" *ngIf="section === 'My Schedule'">
+            <div bp-layout="col">
+                <div class="border-right">
+                    <p class="primary-title">DAY 1</p>
+                    <p class="secondary-title">{{scheduleDate}}</p>
+                </div>
+            </div>
+            <div bp-layout="col">
+                <div>
+                    <p class="primary-title">DAY 2</p>
+                    <p class="secondary-title">{{scheduleDate}}</p>
+                </div>
+            </div>
+        </div>
     </ion-toolbar>
 </ion-header>
 <ion-content padding #pageContent [ngSwitch]="section">
@@ -101,20 +100,38 @@
                 <ion-buttons>
                     <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)"
                         margin>
-                            <ion-icon name="time"></ion-icon>
-                            <span class="meeting" ion-text color="primary">Reschedule</span>
+                        <ion-icon name="time"></ion-icon>
+                        <span class="meeting" ion-text color="primary">Reschedule</span>
                         </button>
-                    <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)"
-                        margin>
+                        <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)"
+                            margin>
                             <ion-icon color="danger" name="remove-circle"></ion-icon>
                             <span class="meeting" ion-text color="danger">Cancel Meeting</span>
-                        </button>
+                            </button>
                 </ion-buttons>
             </div>
         </ion-item>
     </ion-list>
 
     <ion-fab bottom right *ngIf="showScanBadge">
-        <button ion-fab mini (click)=scanQrCode()><ion-icon name="qr-scanner"></ion-icon></button>
+        <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+        <ion-fab-list side="top">
+            <button ion-fab (click)=scanQrCode()>                
+                <ion-label>Test</ion-label>
+                <ion-icon name="qr-scanner"></ion-icon>
+            </button>
+            <button ion-fab>
+                <ion-icon name="qr-scanner"></ion-icon>
+                <ion-label>Test</ion-label>
+            </button>
+            <button ion-fab>
+                <ion-label>Test</ion-label>
+                <ion-icon name="qr-scanner"></ion-icon>
+            </button>
+            <button ion-fab>
+                <ion-icon name="contacts"></ion-icon>
+                <ion-label>Test</ion-label>
+            </button>
+        </ion-fab-list>
     </ion-fab>
 </ion-content>

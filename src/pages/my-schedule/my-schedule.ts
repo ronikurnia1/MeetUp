@@ -38,7 +38,7 @@ export class MySchedulePage {
   public section: string = "My Schedule";
 
   public scheduleDate: string;
-  public totalMeeting: string;
+  // public totalMeeting: string;
 
   public schedules: Array<Meeting> = [];
   public invitations: Array<Meeting> = [];
@@ -271,7 +271,7 @@ export class MySchedulePage {
   }
 
   ngOnInit() {
-    this.scheduleDate = moment().format("dddd, DD MMMM YYYY");
+    this.scheduleDate = moment().format("ddd, DD MMM YYYY");
     // Get today's meeting schedule data
     this.getTodayMeetingSchedule();
     // Get invitaion
@@ -293,9 +293,9 @@ export class MySchedulePage {
         response.data.forEach(itm => {
           this.schedules.push(this.meetingService.buildMeeting(itm));
         });
-        let numberOfMeeting = this.schedules.filter(itm => itm.type === "meeting").length;
-        this.totalMeeting = numberOfMeeting.toString();
-        this.totalMeeting += numberOfMeeting > 1 ? " meetings" : " meeting";
+        // let numberOfMeeting = this.schedules.filter(itm => itm.type === "meeting").length;
+        // this.totalMeeting = numberOfMeeting.toString();
+        // this.totalMeeting += numberOfMeeting > 1 ? " meetings" : " meeting";
       } else {
         this.alertUser("Retrieve My Schedule data failed.", response.messsage);
       }
@@ -442,40 +442,42 @@ export class MySchedulePage {
 
   scanQrCode() {
 
-    // // get person data
-    // // this is for testing only
-    // this.authService.getProfile("").subscribe(response => {
-    //   if (response.result === "OK") {
-    //     let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
-    //     this.navCtrl.push(page, { profile: response.profile }, { animate: true });
-    //   } else {
-    //     let alert = this.alertCtrl.create({
-    //       title: "Failed to get profile",
-    //       subTitle: response.message,
-    //       buttons: ['OK']
-    //     });
-    //     alert.present();
-    //   }
-    // });
-
-    BarcodeScanner.scan().then((barcodeData) => {
-      if (!barcodeData.cancelled) {
-        // console.log("Barcode:", barcodeData);
-        let personId = barcodeData.text;
-        // get person data
-        this.authService.getProfile(personId).subscribe(response => {
-          if (response.result === "OK") {
-            let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
-            this.navCtrl.push(page, { profile: response.profile }, { animate: true });
-          } else {
-            this.alertUser("Failed to get profile.", response.message);
-          }
+    // get person data
+    // this is for testing only
+    this.authService.getProfile("3829203a-4acf-6092-98b9-ff00006fb7ad").subscribe(response => {
+      if (response.result === "OK") {
+        let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
+        this.navCtrl.push(page, { profile: response.user }, { animate: true });
+      } else {
+        let alert = this.alertCtrl.create({
+          title: "Failed to get profile",
+          subTitle: response.message,
+          buttons: ['OK']
         });
+        alert.present();
       }
-    }, (err) => {
-      console.log("Error:", err);
-      this.alertUser("Scan failed.", err);
     });
+
+    // BarcodeScanner.scan().then((barcodeData) => {
+    //   if (!barcodeData.cancelled) {
+    //     // console.log("Barcode:", barcodeData);
+    //     let personId = barcodeData.text;
+    //     // get person data
+    //     this.authService.getProfile(personId).subscribe(response => {
+    //       if (response.result === "OK") {
+    //         let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
+    //         this.navCtrl.push(page, { profile: response.profile }, { animate: true });
+    //       } else {
+    //         this.alertUser("Failed to get profile.", response.message);
+    //       }
+    //     }, error => {
+    //       this.alertUser("Failed to get profile.", error);
+    //     });
+    //   }
+    // }, (err) => {
+    //   console.log("Error:", err);
+    //   this.alertUser("Scan failed.", err);
+    // });
   }
 
   /**

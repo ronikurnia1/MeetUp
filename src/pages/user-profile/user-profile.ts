@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, PopoverController, Events, ToastController } from 'ionic-angular';
 import { GlobalVarsService } from "../../providers/global-vars-service";
-import { PopoverPage } from "./popover";
 import { RegisterPage } from "../register/register";
 import { ChangePasswordPage } from "../change-password/change-password";
 import { MyQrCodePage } from "../my-qr-code/my-qr-code";
@@ -21,7 +20,6 @@ export class UserProfilePage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private globalVars: GlobalVarsService,
-    private popoverCtrl: PopoverController,
     private toastCtrl: ToastController,
     private events: Events) {
 
@@ -102,16 +100,6 @@ export class UserProfilePage {
     // console.log("View meeting details.");
     let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
     this.navCtrl.push(arrangeMeeting, { selectedUser: this.profile }, { animate: true });
-  }
-
-  showMoreMenu(event: Event) {
-    let menus = [
-      { title: "Edit profile", param: "editProfile", eventName: this.userProfileMenu },
-      { title: "Change password", param: "changePassword", eventName: this.userProfileMenu },
-      { title: "My QR code", param: "myQrCode", eventName: this.userProfileMenu }
-    ];
-    let popover = this.popoverCtrl.create(PopoverPage, menus);
-    popover.present({ ev: event });
   }
 
   ionViewDidLoad() {

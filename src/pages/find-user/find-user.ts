@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, LoadingController, NavParams, Tabs } from "ionic-angular";
+import { NavController, LoadingController, NavParams, Tabs, AlertController } from "ionic-angular";
 import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
@@ -15,6 +15,7 @@ export class FindUserPage {
 
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
+    private alertCtrl: AlertController,
     private loadCtrl: LoadingController,
     private chatService: FirebaseChatService,
     private globalVars: GlobalVarsService,
@@ -35,10 +36,10 @@ export class FindUserPage {
 
     this.meetingService.getUsersForChat(userTypeId, industryId, keywords).subscribe((response) => {
       this.profiles = response.users;
-    }, error => {
-
-    }, () => {
       loader.dismissAll();
+    }, error => {
+      loader.dismissAll();
+      this.alertUser("Retrive user data failed.", error);
     });
 
   }
@@ -66,4 +67,15 @@ export class FindUserPage {
     });
 
   }
+
+  alertUser(title: string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+
 }

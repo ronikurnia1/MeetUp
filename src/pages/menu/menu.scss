@@ -16,4 +16,7 @@ page-menu {
     .list-ios > .item-block:last-child .item-inner {
         border-bottom: 0.55px solid #c8c7cc;
     }
+    ion-navbar.toolbar {
+        height: 170px;
+    }
 }

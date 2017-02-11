@@ -2,8 +2,11 @@ import { Component, NgZone, ViewChild } from "@angular/core";
 import { App, NavController, NavParams, Tabs, AlertController, Content } from "ionic-angular";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 
-import { ScanAttendancePage } from "../scan-attendance/scan-attendance";
 import { UserProfilePage } from "../user-profile/user-profile";
+import { MyQrCodePage } from "../my-qr-code/my-qr-code";
+
+
+import { ScanAttendancePage } from "../scan-attendance/scan-attendance";
 import { AnnouncementPage } from "../announcement/announcement";
 import { FloorPlanPage } from "../floor-plan/floor-plan";
 import { LoginPage } from "../login/login";
@@ -16,6 +19,7 @@ export class MenuPage {
   private tabs: Tabs;
   private user: any;
   private userProfilePage: any;
+  private myQrCodePage: any;
 
   @ViewChild("menuContent")
   public content: Content;
@@ -44,11 +48,6 @@ export class MenuPage {
     }
   ];
   sharedMenus = [
-    {
-      "title": "My Favorites",
-      "icon": "heart",
-      "color": "#4CAF50"
-    },
     {
       "title": "Speakers",
       "icon": "people",
@@ -87,6 +86,7 @@ export class MenuPage {
     private alertCtrl: AlertController) {
 
     this.userProfilePage = UserProfilePage;
+    this.myQrCodePage = MyQrCodePage;
     this.tabs = navCtrl.parent;
 
     // prepare menu

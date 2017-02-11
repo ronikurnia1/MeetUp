@@ -1,6 +1,6 @@
 import { Component, NgZone } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NavController, NavParams, ToastController, LoadingController } from "ionic-angular";
+import { NavController, NavParams, ToastController, AlertController, LoadingController } from "ionic-angular";
 import * as moment from "moment";
 import { MeetingService } from "../../providers/meeting-service";
 
@@ -110,8 +110,14 @@ export class ArrangeMeetingPage {
     // console.log("data:", JSON.stringify(this.form.value));
     this.submitAttempt = true;
     if (this.form.valid) {
-      // console.log("form valid");
+      // loading 
+      let loader = this.loadCtrl.create({
+        content: "Please wait..."
+      });
+      loader.present();
+
       this.meetingService.sendInvitation(this.form.value).subscribe(response => {
+        loader.dismissAll();
         let toast = this.toastCtrl.create({
           message: response.message,
           duration: 3000,
@@ -124,6 +130,9 @@ export class ArrangeMeetingPage {
             this.navCtrl.pop({ animate: true });
           });
         }
+      }, error => {
+        loader.dismissAll();
+
       });
     }
 

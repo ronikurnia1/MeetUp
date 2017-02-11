@@ -60,17 +60,32 @@ export class ChatPage {
    * Get chat list
    */
   getChatList() {
-    let loader = this.loadCtrl.create({
-      content: "Please wait..."
-    });
-    loader.present();
+    // let loader = this.loadCtrl.create({
+    //   content: "Please wait..."
+    // });
+    // loader.present();
 
     this.chats = this.db.list("users/" + this.myId + "/chatsWith", {
       query: { orderByChild: "timeStamp" }
     }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-    this.chats.subscribe(response => {
-      loader.dismissAll();
-    });
+
+    // this.chats.subscribe(response => {
+    //   loader.dismissAll();
+    // }, error => {
+    //   loader.dismissAll();
+    //   console.log("Error:", error);
+    //   this.alertUser("Firebase connection failed.", error)
+    // });
+
+    // this.db.list("users/" + this.myId + "/chatsWith", { query: { orderByChild: "timeStamp" } })
+    //   .map((array) => array.reverse())
+    //   .subscribe(response => {
+    //     loader.dismissAll();
+    //     this.chats = response;
+    //   }, error => {
+    //     loader.dismissAll();
+    //     this.alertUser("Firebase connection failed.", error)
+    //   });
   }
 
   ionViewWillEnter() {

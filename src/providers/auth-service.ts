@@ -72,12 +72,12 @@ export class AuthService {
  */
   getProfile(profileId: string): Observable<any> {
     // TODO:
-    // let request = "MobileUserApi/GetProfile?id=" + profileId;
-    // return this.http.get(this.globalVars.getValue("apiUrl") + request)
-    //     .map((response: Response) => response.json()).catch(this.handleError);
-    let request = "dummy-data/get-profile.json"
-    return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
-      .map((response: Response) => response.json()).catch(this.handleError);
+    let request = "MobileUserApi/GetEventUserById?userId=" + profileId;
+    return this.http.get(this.globalVars.getValue("apiUrl") + request)
+        .map((response: Response) => response.json()).catch(this.handleError);
+    // let request = "dummy-data/get-profile.json"
+    // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
+    //   .map((response: Response) => response.json()).catch(this.handleError);
   }
 
 

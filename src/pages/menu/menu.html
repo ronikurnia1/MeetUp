@@ -10,6 +10,10 @@
         <div class="wrap-text">{{user.fullName}}</div>
       </div>
     </ion-item>
+    <ion-item no-lines (click)="menuSelected(myQrCodePage)">
+      <img item-left src="assets/icon/qr-code.png" width="30px" height="30px">
+      <ion-label>My QR Code</ion-label>
+    </ion-item>
   </ion-navbar>
 </ion-header>
 <ion-content padding #menuContent>
