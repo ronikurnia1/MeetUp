@@ -46,16 +46,17 @@ export class ChatDetailsPage {
 
     this.chatId = this.navParams.get("chatId");
 
-    this.ionViewWillEnter();
+    this.loadTheChat();
 
   }
 
-  ionViewWillEnter() {
+  loadTheChat() {
     if (this.chatId !== undefined) {
       this.messages = this.db.list("messages/" + this.chatId);
       this.firebaseSubs = this.messages.subscribe(data => {
         // scroll to the bottom
-        this.content.scrollToBottom(250);
+        if (this.content)
+          this.content.scrollToBottom(250);
       });
     }
   }
@@ -100,11 +101,7 @@ export class ChatDetailsPage {
       // console.log("Id", this.sender.id);
       this.chatService.getChatId(this.sender, this.receiver).then(response => {
         this.chatId = response;
-        this.messages = this.db.list("messages/" + this.chatId);
-        this.firebaseSubs = this.messages.subscribe(data => {
-          // scroll to the bottom
-          this.content.scrollToBottom(250);
-        });
+        this.loadTheChat();
         this.chatService.sendMessage(this.chatId, this.sender, this.receiver, this.messageToSend);
         this.zone.run(() => {
           this.messageToSend = "";
