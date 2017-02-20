@@ -7,23 +7,28 @@
 <ion-content padding-left padding-right padding-bottom class="meeting">
   <ion-item no-lines>
     <ion-avatar bp-layout="row center">
-      <img [src]="profile.avatar">
+      <img [src]="profile.avatar || 'assets/icon/avatar.png'">
     </ion-avatar>
     <div bp-layout="row fill">
       <ion-item>
-        <div class="center-align bold-text">{{profile.fullName}}</div>
+        <div class="center-align bold-text" *ngIf="!myProfile">{{profile.title + ' ' + profile.firstName + ' ' + profile.lastName}}</div>
+        <div class="center-align bold-text" *ngIf="myProfile">{{profile.firstName + ' ' + profile.lastName}}</div>
+        <div bp-layout="row center middle" *ngIf="myProfile">
+          <button small ion-button text-only (click)="handleMenu('editProfile')">Edit Profile</button>
+          <button small ion-button text-only (click)="handleMenu('changePassword')">Change Password</button>
+        </div>
         <div class="center-align">{{profile.company}}</div>
-        <div class="center-align">{{profile.position}}</div>
-        <div class="center-align">{{profile.countryTitle}}</div>
+        <div class="center-align">{{profile.industryTitle}}</div>
+        <div class="center-align">{{profile.jobLevel}}</div>
+        <div class="center-align">{{profile.jobRole}}</div>
+        <div class="center-align">{{profile.countryName}}</div>
         <div *ngIf="myProfile" class="center-align">{{profile.email}}</div>
         <div *ngIf="myProfile" class="center-align">{{profile.mobile}}</div>
       </ion-item>
     </div>
   </ion-item>
-  <div bp-layout="row center middle" class="meeting">
-    <button ion-button text-only *ngIf="!myProfile" (click)="arrangeMeeting()">Meeting</button>
-    <button ion-button text-only *ngIf="myProfile" (click)="arrangeMeeting()">Change Password</button>
-    <button ion-button text-only *ngIf="myProfile" (click)="arrangeMeeting()">Edit Profile</button>
+  <div bp-layout="row center middle" class="meeting" *ngIf="!myProfile" no-lines>
+    <button small ion-button text-only (click)="handleMenu('arrangeMeeting')">Meeting</button>
   </div>
   <ion-item no-lines>
     <div>Group</div>

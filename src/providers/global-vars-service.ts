@@ -12,7 +12,7 @@ export class GlobalVarsService {
     private config = {
         apiUrlDummy: "assets/",
         apiUrlProxy: "http://116.12.199.25:8093/api/",
-        apiUrl:"/api/",
+        apiUrl: "/api/",
         firebaseUser: "roniku@gmail.com",
         firebasePwd: "St7465dsh!`+"
     };
@@ -49,6 +49,11 @@ export class GlobalVarsService {
             .map((response: Response) => response.json()).catch(this.handleError);
         // return this.http.get(this["apiUrl"] + "dummy-data/get-content-register.json")
         //     .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
+    getClassification(name: string): Observable<any> {
+        return this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=" + name)
+            .map((response: Response) => response.json()).catch(this.handleError);
     }
 
     /**

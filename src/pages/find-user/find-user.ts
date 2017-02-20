@@ -12,6 +12,7 @@ import { FirebaseChatService } from "../../providers/firebase-chat-service";
 export class FindUserPage {
 
   private profiles: any[];
+  private keywords: string;
 
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
@@ -20,35 +21,50 @@ export class FindUserPage {
     private chatService: FirebaseChatService,
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService) {
-
-    this.getUserForChat("", "", "");
+    this.keywords = "";
+    this.getUserForChat("", true, true);
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FindUserPage");
   }
 
-  getUserForChat(userTypeId: string, industryId: string, keywords: string) {
-    let loader = this.loadCtrl.create({
-      content: "Please wait..."
-    });
-    loader.present();
+  getUserForChat(keywords: string, withLoader: boolean, useLocalData: boolean, refresher?: any) {
+    if (refresher)
+      refresher.complete();
 
-    this.meetingService.getUsersForChat(userTypeId, industryId, keywords).subscribe((response) => {
-      this.profiles = response.users;
-      loader.dismissAll();
+    let loader: any;
+    if (withLoader) {
+      loader = this.loadCtrl.create({
+        content: "Please wait..."
+      });
+      loader.present();
+    }
+
+    this.meetingService.getUsersForChat(keywords, useLocalData).subscribe((response) => {
+      if (loader)
+        loader.dismissAll();
+      if (response.result === "OK") {
+        this.profiles = response.users;
+      } else {
+        this.alertUser("Retrieve users failed.", response.message);
+      }
     }, error => {
-      loader.dismissAll();
+      if (loader)
+        loader.dismissAll();
       this.alertUser("Retrive user data failed.", error);
     });
-
   }
 
 
   filterProfile(event: any) {
     let keywords: string = event.target.value || "";
     this.profiles = [];
-    this.getUserForChat("", "", keywords);
+    this.getUserForChat(keywords, false, true);
+  }
+
+  refreshData(refresher: any) {
+    this.getUserForChat(this.keywords, true, false, refresher);
   }
 
   openChat(receiver: any) {

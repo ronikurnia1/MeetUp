@@ -1,19 +1,27 @@
 {
-    "result": "OK",
-    "message": "This is Error Message",
-    "userProfile": {
-        "id": "38923443",
-        "title": "Mr.",
-        "fullName": "John Doe",
-        "email": "email@domain.com",
-        "company": "TechSmart Ltd.",
-        "country": "United States",
-        "position": "CTO",
-        "mobile": "+61 8934 84394",
-        "userType": "exhibitor",
-        "notificationsMethods": "60841f3a-4acf-6092-98b9-ff00006fb7ad;62841f3a-4acf-6092-98b9-ff00006fb7ad",
-        "isAdmin": false,
-        "avatar": "https://randomuser.me/api/portraits/thumb/men/29.jpg",
-        "about": "Lorem ipsum dolor sit amet, vestibulum non, vulputate sed litora eros nascetur, cubilia ut vel vitae. Viverra rutrum odio, volutpat elementum ornare sed nunc. Luctus praesent eget sit metus ipsum, urna imperdiet sed ultricies, ac nulla."
-    }
-}
+   "result": "OK",
+   "userTypeName": "delegate",
+   "userTypeTitle": "Delegate",
+   "isAdmin": false,
+   "userProfile":    {
+      "id": "1e17203a-4acf-6092-98b9-ff00006fb7ad",
+      "avatar": "assets/icon/avatar.png",
+      "firstName": "Quang",
+      "lastName": "Nguyen Xuân",
+      "mobile": "123456789",
+      "email": "kiettuongwork@gmail.com",
+      "countryId": "04841f3a-4acf-6092-98b9-ff00006fb7ad",
+      "countryTitle": "Malaysia",
+      "titleId": "0729203a-4acf-6092-98b9-ff00006fb7ad",
+      "titleTitle": "Ms",
+      "jobLevelId": "a15e203a-4acf-6092-98b9-ff00006fb7ad",
+      "jobLevelTitle": "Director",
+      "jobRoleId": "a95e203a-4acf-6092-98b9-ff00006fb7ad",
+      "jobRoleTitle": "Engineering",
+      "company": "",
+      "position": "Position 1",
+      "notificationMethods": "60841f3a-4acf-6092-98b9-ff00006fb7ad",
+      "about": "About&nbsp;Thai Nguyen Xuan Quang",
+      "userType": "delegate"
+   }
+} 

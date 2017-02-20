@@ -20,13 +20,13 @@ export class PickUserPage {
   private group: string;
 
   private deletegeFilter = [
-    { title: "All Attendees", param: "allAttendees", eventName: this.filterUserMenu },
+    { title: "All User Group", param: "all", eventName: this.filterUserMenu },
     { title: "Exhibitors", param: "exhibitor", eventName: this.filterUserMenu },
     { title: "Speakers", param: "speaker", eventName: this.filterUserMenu },
     { title: "IPI Staff", param: "ipi-staff", eventName: this.filterUserMenu }
   ];
   private nonDeletegeFilter = [
-    { title: "All Attendees", param: "allAttendees", eventName: this.filterUserMenu },
+    { title: "All User Group", param: "all", eventName: this.filterUserMenu },
     { title: "Delegates", param: "delegate", eventName: this.filterUserMenu },
     { title: "Exhibitors", param: "exhibitor", eventName: this.filterUserMenu },
     { title: "Speakers", param: "speaker", eventName: this.filterUserMenu },
@@ -45,8 +45,8 @@ export class PickUserPage {
     private alertCtrl: AlertController,
     private popoverCtrl: PopoverController) {
 
-    this.title = "All Attendees";
-    this.group = "allAttendees";
+    this.title = "All User Group";
+    this.group = "all";
     this.keywords = "";
     // subscribe to the PopoverPage
     events.subscribe(this.filterUserMenu, (menu) => {
@@ -54,7 +54,7 @@ export class PickUserPage {
       this.handleFilter(menu);
     });
     this.users = [];
-    this.searchUser({ target: { value: "" } });
+    this.searchUser({ target: { value: "" } }, true, true);
   }
 
   filterUser(event: any) {
@@ -82,18 +82,26 @@ export class PickUserPage {
   /**
    * Get user based on group & keywords/filter
    */
-  searchUser(event: any) {
-    let loader = this.loadCtrl.create({
-      content: "Please wait..."
-    });
-    loader.present();
+  searchUser(event: any, withLoader: boolean, useLocalData: boolean, refresher?: any) {
+    let loader: any;
+    if (refresher)
+      refresher.complete();
+
+    if (withLoader) {
+      loader = this.loadCtrl.create({
+        content: "Please wait..."
+      });
+      loader.present();
+    }
 
     let keywords = event.target.value || "";
     this.users = [];
-    this.meetingService.getUsers(keywords).subscribe(response => {
+    this.meetingService.getUsers(keywords, useLocalData).subscribe(response => {
+      if (loader)
+        loader.dismissAll();
       if (response.result === "OK") {
         // TODO: implement filtering
-        if (this.group !== "allAttendees") {
+        if (this.group !== "all") {
           this.users = (response.users as any[]).filter(itm => itm.userTypeName === this.group);
         } else {
           this.users = response.users;
@@ -101,9 +109,9 @@ export class PickUserPage {
       } else {
         this.alertUser("Retrieve users failed.", response.message);
       }
-      loader.dismissAll();
     }, error => {
-      loader.dismissAll();
+      if (loader)
+        loader.dismissAll();
       // show toast
       let toast = this.toastCtrl.create({
         message: error,
@@ -114,11 +122,15 @@ export class PickUserPage {
     });
   }
 
+  refreshData(refresher: any) {
+    this.searchUser({ target: { value: this.keywords } }, true, false, refresher);
+  }
+
   handleFilter(menu: any) {
     this.title = menu.title;
     this.group = menu.param;
     // do user searching
-    this.searchUser({ target: { value: this.keywords } });
+    this.searchUser({ target: { value: this.keywords } }, false, true, undefined);
   }
 
   userSelected(user: any) {
@@ -128,10 +140,14 @@ export class PickUserPage {
       // pick-up with callback
       this.navParams.get("callback")({ selectedUser: user, partyType: this.navParams.get("partyType") }).then(() => {
         this.navCtrl.pop();
-      })
+      });
     } else {
+
       let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
-      this.navCtrl.push(arrangeMeeting, { selectedUser: user }, { animate: true });
+
+      this.navCtrl.pop().then(value => {
+        this.navCtrl.push(arrangeMeeting, { selectedUser: user }, { animate: true });
+      });
     }
   }
 

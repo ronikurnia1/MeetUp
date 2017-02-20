@@ -141,8 +141,11 @@ export class CancelOrDeclinePage {
   /**
    * Date Format Helper
    */
-  getDateFormated(value: Date, format: string): string {
-    return moment(value).format(format);
+  getDateFormated(value: string, format: string): string {
+    // API format date is DD-MM-YYYY
+    // Change it to YYYY-MM-DD
+    let dateValue: string = `${value.substr(6, 4)}-${value.substr(3, 2)}-${value.substr(0, 2)}`;
+    return moment(dateValue).format(format);
   }
 
 }

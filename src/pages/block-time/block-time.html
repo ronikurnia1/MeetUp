@@ -13,31 +13,20 @@
   <form [formGroup]="form" (ngSubmit)="updateBlockTime()" novalidate margin-right>
     <ion-list>
       <ion-item class="meeting">
-        <ion-label>
-          <ion-icon bp-layout="margin-right--sm" color="primary" name="calendar"></ion-icon>
-          Date
-        </ion-label>
+        <ion-label>Date</ion-label>
         <ion-datetime displayFormat="DDD, DD MMM YYYY" formControlName="date"></ion-datetime>
       </ion-item>
       <ion-item class="meeting">
-        <ion-label>
-          <ion-icon bp-layout="margin-right--sm" color="primary" name="time"></ion-icon>
-          Start
-        </ion-label>
+        <ion-label>Start Time</ion-label>
         <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" formControlName="startTime"></ion-datetime>
       </ion-item>
       <ion-item class="meeting">
-        <ion-label>
-          <ion-icon bp-layout="margin-right--sm" color="primary" name="time"></ion-icon>
-          End
-        </ion-label>
+        <ion-label>End Time</ion-label>
         <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" formControlName="endTime"></ion-datetime>
       </ion-item>
       <ion-item class="meeting">
-        <ion-label>
-          <ion-icon color="primary" name="restaurant"></ion-icon>
-        </ion-label>
-        <ion-input formControlName="description" type="text" placeholder="Description"></ion-input>
+        <ion-label>Description</ion-label>
+        <ion-input formControlName="description" type="text"></ion-input>
       </ion-item>
       <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.description.valid  && (form.controls.description.dirty || submitAttempt)">Description is required.</div>
     </ion-list>

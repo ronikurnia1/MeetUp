@@ -7,19 +7,19 @@
   <ion-item no-lines class="meeting">
     <div bp-layout="flex">
       <ion-avatar item-left bp-layout="fit">
-        <img [src]="meeting.meetingWith.avatar">
+        <img [src]="meeting.userAvatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div margin-left bp-layout="fill">
-        <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
-        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
-        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+        <div class="wrap-text bold-text">{{meeting.userDisplayName}}</div>
+        <div class="wrap-text">{{meeting.userCompany}}&nbsp;</div>
+        <div class="wrap-text">{{meeting.userCountry}}&nbsp;</div>
       </div>
     </div>
     <div>
       <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
       <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
-      <div>{{meeting.time}}</div>
-      <div margin-top margin-bottom>{{meeting.location}}</div>
+      <div>{{meeting.timeDisplay}}</div>
+      <div margin-top margin-bottom>{{meeting.meetingLocation}}</div>
     </div>
   </ion-item>
   <ion-item padding-right class="meeting">

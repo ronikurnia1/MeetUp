@@ -7,18 +7,18 @@
   <ion-item no-lines class="meeting" margin-bottom>
     <div bp-layout="flex">
       <ion-avatar item-left bp-layout="fit">
-        <img [src]="meeting.meetingWith.avatar">
+        <img [src]="meeting.userAvatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div margin-left bp-layout="fill">
-        <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
-        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
-        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+        <div class="wrap-text bold-text">{{meeting.userDisplayName}}</div>
+        <div class="wrap-text">{{meeting.userCompany}}&nbsp;</div>
+        <div class="wrap-text">{{meeting.userCountry}}&nbsp;</div>
       </div>
     </div>
     <div>
       <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
       <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
-      <div>{{meeting.time}}</div>
+      <div>{{meeting.timeDisplay}}</div>
     </div>
   </ion-item>
 
@@ -57,7 +57,7 @@
   <form [formGroup]="form" (ngSubmit)="rescheduleMeeting()" novalidate>
     <ion-item class="meeting" padding-left padding-right padding-top>
       <ion-select formControlName="location" placeholder="Location" [selectOptions]="locationSelectOptions" class="selection">
-        <ion-option *ngFor="let loc of locations" [value]="loc.name">{{loc.name}}</ion-option>
+        <ion-option *ngFor="let loc of locations" [value]="loc.id">{{loc.title}}</ion-option>
       </ion-select>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.location.valid  && (form.controls.location.dirty || submitAttempt)">Location is required.</div>

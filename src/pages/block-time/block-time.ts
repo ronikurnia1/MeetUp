@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MeetingService } from "../../providers/meeting-service";
+import { GlobalVarsService } from "../../providers/global-vars-service";
 
 @Component({
   selector: 'page-block-time',
@@ -15,18 +16,21 @@ export class BlockTimePage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private globalVars: GlobalVarsService,
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private meetingService: MeetingService) {
 
     let blockTime = navParams.get("blockTime");
+    let dateValue: string = `${blockTime.date.substr(6, 4)}-${blockTime.date.substr(3, 2)}-${blockTime.date.substr(0, 2)}`;
 
     this.form = formBuilder.group({
-      id: [blockTime.id],
-      date: [blockTime.date, Validators.required],
-      startTime: [blockTime.time.split("-")[0], Validators.required],
-      endTime: [blockTime.time.split("-")[1], Validators.required],
+      blockTimeId: [blockTime.id, Validators.required],
+      userId: [this.globalVars.getValue("userData").id, Validators.required],
+      date: [dateValue, Validators.required],
+      startTime: [blockTime.startTime, Validators.required],
+      endTime: [blockTime.endTime, Validators.required],
       description: [blockTime.subject, Validators.required]
     });
 

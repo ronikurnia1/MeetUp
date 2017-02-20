@@ -1,8 +1,9 @@
 import { Component, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
-import { NavController, NavParams, Content } from 'ionic-angular';
+import { NavController, NavParams, Content, ToastController } from 'ionic-angular';
 import * as moment from "moment";
 import { UserProfilePage } from "../user-profile/user-profile";
 import { GlobalVarsService } from "../../providers/global-vars-service";
+import { AuthService } from "../../providers/auth-service";
 import { AngularFireDatabase, FirebaseListObservable } from "angularfire2";
 import { FirebaseChatService } from "../../providers/firebase-chat-service";
 import { Observable } from "rxjs/Observable";
@@ -34,6 +35,8 @@ export class ChatDetailsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private chatService: FirebaseChatService,
+    private authService: AuthService,
+    private toastCtrl: ToastController,
     private db: AngularFireDatabase,
     private zone: NgZone,
     private globalVars: GlobalVarsService) {
@@ -62,11 +65,33 @@ export class ChatDetailsPage {
   // }
 
   ionViewWillLeave() {
-    this.firebaseSubs.unsubscribe();
+    if (this.firebaseSubs) {
+      this.firebaseSubs.unsubscribe();
+    }
   }
   openProfile() {
     let profilePage: any = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
-    this.navCtrl.push(profilePage, { profile: this.receiver }, { animate: true });
+
+    // get profile 
+    this.authService.getProfile("099e203a-4acf-6092-98b9-ff00006fb7ad").subscribe(respose => {
+      if (respose.result === "OK") {
+        this.navCtrl.push(profilePage, { profile: respose.user }, { animate: true });
+      } else {
+        this.showToast(respose.message);
+      }
+    }, error => {
+      this.showToast(error);
+    });
+
+  }
+
+  showToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: "bottom"
+    });
+    toast.present();
   }
 
   sendMessage() {

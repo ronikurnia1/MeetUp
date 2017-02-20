@@ -1,14 +1,17 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Find User</ion-title>
+    <ion-title>Users</ion-title>
   </ion-navbar>
   <ion-toolbar no-border>
-    <ion-searchbar (ionInput)="filterProfile($event)"></ion-searchbar>
+    <ion-searchbar (ionInput)="filterProfile($event)" [(ngModel)]="keywords"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
+  <ion-refresher (ionRefresh)="refreshData($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
 
   <ion-list [virtualScroll]="profiles" approxItemHeight="45px">
     <ion-item *virtualItem="let profile" class="meeting" (click)="openChat(profile)">
@@ -17,9 +20,9 @@
           <img [src]="profile.avatar || 'assets/icon/avatar.png'">
         </ion-avatar>
         <div margin-left bp-layout="fill">
-          <div class="wrap-text bold-text">{{profile.title}} {{profile.title}} {{profile.fullName}}</div>
+          <div class="wrap-text bold-text">{{profile.title + ' ' + profile.firstName + ' ' + profile.lastName}}</div>
           <div class="wrap-text">{{profile.company}}&nbsp;</div>
-          <div class="wrap-text">{{profile.country}}&nbsp;</div>
+          <div class="wrap-text">{{profile.countryName}}&nbsp;</div>
         </div>
       </div>
     </ion-item>

@@ -39,7 +39,6 @@ export class AuthService {
    * Register user
    */
   registerUser(registrationData: any): Observable<any> {
-    // TODO:
     return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/Register", registrationData)
       .map((response: Response) => {
         if (response.json().result === "OK") {
@@ -96,7 +95,6 @@ export class AuthService {
    * Authenticate user
    */
   authenticateUser(email: string, password: string): Observable<any> {
-    // TODO:
     let data = {
       email: email,
       password: password

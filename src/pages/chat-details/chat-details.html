@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title (click)="openProfile()">
-      {{receiver.fullName}}
+      {{receiver.title}} {{receiver.firstName}} {{receiver.lasttName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -11,7 +11,7 @@
 
   <div class="message-wrapper disable-user-behavior" *ngFor="let msg of messages | async">
     <div *ngIf="msg.sender === sender.id">
-      <img class="profile-pic right" [src]="sender.avatar">
+      <img class="profile-pic right" [src]="sender.avatar || 'assets/icon/avatar.png'">
       <div class="chat-bubble right">
         <div class="message" autolinker="">{{msg.message}}</div>
         <div class="message-detail">
@@ -21,7 +21,7 @@
     </div>
 
     <div *ngIf="msg.sender !== sender.id">
-      <img class="profile-pic left" [src]="receiver.avatar">
+      <img class="profile-pic left" [src]="receiver.avatar || 'assets/icon/avatar.png'">
       <div class="chat-bubble left">
         <div class="message" autolinker="">{{msg.message}}</div>
         <div class="message-detail">
@@ -46,7 +46,7 @@
     </div>
     <div bp-layout="fix">
       <button ion-button icon-only clear (click)="sendMessage()">
-        <ion-icon color="primary" name="send"></ion-icon>
+        <ion-icon color="primary" name="paper-plane"></ion-icon>
       </button>
     </div>
   </div>

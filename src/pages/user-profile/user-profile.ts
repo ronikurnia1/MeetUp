@@ -15,8 +15,6 @@ export class UserProfilePage {
   private profile: UserProfile;
   private pageTitle: string;
 
-  private userProfileMenu: string = "menu:userProfile";
-
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private globalVars: GlobalVarsService,
@@ -32,12 +30,6 @@ export class UserProfilePage {
       this.profile = globalVars.getValue("userData");
       this.pageTitle = "My Profile";
     }
-
-    // subscribe to the PopoverPage
-    events.subscribe(this.userProfileMenu, (menu) => {
-      // console.log("menu", menu);
-      this.handleMenu(menu);
-    });
   }
 
   ionViewWillEnter() {
@@ -47,21 +39,42 @@ export class UserProfilePage {
     }
   }
 
-  handleMenu(menu: any) {
-    switch (menu.param) {
+  handleMenu(menu: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    switch (menu) {
       case "editProfile": {
-
-        // prepareration
-        let countries: Array<any>;
-        let notifications: Array<any>;
-        let titles: Array<any>;
         this.globalVars.getCountries().subscribe(response => {
           if (response.result === "OK") {
-            countries = response.countries;
-            notifications = response.notificationMethods;
-            titles = response.titles;
-            let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-            this.navCtrl.push(register, { title: "Edit Profile", countries: countries, titles: titles, notifications: notifications });
+            this.globalVars.getClassification("industry-type").subscribe(res => {
+              if (res.result === "OK") {
+                let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
+                this.navCtrl.push(register, {
+                  title: "Edit Profile",
+                  countries: response.countries,
+                  industries: res.data,
+                  jobLevels: response.jobLevels,
+                  jobRoles: response.jobRoles,
+                  titles: response.titles,
+                  notifications: response.notificationMethods
+                });
+              } else {
+                let toast = this.toastCtrl.create({
+                  message: res.Message,
+                  duration: 3000,
+                  position: "bottom"
+                });
+                toast.present();
+              }
+            }, err => {
+              // show toast
+              let toast = this.toastCtrl.create({
+                message: err,
+                duration: 3000,
+                position: "bottom"
+              });
+              toast.present();
+            });
           } else {
             let toast = this.toastCtrl.create({
               message: response.Message,
@@ -87,19 +100,12 @@ export class UserProfilePage {
         break
       }
       default: {
-        let page = this.navCtrl.getViews().find(itm => itm.name === "MyQrCodePage") || MyQrCodePage;
-        this.navCtrl.push(page, null, { animate: true });
+        // console.log("View meeting details.");
+        let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
+        this.navCtrl.push(arrangeMeeting, { selectedUser: this.profile }, { animate: true });
         break;
       }
     }
-  }
-
-  arrangeMeeting() {
-    event.stopPropagation();
-    event.preventDefault();
-    // console.log("View meeting details.");
-    let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
-    this.navCtrl.push(arrangeMeeting, { selectedUser: this.profile }, { animate: true });
   }
 
   ionViewDidLoad() {
@@ -107,7 +113,7 @@ export class UserProfilePage {
   }
 
   ionViewWillUnload() {
-    this.events.unsubscribe(this.userProfileMenu);
+    // this.events.unsubscribe(this.userProfileMenu);
   }
 }
 

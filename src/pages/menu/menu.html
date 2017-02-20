@@ -7,7 +7,7 @@
       </ion-avatar>
       <div margin-left bp-layout="fill">
         <div class="wrap-text">Welcome,</div>
-        <div class="wrap-text">{{user.fullName}}</div>
+        <div class="wrap-text">{{user.firstName + ' ' + user.lastName}}</div>
       </div>
     </ion-item>
     <ion-item no-lines (click)="menuSelected(myQrCodePage)">

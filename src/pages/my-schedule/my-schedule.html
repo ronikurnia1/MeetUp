@@ -20,31 +20,38 @@
     <ion-toolbar no-border>
         <ion-searchbar [value]="filterInvitation" (ionInput)="filterInvitations($event)" *ngIf="section === 'Invitations'"></ion-searchbar>
         <ion-searchbar [value]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'Sent'"></ion-searchbar>
+
         <div bp-layout="row gutter-none" *ngIf="section === 'My Schedule'">
-            <div bp-layout="col">
+            <div bp-layout="col" (click)="toggleDay(1)">
                 <div class="border-right">
-                    <p class="primary-title">DAY 1</p>
-                    <p class="secondary-title">{{scheduleDate}}</p>
+                    <p class="primary-title" [class.day-selected]="day1Selected">DAY 1</p>
+                    <p class="secondary-title" [class.day-selected]="day1Selected">{{scheduleDate}}</p>
                 </div>
             </div>
-            <div bp-layout="col">
+            <div bp-layout="col" (click)="toggleDay(2)">
                 <div>
-                    <p class="primary-title">DAY 2</p>
-                    <p class="secondary-title">{{scheduleDate}}</p>
+                    <p class="primary-title" [class.day-selected]="day2Selected">DAY 2</p>
+                    <p class="secondary-title" [class.day-selected]="day2Selected">{{scheduleDate}}</p>
                 </div>
             </div>
         </div>
+
     </ion-toolbar>
 </ion-header>
 <ion-content padding #pageContent [ngSwitch]="section">
+    <ion-refresher (ionRefresh)="refreshData($event)">
+        <ion-refresher-content>
+        </ion-refresher-content>
+    </ion-refresher>
 
     <ion-list *ngSwitchCase="'My Schedule'">
         <ion-item *ngFor="let meeting of schedules" (click)="viewMeetingDetails(meeting, 'my-schedule')" class="meeting">
             <div bp-layout="flex margin-bottom">
-                <div bp-layout="fit margin-right--sm">{{meeting.time}}</div>
+                <div bp-layout="fit margin-right--sm">{{meeting.timeDisplay}}</div>
                 <div bp-layout="fill margin-left--sm">
-                    <div class="bold-text wrap-text">{{meeting.subject}}</div>
-                    <div *ngIf="meeting.type==='meeting'" bp-layout="margin-top--sm" class="wrap-text">Venue: {{meeting.location}}</div>
+                    <div *ngIf="!meeting.isBlockTime" class="bold-text wrap-text">{{meeting.subject}}</div>
+                    <div *ngIf="meeting.isBlockTime" class="bold-text wrap-text">Blocked: {{meeting.subject}}</div>
+                    <div *ngIf="!meeting.isBlockTime" bp-layout="margin-top--sm" class="wrap-text">Location: {{meeting.meetingLocation}}</div>
                 </div>
             </div>
         </ion-item>
@@ -54,12 +61,12 @@
         <ion-item *ngFor="let meeting of invitations" (click)="viewMeetingDetails(meeting, 'invitation')" class="meeting">
             <div bp-layout="flex">
                 <ion-avatar item-left bp-layout="fit margin-right--sm">
-                    <img [src]="meeting.meetingWith.avatar">
+                    <img [src]="meeting.userAvatar || 'assets/icon/avatar.png'">
                 </ion-avatar>
                 <div bp-layout="fill margin-left--sm">
-                    <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
+                    <div class="wrap-text bold-text">{{meeting.userDisplayName}}</div>
                     <div class="wrap-text">{{meeting.subject}}</div>
-                    <div class="wrap-text">{{getDateFormated(meeting.date,'DD MMMM YYYY')}}, {{meeting.time}}</div>
+                    <div class="wrap-text">{{getDateFormated(meeting.date,'DD MMMM YYYY')}}, {{meeting.timeDisplay}}</div>
                 </div>
             </div>
             <div bp-layout="row center margin-top--sm margin-bottom--sm">
@@ -87,23 +94,23 @@
         <ion-item *ngFor="let meeting of hostings" (click)="viewMeetingDetails(meeting, 'hosted')" class="meeting">
             <div bp-layout="flex">
                 <ion-avatar item-left bp-layout="fit margin-right--sm">
-                    <img [src]="meeting.meetingWith.avatar">
+                    <img [src]="meeting.userAvatar || 'assets/icon/avatar.png'">
                 </ion-avatar>
                 <div bp-layout="fill margin-left--sm">
-                    <div class="pull-right status {{meeting.status}}">{{meeting.status}}</div>
-                    <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
+                    <div class="pull-right status {{meeting.meetingStatus}}">{{meeting.meetingStatus}}</div>
+                    <div class="wrap-text bold-text">{{meeting.userDisplayName}}</div>
                     <div class="wrap-text">{{meeting.subject}}</div>
-                    <div class="wrap-text">{{getDateFormated(meeting.date,'DD MMMM YYYY')}}, {{meeting.time}}</div>
+                    <div class="wrap-text">{{getDateFormated(meeting.date,'DD MMM YYYY')}}, {{meeting.timeDisplay}}</div>
                 </div>
             </div>
             <div bp-layout="row center margin-top--sm margin-bottom--sm">
                 <ion-buttons>
-                    <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)"
+                    <button *ngIf="meeting.meetingStatus.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting(meeting)"
                         margin>
                         <ion-icon name="time"></ion-icon>
                         <span class="meeting" ion-text color="primary">Reschedule</span>
                         </button>
-                        <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)"
+                        <button *ngIf="meeting.meetingStatus.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting(meeting)"
                             margin>
                             <ion-icon color="danger" name="remove-circle"></ion-icon>
                             <span class="meeting" ion-text color="danger">Cancel Meeting</span>
@@ -113,24 +120,28 @@
         </ion-item>
     </ion-list>
 
-    <ion-fab bottom right *ngIf="showScanBadge">
+    <ion-fab bottom right>
         <button ion-fab mini><ion-icon name="add"></ion-icon></button>
         <ion-fab-list side="top">
-            <button ion-fab (click)=scanQrCode()>                
-                <ion-label>Test</ion-label>
-                <ion-icon name="qr-scanner"></ion-icon>
+            <button ion-fab (click)="syncToPhone($event)">                
+                <ion-label>Sync to Phone</ion-label>
+                <ion-icon color="primary" name="sync"></ion-icon>
             </button>
-            <button ion-fab>
-                <ion-icon name="qr-scanner"></ion-icon>
-                <ion-label>Test</ion-label>
+            <button ion-fab (click)="scanQrCode()">                
+                <ion-label>Meeting History</ion-label>
+                <ion-icon color="primary" name="time"></ion-icon>
             </button>
-            <button ion-fab>
-                <ion-label>Test</ion-label>
-                <ion-icon name="qr-scanner"></ion-icon>
+            <button ion-fab (click)="viewCalendar($event)">
+                <ion-label>Block Time</ion-label>
+                <ion-icon color="primary" name="remove-circle"></ion-icon>
             </button>
-            <button ion-fab>
-                <ion-icon name="contacts"></ion-icon>
-                <ion-label>Test</ion-label>
+            <button ion-fab (click)="scanQrCode($event)">
+                <ion-label>Scan Badge</ion-label>
+                <ion-icon color="primary" name="qr-scanner"></ion-icon>
+            </button>
+            <button ion-fab (click)="arrangeMeeting($event)">
+                <ion-label>Add Meeting</ion-label>
+                <ion-icon color="primary"  name="contacts"></ion-icon>
             </button>
         </ion-fab-list>
     </ion-fab>

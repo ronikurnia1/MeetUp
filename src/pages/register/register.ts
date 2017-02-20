@@ -20,6 +20,9 @@ export class RegisterPage {
   private registerForm: FormGroup;
 
   private countries: Array<any>;
+  private industries: Array<any>;
+  private jobLevels: Array<any>;
+  private jobRoles: Array<any>;
   private notifications: Array<any>;
   private titles: any;
   private submitAttempt: boolean = false;
@@ -41,7 +44,10 @@ export class RegisterPage {
 
     this.screenTitle = navParams.get("title");
     this.countries = navParams.get("countries");
+    this.industries = navParams.get("industries");
     this.notifications = navParams.get("notifications");
+    this.jobLevels = navParams.get("jobLevels");
+    this.jobRoles = navParams.get("jobRoles");
     this.titles = navParams.get("titles");
 
     this.buttonTitle = this.screenTitle.toLowerCase() === "register" ? "Register" : "Save";
@@ -78,15 +84,22 @@ export class RegisterPage {
         avatar: [profile.avatar || "assets/icon/avatar.png"],
         titleTitle: [profile.titleTitle],
         titleId: [profile.titleId],
-        fullName: [profile.fullName, Validators.required],
+        firstName: [profile.firstName, Validators.required],
+        lastName: [profile.lastName, Validators.required],
         mobile: [profile.mobile, Validators.required],
         email: [profile.email, Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
         countryId: [profile.countryId, Validators.required],
         countryTitle: [profile.countryTitle],
         company: [profile.company, Validators.required],
+        jobLevelId: [profile.jobLevelId],
+        jobLevelTitle: [profile.jobLevelTitle],
+        jobRoleId: [profile.jobRoleId],
+        jobRoleTitle: [profile.jobRoleTitle],
         userType: [profile.userType],
         isAdmin: [profile.isAdmin],
-        position: [profile.position]
+        industryId: [profile.industryId, Validators.required],
+        industryTitle: [profile.insudtryTitle],
+        notificationsMethods: [profile.notificationsMethods]
       });
       this.notifications.forEach(notif => {
         let value: boolean = false;
@@ -104,7 +117,15 @@ export class RegisterPage {
     this.registerForm.controls["countryTitle"].setValue(this.countries.find(itm => itm.id === event).title);
     //console.log("Country", this.registerForm.controls["countryTitle"].value);
   }
-
+  industryChange(event: any) {
+    this.registerForm.controls["industryTitle"].setValue(this.industries.find(itm => itm.id === event).title);
+  }
+  jobRoleChange(event: any) {
+    this.registerForm.controls["jobRoleTitle"].setValue(this.jobRoles.find(itm => itm.id === event).title);
+  }
+  jobLevelChange(event: any) {
+    this.registerForm.controls["jobLevelTitle"].setValue(this.jobLevels.find(itm => itm.id === event).title);
+  }
   titleChange(event: any) {
     this.registerForm.controls["titleTitle"].setValue(this.titles.find(itm => itm.id === event).title);
   }
@@ -163,7 +184,7 @@ export class RegisterPage {
     // console.log("Update profile:", this.registerForm.value);
     // Call backend UpdateProfile API
     let userData = this.getFormValue(this.registerForm);
-    this.authService.updateProfile(this.registerForm.value).subscribe(response => {
+    this.authService.updateProfile(userData).subscribe(response => {
       if (response.result === "OK") {
         // construct user data
         this.globalVars.setValue("userData", this.registerForm.value);
@@ -199,13 +220,17 @@ export class RegisterPage {
 
   getFormValue(form: FormGroup): any {
     let userData = {
+      id: form.controls["id"].value,
       titleId: form.controls["titleId"].value,
       avatar: form.controls["avatar"].value,
-      fullName: form.controls["fullName"].value,
+      firstName: form.controls["firstName"].value,
+      lastName: form.controls["lastName"].value,
       email: form.controls["email"].value,
       company: form.controls["company"].value,
       country: form.controls["countryId"].value,
-      position: form.controls["position"].value,
+      industryId: form.controls["industryId"].value,
+      jobLevelId: form.controls["jobLevelId"].value,
+      jobRoleId: form.controls["jobRoleId"].value,
       mobile: form.controls["mobile"].value,
       userType: form.controls["userType"].value,
       isAdmin: form.controls["isAdmin"].value,
@@ -218,10 +243,13 @@ export class RegisterPage {
       }
     });
     userData["notificationsMethods"] = notifValues;
+    // update the form as well
+    form.controls["notificationsMethods"].setValue(notifValues);
+
     if (this.screenTitle.toLowerCase() === "register") {
       userData["password"] = form.controls["password"].value;
     }
-    console.log("Data", JSON.stringify(userData));
+    // console.log("Data", JSON.stringify(userData));
     return userData;
   }
 

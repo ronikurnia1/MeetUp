@@ -1,7 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams, ToastController, Events } from "ionic-angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Meeting } from "../../domain/meeting";
 import * as moment from "moment";
 import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
@@ -14,7 +13,7 @@ export class RescheduleMeetingPage {
   private locationSelectOptions = { title: "Location" };
   private locations: any[];
 
-  public meeting: Meeting;
+  public meeting: any;
 
   private scheduleOption: string = "bestTimeSlot";
   private submitAttempt: boolean = false;
@@ -63,7 +62,7 @@ export class RescheduleMeetingPage {
 
     // build form
     this.form = this.formBuilder.group({
-      location: [this.meeting.location, Validators.required],
+      location: [this.meeting.meetingLocation, Validators.required],
       reason: ["", Validators.required]
     });
 
@@ -90,7 +89,7 @@ export class RescheduleMeetingPage {
 
       let rescheduleData = {
         meetingId: this.meeting.id,
-        recipientEmail: this.globalVars.getValue("userData").email,
+        byUserEmail: this.globalVars.getValue("userData").email,
         statusName: "rescheduled",
         reason: this.form.controls["reason"].value,
         location: this.form.controls["location"].value,
@@ -138,8 +137,11 @@ export class RescheduleMeetingPage {
   /**
    * Date Format Helper
    */
-  getDateFormated(value: Date, format: string): string {
-    return moment(value).format(format);
+  getDateFormated(value: string, format: string): string {
+    // API format date is DD-MM-YYYY
+    // Change it to YYYY-MM-DD
+    let dateValue: string = `${value.substr(6, 4)}-${value.substr(3, 2)}-${value.substr(0, 2)}`;
+    return moment(dateValue).format(format);
   }
 
 }

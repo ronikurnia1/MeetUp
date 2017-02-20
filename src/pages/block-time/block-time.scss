@@ -6,6 +6,9 @@ page-block-time {
     .back-button.show-back-button {
         z-index: 1000;
     }
+    .text-input {
+        text-align: right;
+    }
     .list-md .item-input.ng-invalid.ng-touched:not(.input-has-focus):last-child {
         box-shadow: none;
         border-bottom: none;

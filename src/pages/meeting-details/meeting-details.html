@@ -4,26 +4,26 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-item padding-left no-lines class="meeting" (click)="viewProfile()">
+  <ion-item padding-left no-lines class="meeting" (click)="viewProfile(meeting.userId)">
     <div bp-layout="flex">
       <ion-avatar item-left bp-layout="fit">
-        <img [src]="meeting.meetingWith.avatar">
+        <img [src]="meeting.userAvatar || 'assets/icon/avatar.png'">
       </ion-avatar>
       <div margin-left bp-layout="fill">
-        <div class="wrap-text bold-text">{{meeting.meetingWith.title}} {{meeting.meetingWith.fullName}}</div>
-        <div class="wrap-text">{{meeting.meetingWith.company}}&nbsp;</div>
-        <div class="wrap-text">{{meeting.meetingWith.country}}&nbsp;</div>
+        <div class="wrap-text bold-text">{{meeting.userDisplayName}}</div>
+        <div class="wrap-text">{{meeting.userCompany}}&nbsp;</div>
+        <div class="wrap-text">{{meeting.userCountry}}&nbsp;</div>
       </div>
     </div>
   </ion-item>
   <div class="meeting" padding-left padding-right>
     <div margin-top margin-bottom class="bold-text">{{meeting.subject}}</div>
     <div>{{getDateFormated(meeting.date, 'dddd, DD MMMM YYYY')}}</div>
-    <div>{{meeting.time}}</div>
-    <div margin-top margin-bottom>{{meeting.location}}</div>
+    <div>{{meeting.timeDisplay}}</div>
+    <div margin-top margin-bottom>{{meeting.meetingLocation}}</div>
     <div *ngIf="type === 'tracker'" margin-top class="bold-text">Follow Up Plan</div>
     <div *ngIf="type === 'tracker'" class="wrap-text">{{meeting.followUp}}</div>
-    <div *ngIf="type !== 'tracker'" class="status {{meeting.status}}">{{meeting.status}}</div>
+    <div *ngIf="type !== 'tracker'" class="status {{meeting.meetingStatus}}">{{meeting.meetingStatus}}</div>
     <div margin-top class="bold-text">Remarks</div>
     <div class="wrap-text">{{meeting.remarks}}</div>
   </div>
@@ -50,12 +50,12 @@
       </button>
     </ion-buttons>
     <ion-buttons *ngIf="type === 'hosted'" padding-right>
-      <button *ngIf="meeting.status.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()"
+      <button *ngIf="meeting.meetingStatus.toLowerCase() === 'pending'" ion-button clear icon-only class="text-on-bottom" (click)="rescheduleMeeting()"
         margin>
         <ion-icon name="time"></ion-icon>
         <span class="meeting" ion-text color="primary">Reschedule</span>
       </button>
-      <button *ngIf="meeting.status.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()"
+      <button *ngIf="meeting.meetingStatus.toLowerCase() === 'confirmed'" ion-button clear icon-only class="text-on-bottom" (click)="cancelMeeting()"
         margin>
         <ion-icon color="danger" name="remove-circle"></ion-icon>
         <span class="meeting" ion-text color="danger">Cancel Meeting</span>

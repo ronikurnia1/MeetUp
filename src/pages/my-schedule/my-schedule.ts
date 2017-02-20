@@ -5,17 +5,16 @@ import {
   Platform, Content
 } from "ionic-angular";
 import * as moment from "moment";
-import { Meeting } from "../../domain/meeting";
+// import { Meeting } from "../../domain/meeting";
 import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingDetailsPage } from "../meeting-details/meeting-details";
-import { MeetingTrackerPage } from "../meeting-tracker/meeting-tracker";
 import { CalendarViewPage } from "../calendar-view/calendar-view";
 import { CancelOrDeclinePage } from "../cancel-or-decline/cancel-or-decline";
 import { RescheduleMeetingPage } from "../reschedule-meeting/reschedule-meeting";
 import { BlockTimePage } from "../block-time/block-time";
 import { PickUserPage } from "../pick-user/pick-user";
-import { BarcodeScanner } from "ionic-native";
+import { BarcodeScanner, Calendar } from "ionic-native";
 import { AuthService } from "../../providers/auth-service";
 import { ScanBadgePage } from "../scan-badge/scan-badge";
 import { PopoverPage } from "../user-profile/popover";
@@ -33,19 +32,18 @@ export class MySchedulePage {
   private withdrawMeetingSuccess: string = "meeting:withdrawMeetingSuccess";
 
   private tabs: Tabs;
-  private showScanBadge: boolean = false;
 
   public section: string = "My Schedule";
 
   public scheduleDate: string;
   // public totalMeeting: string;
 
-  public schedules: Array<Meeting> = [];
-  public invitations: Array<Meeting> = [];
-  public hostings: Array<Meeting> = [];
+  public schedules: Array<any> = [];
+  public invitations: Array<any> = [];
+  public hostings: Array<any> = [];
 
-  public fullInvitations: Array<Meeting> = [];
-  public fullHostings: Array<Meeting> = [];
+  public fullInvitations: Array<any> = [];
+  public fullHostings: Array<any> = [];
 
   public filterInvitation: string = "";
   public filterHosting: string = "";
@@ -60,6 +58,10 @@ export class MySchedulePage {
     { title: "Confirmed", param: "confirmed", eventName: this.filterStatusMenu },
     { title: "Cancelled", param: "cancelled", eventName: this.filterStatusMenu }
   ];
+
+
+  private day1Selected: boolean = true;
+  private day2Selected: boolean = false;
 
   @ViewChild("pageContent")
   public content: Content;
@@ -82,22 +84,22 @@ export class MySchedulePage {
     this.tabs = navCtrl.parent;
 
     // Subscribe to the event published by MeetingDetailsPage
-    events.subscribe(this.acceptInvitationSuccess, (meetingData: Meeting) => {
+    events.subscribe(this.acceptInvitationSuccess, (meetingData: any) => {
       // remove appropriate invitaion
       this.removeInvitaion(meetingData);
     });
     // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.declineInvitaionSuccess, (meetingData: Meeting) => {
+    events.subscribe(this.declineInvitaionSuccess, (meetingData: any) => {
       // remove appropriate invitaion
       this.removeInvitaion(meetingData);
     });
     // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.cancelMeetingSuccess, (meetingData: Meeting) => {
+    events.subscribe(this.cancelMeetingSuccess, (meetingData: any) => {
       // remove appropriate hosting
       this.removeHosting(meetingData);
     });
     // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.withdrawMeetingSuccess, (meetingData: Meeting) => {
+    events.subscribe(this.withdrawMeetingSuccess, (meetingData: any) => {
       // remove appropriate schedule
       this.removeSchedule(meetingData);
     });
@@ -108,6 +110,11 @@ export class MySchedulePage {
       this.handleFilter(menu);
     });
 
+  }
+
+  toggleDay(value: number) {
+    this.day1Selected = value === 1;
+    this.day2Selected = value === 2;
   }
 
   handleFilter(menu: any) {
@@ -145,13 +152,6 @@ export class MySchedulePage {
 
   ionViewWillEnter() {
     let userType: string = this.globalVars.getValue("userData").userType;
-    // console.log("user type:", userType);
-    // this.showScanBadge = userType.toLowerCase() === "exhibitor" || userType.toLowerCase() === "speaker";
-    // console.log("show scan:", this.showScanBadge);
-    this.zone.run(() => {
-      this.showScanBadge = userType.toLowerCase() === "exhibitor" || userType.toLowerCase() === "speaker";
-      console.log("show scan:", this.showScanBadge);
-    });
   }
 
   ionViewWillUnload() {
@@ -164,7 +164,7 @@ export class MySchedulePage {
     this.events.unsubscribe(this.filterStatusMenu);
   }
 
-  cancelMeeting(data: Meeting) {
+  cancelMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
     console.log("Cancel Meeting.");
@@ -176,7 +176,7 @@ export class MySchedulePage {
     }
   }
 
-  withdrawAcceptedMeeting(data: Meeting) {
+  withdrawAcceptedMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
     console.log("Withdraw Meeting.");
@@ -187,7 +187,7 @@ export class MySchedulePage {
       this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "withdraw" });
     }
   }
-  rescheduleMeeting(data: Meeting) {
+  rescheduleMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
     console.log("Reschedule Meeting.");
@@ -199,7 +199,7 @@ export class MySchedulePage {
     }
   }
 
-  acceptMeeting(meeting: Meeting) {
+  acceptMeeting(meeting: any) {
     event.stopPropagation();
     event.preventDefault();
     console.log("Accept Meeting.");
@@ -221,16 +221,12 @@ export class MySchedulePage {
       });
   }
 
-  declineMeeting(data: Meeting) {
+  declineMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Decline Meeting.");
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
-    if (cancelDecline) {
-      this.navCtrl.push(cancelDecline, { meetingData: data, type: "decline" });
-    } else {
-      this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "decline" });
-    }
+    // console.log("Decline Meeting.");
+    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
+    this.navCtrl.push(cancelDecline, { meetingData: data, type: "decline" });
   }
 
   /**
@@ -241,22 +237,23 @@ export class MySchedulePage {
     event.preventDefault();
     //check the user type
     let userType: string = this.globalVars.getValue("userData").userType;
+    let page: any;
+
+    let tabs: Tabs = this.navCtrl.parent;
 
     switch (userType.toLowerCase()) {
       case "admin":
       case "ipi staff":
       case "event organizer": {
-        let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "AdminArrangeMeetingPage") || AdminArrangeMeetingPage;
-        this.navCtrl.push(arrangeMeeting);
+        page = tabs.parent.getViews().find(itm => itm.name === "AdminArrangeMeetingPage") || AdminArrangeMeetingPage;
         break;
       }
       default: {
-        let pickUser = this.navCtrl.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
-        this.navCtrl.push(pickUser);
+        page = tabs.parent.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
         break;
       }
     }
-
+    tabs.parent.push(page, null, { animate: true });
   }
 
   /**
@@ -276,30 +273,32 @@ export class MySchedulePage {
     this.getTodayMeetingSchedule();
     // Get invitaion
     this.getMeetingInvitaions();
-    // Get hosting
-    this.getHostedMeetings();
+    // Get Sent
+    this.getSentMeetings();
   }
 
 
   /**
    * Get today's meeting schedule of logged user
    */
-  getTodayMeetingSchedule() {
+  getTodayMeetingSchedule(refresher?: any) {
     this.schedules = [];
-    let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "my").subscribe(response => {
+    let userId: string = this.globalVars.getValue("userData").id;
+    this.meetingService.getMeetings(userId, "MySchedule").subscribe(response => {
+      if (refresher)
+        refresher.complete();
       // console.log("Meeting:", JSON.stringify(data));
       if (response.result === "OK") {
-        response.data.forEach(itm => {
-          this.schedules.push(this.meetingService.buildMeeting(itm));
-        });
-        // let numberOfMeeting = this.schedules.filter(itm => itm.type === "meeting").length;
-        // this.totalMeeting = numberOfMeeting.toString();
-        // this.totalMeeting += numberOfMeeting > 1 ? " meetings" : " meeting";
+        this.schedules = response.data;
+        // response.data.forEach(itm => {
+        //   this.schedules.push(this.meetingService.buildMeeting(itm));
+        // });
       } else {
         this.alertUser("Retrieve My Schedule data failed.", response.messsage);
       }
     }, error => {
+      if (refresher)
+        refresher.complete();
       this.schedules = [];
       console.log("Error", error);
       this.alertUser("Retrieve My Schedule data failed.", error);
@@ -310,21 +309,26 @@ export class MySchedulePage {
   /**
    * Get meeting invitations of logged user
    */
-  getMeetingInvitaions() {
+  getMeetingInvitaions(refresher?: any) {
     this.fullInvitations = [];
-    let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "invited").subscribe(response => {
+    let userId: string = this.globalVars.getValue("userData").id;
+    this.meetingService.getMeetings(userId, "Invitations").subscribe(response => {
+      if (refresher)
+        refresher.complete();
       if (response.result === "OK") {
-        response.data.forEach(itm => {
-          if (itm.type === "meeting") {
-            this.fullInvitations.push(this.meetingService.buildMeeting(itm));
-          }
-        });
+        // response.data.forEach(itm => {
+        //   if (itm.type === "meeting") {
+        //     this.fullInvitations.push(this.meetingService.buildMeeting(itm));
+        //   }
+        // });
+        this.fullInvitations = response.data;
         this.invitations = this.fullInvitations.slice();
       } else {
         this.alertUser("Retrieve Invitations data failed.", response.messsage);
       }
     }, error => {
+      if (refresher)
+        refresher.complete();
       this.fullInvitations = [];
       console.log("Error", error);
       this.alertUser("Retrieve Invitations data failed.", error);
@@ -332,61 +336,74 @@ export class MySchedulePage {
   }
 
   /**
-   * Get hosted meetings of logged user
+   * Get Sent meetings of logged user
    */
-  getHostedMeetings() {
+  getSentMeetings(refresher?: any) {
     this.fullHostings = [];
-    let userEmail: string = this.globalVars.getValue("userData").email;
-    this.meetingService.getMeetings(userEmail, "hosting").subscribe(response => {
+    let userId: string = this.globalVars.getValue("userData").id;
+    this.meetingService.getMeetings(userId, "Sent").subscribe(response => {
+      if (refresher)
+        refresher.complete();
       if (response.result === "OK") {
-        response.data.forEach(itm => {
-          if (itm.type === "meeting") {
-            this.fullHostings.push(this.meetingService.buildMeeting(itm));
-          }
-        });
+        this.fullHostings = response.data;
         this.hostings = this.fullHostings.slice();
       } else {
         this.alertUser("Retrieve Sent data failed.", response.messsage);
       }
     }, error => {
+      if (refresher)
+        refresher.complete();
       this.fullHostings = [];
       console.log("Error", error);
       this.alertUser("Retrieve Sent data failed.", error);
     });
   }
 
-  /**
-   * Open Meeting Tracker
-   */
-  openMeetingTracker(eventData: Events) {
-    event.stopPropagation();
-    event.preventDefault();
-    //console.log("Open Meeting Tracker.");
-    let meetingTracker = this.navCtrl.getViews().find(itm => itm.name === "MeetingTrackerPage");
-    if (meetingTracker) {
-      console.log("Meeting Tracker exists.");
-      this.navCtrl.push(meetingTracker);
-    } else {
-      console.log("Load new Meeting Tracker.");
-      this.navCtrl.push(MeetingTrackerPage);
+
+
+  syncToPhone(event: any) {
+    if (Calendar.hasReadWritePermission) {
+      this.syncCalendarToPhone();
+    }
+    else {
+      Calendar.requestReadWritePermission().then(value => {
+        this.syncCalendarToPhone();
+      }).catch(reason => {
+        this.alertUser("Failed to sync", reason.message);
+      });
     }
   }
 
+  syncCalendarToPhone() {
+    // delete all existing IPI calendar
+    Calendar.findEventWithOptions("", "", "", new Date(), new Date(), {}).then(value => {
+
+      Calendar.deleteEvent("", "", "", new Date(), new Date()).then(value => {
+        Calendar.createEventWithOptions("", "", "", new Date(), new Date(), {});
+      }).catch(reason => {
+
+      });
+    }).catch(reason => {
+
+    });
+  }
+
+
   /**
-   * View Meeting Details (Invitation or Hosted)
+   * View Meeting Details
    */
-  viewMeetingDetails(data: Meeting, type: string) {
+  viewMeetingDetails(data: any, type: string) {
     event.stopPropagation();
     event.preventDefault();
-    if (data.type === "meeting") {
-      // console.log("View meeting details.");
-      let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
-      this.navCtrl.push(meetingDetails, { meetingData: data, type: type }, { animate: true });
-    } else {
+    if (data.isBlockTime) {
       // Open blocking detail
       console.log("Open blocktime detail.");
       let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
       this.navCtrl.push(blockTime, { blockTime: data }, { animate: true });
+    } else {
+      // console.log("View meeting details.");
+      let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+      this.navCtrl.push(meetingDetails, { meetingData: data, type: type }, { animate: true });
     }
   }
   /**
@@ -399,10 +416,10 @@ export class MySchedulePage {
     if (value && value.trim() != "") {
       this.invitations = this.fullInvitations.filter((itm) => {
         return (itm.subject.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.location.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.time.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.meetingWith.fullName.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.remarks.toLowerCase().indexOf(value.toLowerCase()) > -1
+          itm.meetingLocation.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          itm.timeDisplay.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          itm.userDisplayName.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          itm.date.toLowerCase().indexOf(value.toLowerCase()) > -1
         );
       }).slice();
     } else {
@@ -421,16 +438,34 @@ export class MySchedulePage {
     if (value && value.trim() != "") {
       this.hostings = this.fullHostings.filter((itm) => {
         return (itm.subject.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.location.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.time.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.meetingWith.fullName.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-          itm.remarks.toLowerCase().indexOf(value.toLowerCase()) > -1
+          itm.meetingLocation.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          itm.timeDisplay.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          itm.userDisplayName.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
+          itm.date.toLowerCase().indexOf(value.toLowerCase()) > -1
         );
       }).slice();
     } else {
       this.hostings = this.fullHostings.slice();
     }
   }
+
+  refreshData(refresher: any) {
+    switch (this.section) {
+      case "Invitations": {
+        this.getMeetingInvitaions(refresher);
+        break;
+      }
+      case "Sent": {
+        this.getSentMeetings(refresher);
+        break;
+      }
+      default: {
+        this.getTodayMeetingSchedule(refresher);
+        break;
+      }
+    }
+  }
+
 
   /**
    * checkSchedule
@@ -483,7 +518,7 @@ export class MySchedulePage {
   /**
    * remove appropriate invitation
    */
-  private removeInvitaion(meeting: Meeting) {
+  private removeInvitaion(meeting: any) {
     let index = this.invitations.indexOf(meeting);
     if (index > -1) {
       this.invitations.splice(index, 1);
@@ -496,7 +531,7 @@ export class MySchedulePage {
   /**
    * remove appropriate schedule
    */
-  private removeSchedule(meeting: Meeting) {
+  private removeSchedule(meeting: any) {
     let index = this.schedules.indexOf(meeting);
     if (index > -1) {
       this.schedules.splice(index, 1);
@@ -505,7 +540,7 @@ export class MySchedulePage {
   /**
    * remove appropriate hosting
    */
-  private removeHosting(meeting: Meeting) {
+  private removeHosting(meeting: any) {
     let index = this.hostings.indexOf(meeting);
     if (index > -1) {
       this.hostings.splice(index, 1);
@@ -524,8 +559,11 @@ export class MySchedulePage {
   /**
    * Date Format Helper
    */
-  getDateFormated(value: Date, format: string): string {
-    return moment(value).format(format);
+  getDateFormated(value: string, format: string): string {
+    // API format date is DD-MM-YYYY
+    // Change it to YYYY-MM-DD
+    let dateValue: string = `${value.substr(6, 4)}-${value.substr(3, 2)}-${value.substr(0, 2)}`;
+    return moment(dateValue).format(format);
   }
 
 

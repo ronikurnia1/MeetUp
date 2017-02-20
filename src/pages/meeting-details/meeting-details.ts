@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { NavController, NavParams, ToastController, Events } from "ionic-angular";
-import { Meeting } from "../../domain/meeting";
 import * as moment from "moment";
 import { MeetingService } from "../../providers/meeting-service";
+import { AuthService } from "../../providers/auth-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { CancelOrDeclinePage } from "../cancel-or-decline/cancel-or-decline";
 import { RescheduleMeetingPage } from "../reschedule-meeting/reschedule-meeting";
@@ -14,7 +14,7 @@ import { UserProfilePage } from "../user-profile/user-profile";
   templateUrl: "meeting-details.html"
 })
 export class MeetingDetailsPage {
-  public meeting: Meeting;
+  public meeting: any;
   public type: string;
 
   // post meeting survey
@@ -33,10 +33,12 @@ export class MeetingDetailsPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private meetingService: MeetingService,
+    private authService: AuthService,
     private globalVars: GlobalVarsService,
     private toastCtrl: ToastController,
     private events: Events) {
     this.meeting = navParams.get("meetingData");
+    console.log("meeting:", this.meeting);
     this.type = navParams.get("type");
   }
 
@@ -44,8 +46,27 @@ export class MeetingDetailsPage {
     event.stopPropagation();
     event.preventDefault();
     let profilePage = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
-    this.navCtrl.push(profilePage, { profile: this.meeting.meetingWith });
+    // get profile 
+    this.authService.getProfile(this.meeting.userId).subscribe(respose => {
+      if (respose.result === "OK") {
+        this.navCtrl.push(profilePage, { profile: respose.user });
+      } else {
+        this.showToast(respose.message);
+      }
+    }, error => {
+      this.showToast(error);
+    });
   }
+
+  showToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: "bottom"
+    });
+    toast.present();
+  }
+
 
   acceptMeeting() {
     event.stopPropagation();
@@ -149,8 +170,11 @@ export class MeetingDetailsPage {
   /**
    * Date Format Helper
    */
-  getDateFormated(value: Date, format: string): string {
-    return moment(value).format(format);
+  getDateFormated(value: string, format: string): string {
+    // API format date is DD-MM-YYYY
+    // Change it to YYYY-MM-DD
+    let dateValue: string = `${value.substr(6, 4)}-${value.substr(3, 2)}-${value.substr(0, 2)}`;
+    return moment(dateValue).format(format);
   }
 
 }

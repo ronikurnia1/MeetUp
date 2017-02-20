@@ -16,8 +16,6 @@ import { MySchedulePage } from "../pages/my-schedule/my-schedule";
 import { MeetingDetailsPage } from "../pages/meeting-details/meeting-details";
 import { MenuPage } from "../pages/menu/menu";
 import { ScanAttendancePage } from "../pages/scan-attendance/scan-attendance";
-import { MeetingTrackerPage } from "../pages/meeting-tracker/meeting-tracker";
-import { CalendarViewPage } from "../pages/calendar-view/calendar-view";
 import { ProviderModule } from "../providers/provider.module";
 import { CancelOrDeclinePage } from "../pages/cancel-or-decline/cancel-or-decline";
 import { RescheduleMeetingPage } from "../pages/reschedule-meeting/reschedule-meeting";
@@ -64,8 +62,6 @@ export const firebaseConfig = {
     MeetingDetailsPage,
     MenuPage,
     ScanAttendancePage,
-    MeetingTrackerPage,
-    CalendarViewPage,
     CancelOrDeclinePage,
     RescheduleMeetingPage,
     NotificationPage,
@@ -102,8 +98,6 @@ export const firebaseConfig = {
     MeetingDetailsPage,
     MenuPage,
     ScanAttendancePage,
-    MeetingTrackerPage,
-    CalendarViewPage,
     CancelOrDeclinePage,
     RescheduleMeetingPage,
     NotificationPage,

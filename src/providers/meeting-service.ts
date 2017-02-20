@@ -18,13 +18,39 @@ export class MeetingService {
     /**
      * get users based on given group & keywords
      */
-    getUsers(keyword: string): Observable<any> {
-        // TODO:
-        let queryString = "?userId=" + this.globalVars.getValue("userData").id
-            + "&keyword=" + keyword;
+    getUsers(keyword: string, useLocalData: boolean): Observable<any> {
+        // check local storage
+        // console.log("keyword:", keyword);
+        if (localStorage.getItem("meetingUser") && useLocalData) {
+            return new Observable<any>(observer => {
+                let result: any = JSON.parse(localStorage.getItem("meetingUser"));
+                if (keyword) {
+                    result.users = (result.users as any[]).filter(itm => {
+                        return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1
+                    });
+                    // console.log("data:", result);
+                }
+                observer.next(result);
+                observer.complete();
+            });
+        }
+        let queryString = "?userId=" + this.globalVars.getValue("userData").id + "&keyword=";
         let request = "MobileMeetingApi/GetEventUsers" + queryString;
         return this.http.get(this.globalVars.getValue("apiUrl") + request)
-            .map((response: Response) => response.json()).catch(this.handleError);
+            .map((response: Response) => {
+                localStorage.setItem("meetingUser", JSON.stringify(response.json()));
+                let result: any = response.json();
+                result.users = (result.users as any[]).filter(itm => {
+                    return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1
+                });
+                return result;
+            }).catch(this.handleError);
         // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
         //     .map((response: Response) => response.json()).catch(this.handleError);
     }
@@ -33,13 +59,44 @@ export class MeetingService {
     /**
      * get users for chatting
      */
-    getUsersForChat(userTypeId: string, industryId: string, keyword: string): Observable<any> {
-        // TODO:
-        let queryString = "?userId=" + this.globalVars.getValue("userData").id +
-            "&userTypeId=" + userTypeId + "&industryId=" + industryId + "&keyword=" + keyword;
+    getUsersForChat(keyword: string, useLocalData: boolean): Observable<any> {
+        // check local storage
+        if (localStorage.getItem("chatUser") && useLocalData) {
+
+            return new Observable<any>(observer => {
+                let result: any = JSON.parse(localStorage.getItem("chatUser"));
+                if (keyword) {
+                    result.users = (result.users as any[]).filter(itm => {
+                        return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                            itm.industryTitle.toLowerCase().indexOf(keyword.toLowerCase()) > -1
+                    });
+                    // console.log("data:", result);
+                }
+                observer.next(result);
+                observer.complete();
+            });
+        }
+
+        let queryString = "?userId=" + this.globalVars.getValue("userData").id + "&userTypeId=&industryId=&keyword=";
         let request = "MobileUserApi/GetUsersChat" + queryString;
+
         return this.http.get(this.globalVars.getValue("apiUrl") + request)
-            .map((response: Response) => response.json()).catch(this.handleError);
+            .map((response: Response) => {
+                localStorage.setItem("chatUser", JSON.stringify(response.json()));
+                let result: any = response.json();
+                result.users = (result.users as any[]).filter(itm => {
+                    return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
+                        itm.industryTitle.toLowerCase().indexOf(keyword.toLowerCase()) > -1
+                });
+                return result;
+            }).catch(this.handleError);
+
         // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
         //     .map((response: Response) => response.json()).catch(this.handleError);
     }
@@ -84,13 +141,13 @@ export class MeetingService {
     /**
      * get today's meeting data of certain userName
      */
-    getMeetings(userEmail: string, type: string): Observable<any> {
+    getMeetings(userId: string, type: string): Observable<any> {
         // TODO:
-        // let request = "GetMeetings?type=" + type + "&email=" + userEmail;
-        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/today-meetings.json")
+        let request = "MobileMeetingApi/GetMeetingsByType?type=" + type + "&userId=" + userId;
+        return this.http.get(this.globalVars.getValue("apiUrl") + request)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/today-meetings.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
 
@@ -146,38 +203,35 @@ export class MeetingService {
      */
     acceptInvitation(meetingId: string,
         userEmail: string): Observable<any> {
-        // TODO:
-        // let data = { meetingId: meetingId, recipientEmail: userEmail, statusName: "accepted" };
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", data)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/accept-invitation.json")
+        let data = { meetingId: meetingId, byUserEmail: userEmail, statusName: "accepted" };
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/UpdateMeetingStatus", data)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/accept-invitation.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
      * Reschedule meeting invitation
      */
     rescheduleMeeting(rescheduleData: any): Observable<any> {
-        // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", rescheduleData)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/reschedule-meeting.json")
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/UpdateMeetingStatus", rescheduleData)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/reschedule-meeting.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
      * Reject/Decline meeting invitation
      */
     declineInvitation(meetingId: string, userEmail: string, reason: string): Observable<any> {
-        // TODO:
-        // let data = {
-        //     meetingid: meetingId,
-        //     recipientemail: userEmail,
-        //     statusname: "rejected",
-        //     reason: reason
-        // };
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", data)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/decline-invitation.json")
+        let data = {
+            meetingid: meetingId,
+            byUserEmail: userEmail,
+            statusname: "rejected",
+            reason: reason
+        };
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/UpdateMeetingStatus", data)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/decline-invitation.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
     /**
@@ -236,10 +290,10 @@ export class MeetingService {
     updateBlockTime(blockTime: any): Observable<any> {
         // console.log("blocktime:", blockTime);
         // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateBlcokTime", blockTime)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/update-blocktime.json")
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/UpdateBlockTime", blockTime)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/update-blocktime.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
     /**
@@ -314,13 +368,16 @@ export class MeetingService {
     * Helper for building meeting object
     */
     public buildMeeting(rawData: any): Meeting {
+        rawData["status"] = "pending";
+        rawData["meetingWith"] = {};
+        rawData.type = "meeting";
         return new Meeting(
             rawData.id,
             rawData.subject,
             rawData.type,
-            rawData.location,
-            rawData.date,
-            rawData.time,
+            rawData.meetingLocation,
+            new Date("2017-02-16"),
+            rawData.timeDisplay,
             rawData.meetingWith,
             rawData.status,
             rawData.remarks);

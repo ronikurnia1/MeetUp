@@ -26,54 +26,58 @@ export class MenuPage {
 
   items = [];
 
-  fullMenus = [
+  fullMenus: any[] = [
     {
-      "title": "Scan Attendance",
-      "page": ScanAttendancePage,
-      "icon": "qr-scanner",
-      "color": "#4CAF50"
+      title: "Scan Attendance",
+      page: ScanAttendancePage,
+      icon: "qr-scanner",
+      color: "#4CAF50"
     },
     {
-      "title": "Staff Dashboard",
-      "icon": "stats",
-      "color": "#4CAF50"
+      title: "Staff Dashboard",
+      icon: "stats",
+      page: AnnouncementPage,
+      color: "#4CAF50"
     }
   ];
   limitedMenus = [
     {
-      "title": "Announcement/Message",
-      "page": AnnouncementPage,
-      "icon": "megaphone",
-      "color": "#4CAF50"
+      title: "Announcement/Message",
+      page: AnnouncementPage,
+      icon: "megaphone",
+      color: "#4CAF50"
     }
   ];
-  sharedMenus = [
+  sharedMenus: any[] = [
     {
-      "title": "Speakers",
-      "icon": "people",
-      "color": "#4CAF50"
+      title: "Speakers",
+      icon: "people",
+      page: AnnouncementPage,
+      color: "#4CAF50"
     },
     {
-      "title": "Agenda",
-      "icon": "calendar",
-      "color": "#4CAF50"
+      title: "Agenda",
+      page: AnnouncementPage,
+      icon: "calendar",
+      color: "#4CAF50"
     },
     {
-      "title": "Venue",
-      "icon": "pin",
-      "page": FloorPlanPage,
-      "color": "#4CAF50"
+      title: "Venue",
+      icon: "pin",
+      page: FloorPlanPage,
+      color: "#4CAF50"
     },
     {
-      "title": "Technologies",
-      "icon": "school",
-      "color": "#4CAF50"
+      title: "Technologies",
+      page: AnnouncementPage,
+      icon: "school",
+      color: "#4CAF50"
     },
     {
-      "title": "Logout",
-      "page": LoginPage,
-      "icon": "power",
-      "color": "#E63135"
+      title: "Logout",
+      page: LoginPage,
+      icon: "power",
+      color: "#E63135"
     }
   ];
 
@@ -113,8 +117,13 @@ export class MenuPage {
       } else {
         // others than login page
         // check if page exist
-        let pageToLoad = this.navCtrl.getViews().find(itm => itm.name === page.name) || page;
-        this.navCtrl.push(pageToLoad, null, navOptions).then(data => { });
+        // let pageToLoad = this.navCtrl.getViews().find(itm => itm.name === page.name) || page;
+        // this.navCtrl.push(pageToLoad, null, navOptions).then(data => { });
+
+        let tabs: Tabs = this.navCtrl.parent;
+        let pageToLoad: any = tabs.parent.getViews().find(itm => itm.name === page.name) || page;
+        tabs.parent.push(pageToLoad, null, navOptions);
+
       }
     }
     else {
@@ -142,9 +151,7 @@ export class MenuPage {
         break;
       }
       default: {
-        // this.items = this.limitedMenus.concat(this.sharedMenus);
-        this.items = this.sharedMenus.slice();
-        this.items.splice(1, 0, this.limitedMenus[0]);
+        this.items = this.limitedMenus.concat(this.sharedMenus);
         break;
       }
     }

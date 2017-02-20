@@ -39,6 +39,7 @@ export class ArrangeMeetingPage {
     private formBuilder: FormBuilder,
     private zone: NgZone,
     private meetingService: MeetingService,
+    private alertCtrl: AlertController,
     private toastCtrl: ToastController) {
 
 
@@ -126,13 +127,16 @@ export class ArrangeMeetingPage {
         toast.present();
         if (response.result === "OK") {
           // go back to the previous screen
-          this.navCtrl.pop({ animate: true }).then(value => {
-            this.navCtrl.pop({ animate: true });
-          });
+          this.navCtrl.pop({ animate: true });
         }
       }, error => {
         loader.dismissAll();
-
+        let alert = this.alertCtrl.create({
+          title: "Arrange Meeting Failed",
+          subTitle: error.message,
+          buttons: ['OK']
+        });
+        alert.present();
       });
     }
 

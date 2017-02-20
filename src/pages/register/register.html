@@ -12,69 +12,70 @@
       </ion-avatar>
       <ion-icon bp-layout="row center" (click)="selectAvatarSource()" name="camera"></ion-icon>
     </ion-item>
-    <ion-item bp-layout="row gutter-none" class="meeting">
-      <ion-label bp-layout="fit">
-        <ion-icon color="primary" name="medal"></ion-icon>
-      </ion-label>
-      <ion-select placeholder="Title" bp-layout="fill" [selectOptions]="{title: 'Select title'}" class="selection" formControlName="titleId">
+    <ion-item *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
+      <ion-label>Email</ion-label>
+      <ion-input formControlName="email" type="email"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.email.valid  && (registerForm.controls.email.dirty || submitAttempt)">Invalid Email address.</div>
+    <ion-item class="meeting">
+      <ion-label>Title</ion-label>
+      <ion-select class="ion-select-long" [selectOptions]="{title: 'Select title'}" formControlName="titleId">
         <ion-option *ngFor="let title of titles" [value]="title.id">{{title.title}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="person"></ion-icon>
-      </ion-label>
-      <ion-input required formControlName="fullName" type="text" placeholder="Full Name"></ion-input>
+      <ion-label>First Name</ion-label>
+      <ion-input required formControlName="firstName" type="text"></ion-input>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.fullName.valid  && (registerForm.controls.fullName.dirty || submitAttempt)">Full Name is required.</div>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.firstName.valid  && (registerForm.controls.firstName.dirty || submitAttempt)">First Name is required.</div>
     <ion-item class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="call"></ion-icon>
-      </ion-label>
-      <ion-input formControlName="mobile" type="text" placeholder="Mobile"></ion-input>
+      <ion-label>Last Name</ion-label>
+      <ion-input required formControlName="lastName" type="text"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.lastName.valid  && (registerForm.controls.lastName.dirty || submitAttempt)">Last Name is required.</div>
+    <ion-item class="meeting">
+      <ion-label>Mobile</ion-label>
+      <ion-input formControlName="mobile" type="text"></ion-input>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.mobile.valid  && (registerForm.controls.mobile.dirty || submitAttempt)">Mobile no is required.</div>
-    <ion-item class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="mail"></ion-icon>
-      </ion-label>
-      <ion-input formControlName="email" type="email" placeholder="Email address"></ion-input>
-    </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.email.valid  && (registerForm.controls.email.dirty || submitAttempt)">Invalid Email address.</div>
     <ion-item *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="lock"></ion-icon>
-      </ion-label>
-      <ion-input formControlName="password" required validateEqual="confirmPassword" reverse="true" type="password" placeholder="Password"></ion-input>
+      <ion-label>Password</ion-label>
+      <ion-input formControlName="password" required validateEqual="confirmPassword" reverse="true" type="password"></ion-input>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="screenTitle.toLowerCase() === 'register' && !registerForm.controls.password.valid  && (registerForm.controls.password.dirty || submitAttempt)">Password is required.</div>
     <ion-item *ngIf="screenTitle.toLowerCase() === 'register'" class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="lock"></ion-icon>
-      </ion-label>
-      <ion-input formControlName="confirmPassword" required validateEqual="password" type="password" placeholder="Confirm Password"></ion-input>
+      <ion-label>Confirm Password</ion-label>
+      <ion-input formControlName="confirmPassword" required validateEqual="password" type="password"></ion-input>
     </ion-item>
     <div class="small-text" ion-text color="danger" padding-left *ngIf="screenTitle.toLowerCase() === 'register' && !registerForm.controls.confirmPassword.valid  && (registerForm.controls.confirmPassword.dirty || submitAttempt)">Password mismatch.</div>
-    <ion-item bp-layout="row gutter-none" class="meeting">
-      <ion-label bp-layout="fit">
-        <ion-icon color="primary" name="globe"></ion-icon>
-      </ion-label>
-      <ion-select placeholder="Country" (ionChange)="contryChange($event)" bp-layout="fill" [selectOptions]="{title: 'Select Country'}" class="selection" formControlName="countryId">
+    <ion-item class="meeting">
+      <ion-label>Company/Org.</ion-label>
+      <ion-input type="text" formControlName="company"></ion-input>
+    </ion-item>
+    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.company.valid  && (registerForm.controls.company.dirty || submitAttempt)">Company/Organization is required.</div>
+    <ion-item class="meeting">
+      <ion-label>Job Level</ion-label>
+      <ion-select class="ion-select-long" (ionChange)="jobLevelChange($event)" [selectOptions]="{title: 'Select Job Level'}" formControlName="jobLevelId">
+        <ion-option *ngFor="let jobLevel of jobLevels" [value]="jobLevel.id">{{jobLevel.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>Job Role</ion-label>
+      <ion-select class="ion-select-long" (ionChange)="jobRoleChange($event)" [selectOptions]="{title: 'Select Job Role'}" formControlName="jobRoleId">
+        <ion-option *ngFor="let jobRole of jobRoles" [value]="jobRole.id">{{jobRole.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="meeting">
+      <ion-label>Country</ion-label>
+      <ion-select class="ion-select-long" (ionChange)="contryChange($event)" [selectOptions]="{title: 'Select Country'}" formControlName="countryId">
         <ion-option *ngFor="let country of countries" [value]="country.id">{{country.title}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="briefcase"></ion-icon>
-      </ion-label>
-      <ion-input type="text" formControlName="company" placeholder="Company"></ion-input>
-    </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.company.valid  && (registerForm.controls.company.dirty || submitAttempt)">Company is required.</div>
-    <ion-item class="meeting">
-      <ion-label>
-        <ion-icon color="primary" name="shirt"></ion-icon>
-      </ion-label>
-      <ion-input formControlName="position" type="text" placeholder="Position"></ion-input>
+      <ion-label>Industry</ion-label>
+      <ion-select class="ion-select-long" (ionChange)="industryChange($event)" [selectOptions]="{title: 'Select Industry'}" formControlName="industryId">
+        <ion-option *ngFor="let industry of industries" [value]="industry.id">{{industry.title}}</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item no-lines class="meeting">
       <ion-label>Notify me by</ion-label>
