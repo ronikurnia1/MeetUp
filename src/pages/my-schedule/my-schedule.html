@@ -22,16 +22,16 @@
         <ion-searchbar [value]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'Sent'"></ion-searchbar>
 
         <div bp-layout="row gutter-none" *ngIf="section === 'My Schedule'">
-            <div bp-layout="col" (click)="toggleDay(1)">
+            <div bp-layout="col" (click)="toggleDay(day1)">
                 <div class="border-right">
-                    <p class="primary-title" [class.day-selected]="day1Selected">DAY 1</p>
-                    <p class="secondary-title" [class.day-selected]="day1Selected">{{scheduleDate}}</p>
+                    <p class="primary-title" [class.day-selected]="daySelected === day1">DAY 1</p>
+                    <p class="secondary-title" [class.day-selected]="daySelected === day1">{{getDateFormated(day1, 'ddd, DD MMM YYYY')}}</p>
                 </div>
             </div>
-            <div bp-layout="col" (click)="toggleDay(2)">
+            <div bp-layout="col" (click)="toggleDay(day2)">
                 <div>
-                    <p class="primary-title" [class.day-selected]="day2Selected">DAY 2</p>
-                    <p class="secondary-title" [class.day-selected]="day2Selected">{{scheduleDate}}</p>
+                    <p class="primary-title" [class.day-selected]="daySelected === day2">DAY 2</p>
+                    <p class="secondary-title" [class.day-selected]="daySelected === day2">{{getDateFormated(day2, 'ddd, DD MMM YYYY')}}</p>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
     </ion-refresher>
 
     <ion-list *ngSwitchCase="'My Schedule'">
-        <ion-item *ngFor="let meeting of schedules" (click)="viewMeetingDetails(meeting, 'my-schedule')" class="meeting">
+        <ion-item *ngFor="let meeting of schedules | meetingFilter:daySelected" (click)="viewMeetingDetails(meeting, 'my-schedule')" class="meeting">
             <div bp-layout="flex margin-bottom">
                 <div bp-layout="fit margin-right--sm">{{meeting.timeDisplay}}</div>
                 <div bp-layout="fill margin-left--sm">

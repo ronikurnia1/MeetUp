@@ -22,49 +22,30 @@
     </div>
   </ion-item>
 
-  <div padding-left class="meeting bold-text">Reschedule to</div>
-
-  <ion-item class="meeting" no-lines>
-    <input (click)="scheduleOptionSelected('bestTimeSlot')" class="radio-button" type="radio" [checked]="scheduleOption === 'bestTimeSlot'"
-      name="scheduleOption" id="bestTimeSlot">
-    <label class="radio-label" for="bestTimeSlot">Best time slot</label>
-  </ion-item>
-
-  <div class="meeting pull-right" [class.bold-text]="scheduleOption === 'bestTimeSlot'">
-    <div>{{getDateFormated(bestTimeSlot.date,'dddd, DD MMMM YYYY')}}</div>
-    <div>{{bestTimeSlot.startTime}}-{{bestTimeSlot.endTime}}</div>
-  </div>
-
-  <ion-item class="meeting" no-lines>
-    <input (click)="scheduleOptionSelected('manualTime')" class="radio-button" type="radio" [checked]="scheduleOption !== 'bestTimeSlot'"
-      name="scheduleOption" id="manualTime">
-    <label class="radio-label" for="manualTime">Select manually</label>
-  </ion-item>
-  <div margin-right>
-    <ion-item *ngIf="scheduleOption === 'manualTime'" class="meeting" margin-left padding-right>
-      <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="DDDD, DD MMM YYYY" [(ngModel)]="manualTime.date"></ion-datetime>
-    </ion-item>
-    <ion-item *ngIf="scheduleOption === 'manualTime'" class="meeting" margin-left padding-right>
-      <ion-label>Start</ion-label>
-      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="manualTime.startTime"></ion-datetime>
-    </ion-item>
-    <ion-item *ngIf="scheduleOption === 'manualTime'" class="meeting" margin-left padding-right>
-      <ion-label>End</ion-label>
-      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="manualTime.endTime"></ion-datetime>
-    </ion-item>
-  </div>
   <form [formGroup]="form" (ngSubmit)="rescheduleMeeting()" novalidate>
-    <ion-item class="meeting" padding-left padding-right padding-top>
-      <ion-select formControlName="location" placeholder="Location" [selectOptions]="locationSelectOptions" class="selection">
-        <ion-option *ngFor="let loc of locations" [value]="loc.id">{{loc.title}}</ion-option>
-      </ion-select>
+    <ion-item text-wrap no-lines>
+      <div bp-layout="row center middle padding-left">
+        <div bp-layout="fit">
+          <ion-icon class="bigger" color="primary" name="information-circle"></ion-icon>
+        </div>
+        <div bp-layout="fill padding-left padding-right">
+          <span class="meeting"> We have choosen best time slot available, tap to change schedule.</span>
+        </div>
+      </div>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.location.valid  && (form.controls.location.dirty || submitAttempt)">Location is required.</div>
-    <ion-item padding-left padding-right padding-top class="meeting">
-      <ion-textarea placeholder="Reason" formControlName="reason"></ion-textarea>
+    <ion-item class="meeting" padding-right>
+      <ion-label>Date</ion-label>
+      <ion-datetime formControlName="date" displayFormat="DDDD, DD MMM YYYY" [min]="minDate" [max]="maxDate"></ion-datetime>
     </ion-item>
-    <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.reason.valid  && (form.controls.reason.dirty || submitAttempt)">Reason is required.</div>
+    <ion-item class="meeting" padding-right>
+      <ion-label>Start</ion-label>
+      <ion-datetime formControlName="startTime" displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>
+    </ion-item>
+    <ion-item class="meeting" padding-right>
+      <ion-label>End</ion-label>
+      <ion-datetime formControlName="endTime" displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>
+    </ion-item>
+
     <div margin>
       <button ion-button full type="submit">Reschedule</button>
     </div>

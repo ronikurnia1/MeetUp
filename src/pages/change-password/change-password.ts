@@ -47,8 +47,14 @@ export class ChangePasswordPage {
           // redirect to the previous page
           this.navCtrl.pop();
         }
+      }, error => {
+        let toast = this.toastCtrl.create({
+          message: error,
+          duration: 3000,
+          position: "bottom"
+        });
+        toast.present();
       });
-
     }
   }
 

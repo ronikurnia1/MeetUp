@@ -11,29 +11,23 @@
     </ion-avatar>
     <div bp-layout="row fill">
       <ion-item>
-        <div class="center-align bold-text" *ngIf="!myProfile">{{profile.title + ' ' + profile.firstName + ' ' + profile.lastName}}</div>
-        <div class="center-align bold-text" *ngIf="myProfile">{{profile.firstName + ' ' + profile.lastName}}</div>
+        <div class="center-align bold-text" *ngIf="!myProfile">{{profile.title}} {{profile.firstName}} {{profile.lastName}}</div>
+        <div class="center-align bold-text" *ngIf="myProfile">{{profile.titleTitle}} {{profile.firstName}} {{profile.lastName}}</div>
         <div bp-layout="row center middle" *ngIf="myProfile">
           <button small ion-button text-only (click)="handleMenu('editProfile')">Edit Profile</button>
           <button small ion-button text-only (click)="handleMenu('changePassword')">Change Password</button>
         </div>
+        <div bp-layout="row center middle" class="meeting" *ngIf="!myProfile" no-lines>
+          <button small ion-button text-only (click)="handleMenu('arrangeMeeting')">Meeting</button>
+        </div>
         <div class="center-align">{{profile.company}}</div>
         <div class="center-align">{{profile.industryTitle}}</div>
-        <div class="center-align">{{profile.jobLevel}}</div>
-        <div class="center-align">{{profile.jobRole}}</div>
-        <div class="center-align">{{profile.countryName}}</div>
+        <div class="center-align">{{profile.jobLevelTitle || profile.jobLevel}}</div>
+        <div class="center-align">{{profile.jobRoleTitle || profile.jobRole}}</div>
+        <div class="center-align">{{profile.countryTitle || profile.countryName}}</div>
         <div *ngIf="myProfile" class="center-align">{{profile.email}}</div>
         <div *ngIf="myProfile" class="center-align">{{profile.mobile}}</div>
       </ion-item>
     </div>
-  </ion-item>
-  <div bp-layout="row center middle" class="meeting" *ngIf="!myProfile" no-lines>
-    <button small ion-button text-only (click)="handleMenu('arrangeMeeting')">Meeting</button>
-  </div>
-  <ion-item no-lines>
-    <div>Group</div>
-    <p padding-left margin-bottom>{{profile.userType}}</p>
-    <div>Description</div>
-    <p padding-left class=wrap-text>{{profile.description}}</p>
   </ion-item>
 </ion-content>

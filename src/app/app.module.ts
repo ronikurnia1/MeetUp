@@ -38,6 +38,7 @@ import { AdminArrangeMeetingPage } from "../pages/admin-arrange-meeting/admin-ar
 import { AnnouncementPage } from "../pages/announcement/announcement";
 import { AnnouncementDetailsPage } from "../pages/announcement-details/announcement-details";
 import { FloorPlanPage } from "../pages/floor-plan/floor-plan";
+import { MeetingFilterPipe } from "../providers/meeting-filter-pipe";
 
 // export function provideStorage() {
 //   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: '__mydb' })
@@ -82,7 +83,8 @@ export const firebaseConfig = {
     AdminArrangeMeetingPage,
     AnnouncementPage,
     AnnouncementDetailsPage,
-    FloorPlanPage
+    FloorPlanPage,
+    MeetingFilterPipe
   ],
   imports: [
     IonicModule.forRoot(MyApp), Ionic2RatingModule,

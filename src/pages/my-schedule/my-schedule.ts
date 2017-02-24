@@ -33,20 +33,18 @@ export class MySchedulePage {
 
   private tabs: Tabs;
 
-  public section: string = "My Schedule";
+  private section: string = "My Schedule";
 
-  public scheduleDate: string;
-  // public totalMeeting: string;
+  private schedules: Array<any> = [];
 
-  public schedules: Array<any> = [];
-  public invitations: Array<any> = [];
-  public hostings: Array<any> = [];
+  private invitations: Array<any> = [];
+  private hostings: Array<any> = [];
 
-  public fullInvitations: Array<any> = [];
-  public fullHostings: Array<any> = [];
+  private fullInvitations: Array<any> = [];
+  private fullHostings: Array<any> = [];
 
-  public filterInvitation: string = "";
-  public filterHosting: string = "";
+  private filterInvitation: string = "";
+  private filterHosting: string = "";
 
   private statusFilter: string = "All";
   private filterStatusMenu: "menu:filterStatus"
@@ -60,8 +58,9 @@ export class MySchedulePage {
   ];
 
 
-  private day1Selected: boolean = true;
-  private day2Selected: boolean = false;
+  private day1: string;
+  private day2: string;
+  private daySelected: string;
 
   @ViewChild("pageContent")
   public content: Content;
@@ -112,20 +111,14 @@ export class MySchedulePage {
 
   }
 
-  toggleDay(value: number) {
-    this.day1Selected = value === 1;
-    this.day2Selected = value === 2;
+  toggleDay(value: string) {
+    this.daySelected = value;
   }
 
   handleFilter(menu: any) {
     this.statusFilter = menu.title;
     console.log("active filter:", menu.param);
   }
-
-  // segmentChange(event: any) {
-  //   console.log("event:", event);
-  //   this.section = event.value;
-  // }
 
   filterStatus() {
     if (this.section !== "Sent") return;
@@ -190,13 +183,10 @@ export class MySchedulePage {
   rescheduleMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Reschedule Meeting.");
-    let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage");
-    if (reschedule) {
-      this.navCtrl.push(reschedule, { meetingData: data });
-    } else {
-      this.navCtrl.push(RescheduleMeetingPage, { meetingData: data });
-    }
+    let minDate = this.globalVars.getValue("day1");
+    let maxDate = this.globalVars.getValue("day2");
+    let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
+    this.navCtrl.push(reschedule, { meetingData: data, minDate: minDate, maxDate: maxDate });
   }
 
   acceptMeeting(meeting: any) {
@@ -268,9 +258,8 @@ export class MySchedulePage {
   }
 
   ngOnInit() {
-    this.scheduleDate = moment().format("ddd, DD MMM YYYY");
     // Get today's meeting schedule data
-    this.getTodayMeetingSchedule();
+    this.getMeetingSchedule();
     // Get invitaion
     this.getMeetingInvitaions();
     // Get Sent
@@ -281,24 +270,50 @@ export class MySchedulePage {
   /**
    * Get today's meeting schedule of logged user
    */
-  getTodayMeetingSchedule(refresher?: any) {
+  getMeetingSchedule(refresher?: any) {
     this.schedules = [];
     let userId: string = this.globalVars.getValue("userData").id;
-    this.meetingService.getMeetings(userId, "MySchedule").subscribe(response => {
-      if (refresher)
-        refresher.complete();
-      // console.log("Meeting:", JSON.stringify(data));
-      if (response.result === "OK") {
-        this.schedules = response.data;
-        // response.data.forEach(itm => {
-        //   this.schedules.push(this.meetingService.buildMeeting(itm));
-        // });
-      } else {
-        this.alertUser("Retrieve My Schedule data failed.", response.messsage);
+
+    this.meetingService.getMeetingDate().subscribe(res => {
+      this.day1 = res.data[0].id; //.substr(6, 4) + "-" + res.data[0].id.substr(3, 2) + "-" + res.data[0].id.substr(0, 2);
+      this.day2 = res.data[1].id; //.substr(6, 4) + "-" + res.data[1].id.substr(3, 2) + "-" + res.data[1].id.substr(0, 2);
+
+      let minDate = this.day1.substr(6, 4) + "-" + this.day1.substr(3, 2) + "-" + this.day1.substr(0, 2);
+      let maxDate = this.day2.substr(6, 4) + "-" + this.day2.substr(3, 2) + "-" + this.day2.substr(0, 2);
+
+      this.globalVars.setValue("day1", minDate);
+      this.globalVars.setValue("day2", maxDate);
+
+      if (!this.daySelected) {
+        let day2Date = new Date(res.data[1].id.substr(6, 4) + "-" + res.data[1].id.substr(3, 2) + "-" + res.data[1].id.substr(0, 2));
+        this.daySelected = moment(Date.now()).isSame(day2Date, "day") ? this.day2 : this.day1;
       }
+
+      this.meetingService.getMeetings(userId, "MySchedule").subscribe(response => {
+        if (refresher)
+          refresher.complete();
+        // console.log("Meeting:", JSON.stringify(data));
+        if (response.result === "OK") {
+          this.schedules = response.data;
+          // response.data.forEach(itm => {
+          //   this.schedules.push(this.meetingService.buildMeeting(itm));
+          // });
+        } else {
+          this.alertUser("Retrieve My Schedule data failed.", response.messsage);
+        }
+
+      }, err => {
+        if (refresher)
+          refresher.complete();
+
+        this.schedules = [];
+        console.log("Error", err);
+        this.alertUser("Retrieve My Schedule data failed.", err);
+      });
     }, error => {
       if (refresher)
         refresher.complete();
+
       this.schedules = [];
       console.log("Error", error);
       this.alertUser("Retrieve My Schedule data failed.", error);
@@ -460,7 +475,7 @@ export class MySchedulePage {
         break;
       }
       default: {
-        this.getTodayMeetingSchedule(refresher);
+        this.getMeetingSchedule(refresher);
         break;
       }
     }
@@ -562,6 +577,7 @@ export class MySchedulePage {
   getDateFormated(value: string, format: string): string {
     // API format date is DD-MM-YYYY
     // Change it to YYYY-MM-DD
+    if (!value) return "";
     let dateValue: string = `${value.substr(6, 4)}-${value.substr(3, 2)}-${value.substr(0, 2)}`;
     return moment(dateValue).format(format);
   }

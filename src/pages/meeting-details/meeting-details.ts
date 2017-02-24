@@ -38,7 +38,7 @@ export class MeetingDetailsPage {
     private toastCtrl: ToastController,
     private events: Events) {
     this.meeting = navParams.get("meetingData");
-    console.log("meeting:", this.meeting);
+    // console.log("meeting:", this.meeting);
     this.type = navParams.get("type");
   }
 
@@ -115,8 +115,10 @@ export class MeetingDetailsPage {
   rescheduleMeeting() {
     event.stopPropagation();
     event.preventDefault();
+    let minDate = this.globalVars.getValue("day1");
+    let maxDate = this.globalVars.getValue("day2");
     let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
-    this.navCtrl.push(reschedule, { meetingData: this.meeting });
+    this.navCtrl.push(reschedule, { meetingData: this.meeting, minDate: minDate, maxDate: maxDate });
   }
 
   postMeetingSurvey() {

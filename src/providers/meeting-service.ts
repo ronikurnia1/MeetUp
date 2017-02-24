@@ -150,6 +150,16 @@ export class MeetingService {
         //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
+    /**
+     * get meeting's date
+     */
+    getMeetingDate(): Observable<any> {
+        return this.http.get(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/GetEventDates")
+            .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/today-meetings.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
+    }
+
 
     /**
      * get today's meeting data of certain userName

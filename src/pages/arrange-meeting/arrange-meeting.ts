@@ -16,20 +16,10 @@ export class ArrangeMeetingPage {
 
   private technologies: any;
   private locations: any;
+  private minDate: string;
+  private maxDate: string;
 
-  private scheduleOption: string;
   private submitAttempt: boolean = false;
-
-  private bestTimeSlot: {
-    date: string,
-    startTime: string,
-    endTime: string
-  };
-  private manualTime: {
-    date: string,
-    startTime: string,
-    endTime: string
-  }
 
   private form: FormGroup;
 
@@ -44,18 +34,16 @@ export class ArrangeMeetingPage {
 
 
     this.recipient = navParams.get("selectedUser");
-    // TODO: get this value from Backend
-    this.bestTimeSlot = {
-      date: moment(new Date()).format("YYYY-MM-DD"),
-      startTime: "15:30",
-      endTime: "16:30"
-    };
 
-    // initial value for manualTime
-    this.manualTime = {
-      date: moment(new Date()).format("YYYY-MM-DD"),
-      startTime: "08:00",
-      endTime: "09:00"
+    this.minDate = navParams.get("minDate");
+    this.maxDate = navParams.get("maxDate");
+
+    // initial value for best-time slot
+    // TODO: get this value from Backend
+    let bestTimeSlot = {
+      date: this.minDate,
+      startTime: "10:00",
+      endTime: "11:00"
     };
 
     // build form
@@ -63,15 +51,13 @@ export class ArrangeMeetingPage {
       recipient: [this.recipient],
       subject: ["", Validators.required],
       customSubject: ["", Validators.required],
-      date: [this.bestTimeSlot.date, Validators.required],
-      startTime: [this.bestTimeSlot.startTime, Validators.required],
-      endTime: [this.bestTimeSlot.endTime, Validators.required],
+      date: [this.minDate, Validators.required],
+      startTime: [bestTimeSlot.startTime, Validators.required],
+      endTime: [bestTimeSlot.endTime, Validators.required],
       location: ["", Validators.required],
       remarks: ["", Validators.required]
     });
-    this.scheduleOption = "bestTimeSlot";
     this.form.controls["customSubject"].disable({ onlySelf: true });
-
     this.getSuppotingData();
   }
 
@@ -81,6 +67,7 @@ export class ArrangeMeetingPage {
       content: "Please wait..."
     });
     loader.present();
+
 
     this.meetingService.getSubjects().subscribe(response => {
       this.technologies = response.data;
@@ -149,20 +136,6 @@ export class ArrangeMeetingPage {
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad ArrangeMeetingPage");
-  }
-
-  scheduleOptionSelected(value: string) {
-    // console.log("Value:", value);
-    // do the trick to resolve issue: UI doesn't get updated
-    this.zone.run(() => {
-      this.scheduleOption = value;
-      if (value === "bestTimeSlot") {
-        // set it as per bestTimeSlot
-        this.form.controls["date"].setValue(this.bestTimeSlot.date);
-        this.form.controls["startTime"].setValue(this.bestTimeSlot.startTime);
-        this.form.controls["endTime"].setValue(this.bestTimeSlot.endTime);
-      }
-    });
   }
 
   updateSubject(value: any) {

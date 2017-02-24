@@ -5,6 +5,7 @@ import { GlobalVarsService } from "./global-vars-service";
 import { AuthService } from "./auth-service";
 import { CryptoService } from "./crypto-service";
 import { FirebaseChatService } from "./firebase-chat-service";
+
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
  */

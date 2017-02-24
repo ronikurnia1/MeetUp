@@ -12,25 +12,25 @@
 			"id": "dep",
 			"title": "Department Stores",
 			"color": "#72903A",
-			"show": "true"
+			"show": "false"
 		},
 		{
 			"id": "clothing",
 			"title": "Clothing & Accessories",
 			"color": "#91BF39",
-			"show": "true"
+			"show": "false"
 		},
 		{
 			"id": "health",
 			"title": "Health & Cosmetics",
 			"color": "#D84632",
-			"show": "true"
+			"show": "false"
 		},
 		{
 			"id": "misc",
 			"title": "Miscellaneous",
 			"color": "#0C9591",
-			"show": "true"
+			"show": "false"
 		}
 	],
 	"levels": [

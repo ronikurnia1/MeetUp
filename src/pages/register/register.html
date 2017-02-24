@@ -19,7 +19,7 @@
     <div class="small-text" ion-text color="danger" padding-left *ngIf="!registerForm.controls.email.valid  && (registerForm.controls.email.dirty || submitAttempt)">Invalid Email address.</div>
     <ion-item class="meeting">
       <ion-label>Title</ion-label>
-      <ion-select class="ion-select-long" [selectOptions]="{title: 'Select title'}" formControlName="titleId">
+      <ion-select (ionChange)="titleChange($event)" class="ion-select-long" [selectOptions]="{title: 'Select title'}" formControlName="titleId">
         <ion-option *ngFor="let title of titles" [value]="title.id">{{title.title}}</ion-option>
       </ion-select>
     </ion-item>
