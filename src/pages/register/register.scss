@@ -15,11 +15,18 @@ page-register {
     .item.item-md .checkbox-md {
         margin: 9px 20px 9px 4px;
     }
+    .select-text {
+        white-space: normal;
+    }
+
     .text-input {
         text-align: right;
     }
     .ion-select-long {
         max-width: 100%;
+    }
+    .bigest-text {
+        font-size: 25px;
     }
 
 }

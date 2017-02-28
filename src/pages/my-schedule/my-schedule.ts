@@ -28,8 +28,8 @@ import { AdminArrangeMeetingPage } from "../admin-arrange-meeting/admin-arrange-
 export class MySchedulePage {
   private acceptInvitationSuccess: string = "meeting:acceptInvitationSuccess";
   private declineInvitaionSuccess: string = "meeting:declineInvitationSuccess";
-  private cancelMeetingSuccess: string = "meeting:cancelMeetingSuccess";
-  private withdrawMeetingSuccess: string = "meeting:withdrawMeetingSuccess";
+  private cancelMeetingSuccess: string = "meeting:cancelMeetingSuccess"; 
+  private inviteMeetingSuccess: string = "meeting:inviteMeetingSuccess";
 
   private tabs: Tabs;
 
@@ -47,6 +47,8 @@ export class MySchedulePage {
   private filterHosting: string = "";
 
   private statusFilter: string = "All";
+  private meetingStatus: string = "all";
+
   private filterStatusMenu: "menu:filterStatus"
 
 
@@ -86,6 +88,7 @@ export class MySchedulePage {
     events.subscribe(this.acceptInvitationSuccess, (meetingData: any) => {
       // remove appropriate invitaion
       this.removeInvitaion(meetingData);
+      this.getMeetingSchedule(null);
     });
     // Subscribe to the event published by CancelOrDeclinePage
     events.subscribe(this.declineInvitaionSuccess, (meetingData: any) => {
@@ -96,11 +99,12 @@ export class MySchedulePage {
     events.subscribe(this.cancelMeetingSuccess, (meetingData: any) => {
       // remove appropriate hosting
       this.removeHosting(meetingData);
+      this.removeSchedule(meetingData);
     });
     // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.withdrawMeetingSuccess, (meetingData: any) => {
-      // remove appropriate schedule
-      this.removeSchedule(meetingData);
+    events.subscribe(this.inviteMeetingSuccess, (meetingData: any) => {
+      // update Sent Tab
+      this.getSentMeetings();
     });
 
     // subscribe to the PopoverPage
@@ -117,7 +121,7 @@ export class MySchedulePage {
 
   handleFilter(menu: any) {
     this.statusFilter = menu.title;
-    console.log("active filter:", menu.param);
+    this.meetingStatus = menu.param;
   }
 
   filterStatus() {
@@ -153,14 +157,13 @@ export class MySchedulePage {
     this.events.unsubscribe(this.acceptInvitationSuccess);
     this.events.unsubscribe(this.declineInvitaionSuccess);
     this.events.unsubscribe(this.cancelMeetingSuccess);
-    this.events.unsubscribe(this.withdrawMeetingSuccess);
+    this.events.unsubscribe(this.inviteMeetingSuccess);
     this.events.unsubscribe(this.filterStatusMenu);
   }
 
   cancelMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Cancel Meeting.");
     let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
     if (cancelDecline) {
       this.navCtrl.push(cancelDecline, { meetingData: data, type: "cancel" });
@@ -169,17 +172,18 @@ export class MySchedulePage {
     }
   }
 
-  withdrawAcceptedMeeting(data: any) {
-    event.stopPropagation();
-    event.preventDefault();
-    console.log("Withdraw Meeting.");
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
-    if (cancelDecline) {
-      this.navCtrl.push(cancelDecline, { meetingData: data, type: "withdraw" });
-    } else {
-      this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "withdraw" });
-    }
-  }
+  // withdrawAcceptedMeeting(data: any) {
+  //   event.stopPropagation();
+  //   event.preventDefault();
+  //   console.log("Withdraw Meeting.");
+  //   let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
+  //   if (cancelDecline) {
+  //     this.navCtrl.push(cancelDecline, { meetingData: data, type: "withdraw" });
+  //   } else {
+  //     this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "withdraw" });
+  //   }
+  // }
+
   rescheduleMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
@@ -192,7 +196,7 @@ export class MySchedulePage {
   acceptMeeting(meeting: any) {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Accept Meeting.");
+    // console.log("Accept Meeting.");
 
     this.meetingService.acceptInvitation(meeting.id, this.globalVars.getValue("userData").email)
       .subscribe(response => {
@@ -203,6 +207,7 @@ export class MySchedulePage {
           // remove the invitaion
           setTimeout(() => {
             this.removeInvitaion(meeting);
+            this.getMeetingSchedule(null);
           }, 2000);
         } else {
           message = response.message;

@@ -72,7 +72,7 @@ export class MeetingDetailsPage {
     event.stopPropagation();
     event.preventDefault();
 
-    this.meetingService.acceptInvitation(this.meeting.id, this.globalVars.getValue("userData"))
+    this.meetingService.acceptInvitation(this.meeting.id, this.globalVars.getValue("userData").email)
       .subscribe(response => {
         let message: string = "";
         // console.log("Response:", data);
@@ -89,9 +89,10 @@ export class MeetingDetailsPage {
         toast.present().then(value => {
           // if accepting invitation success
           // then publish event to notify to remove item from invitation
+          // and refresh My Schedule as well
           // and then get back to the previous page 
           if (response.result === "OK") {
-            this.events.publish("meeting:acceptInvitationSuccess", this.meeting)
+            this.events.publish("meeting:acceptInvitationSuccess", this.meeting);
             this.navCtrl.pop();
           }
         });

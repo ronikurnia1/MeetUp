@@ -10,3 +10,16 @@ export class MeetingFilterPipe implements PipeTransform {
     return items.filter(item => item.date === date);
   }
 }
+
+
+@Pipe({
+  name: 'meetingStatusFilter',
+  pure: false
+})
+@Injectable()
+export class MeetingStatusFilterPipe implements PipeTransform {
+  transform(items: Array<any>, status: string): Array<any> {
+    return items.filter(item => item.meetingStatus.toLowerCase() === status || status === "all");
+  }
+}
+

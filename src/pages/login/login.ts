@@ -103,10 +103,10 @@ export class LoginPage {
           // put user's data into globalVars
 
           // TODO: remove this later
-          loginResponse.userProfile["userType"] = "exhibitor";
-          if (loginResponse.userProfile["avatar"] === "") {
-            loginResponse.userProfile["avatar"] = "assets/icon/avatar.png";
-          }
+          // loginResponse.userProfile["userType"] = "exhibitor";
+          // if (loginResponse.userProfile["avatar"] === "") {
+          //   loginResponse.userProfile["avatar"] = "assets/icon/avatar.png";
+          // }
           // END TODO
 
           this.globalVars.setValue("userData", loginResponse.userProfile);

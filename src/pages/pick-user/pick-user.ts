@@ -143,14 +143,11 @@ export class PickUserPage {
       });
     } else {
       let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
-      this.meetingService.getMeetingDate().subscribe(res => {
-        let minDate = res.data[0].id.substr(6, 4) + "-" + res.data[0].id.substr(3, 2) + "-" + res.data[0].id.substr(0, 2);
-        let maxDate = res.data[1].id.substr(6, 4) + "-" + res.data[1].id.substr(3, 2) + "-" + res.data[1].id.substr(0, 2);
-        this.navCtrl.pop().then(value => {
-          this.navCtrl.push(arrangeMeeting, { selectedUser: user, minDate: minDate, maxDate: maxDate }, { animate: true });
-        });
-      }, err => {
-        this.alertUser("Cannot Arrange a Meeting", err);
+
+      let minDate = this.globalVars.getValue("day1");
+      let maxDate = this.globalVars.getValue("day2");
+      this.navCtrl.pop().then(value => {
+        this.navCtrl.push(arrangeMeeting, { selectedUser: user, minDate: minDate, maxDate: maxDate }, { animate: true });
       });
     }
   }

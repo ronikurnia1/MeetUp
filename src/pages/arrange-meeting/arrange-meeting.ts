@@ -1,6 +1,9 @@
 import { Component, NgZone } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NavController, NavParams, ToastController, AlertController, LoadingController } from "ionic-angular";
+import {
+  NavController, NavParams, ToastController,
+  AlertController, LoadingController, Events
+} from "ionic-angular";
 import * as moment from "moment";
 import { MeetingService } from "../../providers/meeting-service";
 
@@ -27,6 +30,7 @@ export class ArrangeMeetingPage {
     public navParams: NavParams,
     private loadCtrl: LoadingController,
     private formBuilder: FormBuilder,
+    private events: Events,
     private zone: NgZone,
     private meetingService: MeetingService,
     private alertCtrl: AlertController,
@@ -113,7 +117,9 @@ export class ArrangeMeetingPage {
         });
         toast.present();
         if (response.result === "OK") {
-          // go back to the previous screen
+          // emit event: meeting:inviteMeetingSuccess
+          this.events.publish("meeting:inviteMeetingSuccess", null);
+          // go back to the previous screen          
           this.navCtrl.pop({ animate: true });
         }
       }, error => {

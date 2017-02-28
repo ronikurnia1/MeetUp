@@ -99,7 +99,6 @@ export class CancelOrDeclinePage {
   cancelMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    console.log("Cancel Meeting.");
     this.submitAttempt = true;
     if (this.reason.trim().length === 0) return;
     this.meetingService.cancelMeeting(this.meeting.id, this.reason)
@@ -107,7 +106,7 @@ export class CancelOrDeclinePage {
         let message: string = "";
         // console.log("Response:", data);
         if (response.result === "OK") {
-          message = "You have canceled the meeting.";
+          message = "You have successfully canceled the meeting.";
         } else {
           message = response.message;
         }
@@ -121,7 +120,7 @@ export class CancelOrDeclinePage {
           // then publish event to notify to remove item from hosting
           // and then get back to the previous page 
           if (response.result === "OK") {
-            this.events.publish("meeting:cancelMeetingSuccess", this.meeting)
+            this.events.publish("meeting:cancelMeetingSuccess", this.meeting);
             this.navCtrl.pop().then(data => {
               // Close if Meeting Details page are openned
               let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage");

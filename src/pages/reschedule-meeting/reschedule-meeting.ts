@@ -119,6 +119,13 @@ export class RescheduleMeetingPage {
               this.navCtrl.pop();
             }
           });
+        }, error => {
+          let toast = this.toastCtrl.create({
+            message: error,
+            duration: 3000,
+            position: "bottom"
+          });
+          toast.present();
         });
     }
 

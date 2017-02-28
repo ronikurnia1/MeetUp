@@ -47,54 +47,18 @@ export class UserProfilePage {
     event.preventDefault();
     switch (menu) {
       case "editProfile": {
-        this.globalVars.getCountries().subscribe(response => {
-          if (response.result === "OK") {
-            this.globalVars.getClassification("industry-type").subscribe(res => {
-              if (res.result === "OK") {
-                let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-                this.navCtrl.push(register, {
-                  title: "Edit Profile",
-                  countries: response.countries,
-                  industries: res.data,
-                  jobLevels: response.jobLevels,
-                  jobRoles: response.jobRoles,
-                  titles: response.titles,
-                  notifications: response.notificationMethods
-                });
-              } else {
-                let toast = this.toastCtrl.create({
-                  message: res.Message,
-                  duration: 3000,
-                  position: "bottom"
-                });
-                toast.present();
-              }
-            }, err => {
-              // show toast
-              let toast = this.toastCtrl.create({
-                message: err,
-                duration: 3000,
-                position: "bottom"
-              });
-              toast.present();
-            });
-          } else {
-            let toast = this.toastCtrl.create({
-              message: response.Message,
-              duration: 3000,
-              position: "bottom"
-            });
-            toast.present();
-          }
-        }, (error) => {
-          // show toast
-          let toast = this.toastCtrl.create({
-            message: error,
-            duration: 3000,
-            position: "bottom"
-          });
-          toast.present();
+        let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
+        this.navCtrl.push(register, {
+          title: "Edit Profile",
+          countries: this.globalVars.getValue("countries"),
+          industries: this.globalVars.getValue("industry-type"),
+          technologies: this.globalVars.getValue("area-of-technologies"),
+          jobLevels: this.globalVars.getValue("job-levels"),
+          jobRoles: this.globalVars.getValue("job-roles"),
+          titles: this.globalVars.getValue("titles"),
+          notifications: this.globalVars.getValue("notification-method")
         });
+
         break;
       }
       case "changePassword": {
@@ -128,7 +92,7 @@ export class UserProfilePage {
   }
 
 
-    alertUser(title: string, message: string) {
+  alertUser(title: string, message: string) {
     let alert = this.alertCtrl.create({
       title: title,
       subTitle: message,

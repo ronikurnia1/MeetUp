@@ -21,10 +21,21 @@ export class MyApp {
 
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
       if (window.hasOwnProperty("cordova")) {
         StatusBar.styleDefault();
         Splashscreen.hide();
       }
+
+      // load lookups
+      this.globalVars.getDataLookups().subscribe(response => {
+        response.forEach(itm => {
+          this.globalVars.setValue(itm.name, itm.data);
+        });
+      }, error => {
+
+      });
+
       // check if userData stored locally
       let storedUserData = localStorage.getItem("userData");
       if (storedUserData) {

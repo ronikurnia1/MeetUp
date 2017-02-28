@@ -91,7 +91,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'Sent'">
-        <ion-item *ngFor="let meeting of hostings" (click)="viewMeetingDetails(meeting, 'hosted')" class="meeting">
+        <ion-item *ngFor="let meeting of hostings | meetingStatusFilter:meetingStatus" (click)="viewMeetingDetails(meeting, 'hosted')" class="meeting">
             <div bp-layout="flex">
                 <ion-avatar item-left bp-layout="fit margin-right--sm">
                     <img [src]="meeting.userAvatar || 'assets/icon/avatar.png'">

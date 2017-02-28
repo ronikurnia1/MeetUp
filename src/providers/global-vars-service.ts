@@ -11,8 +11,8 @@ export class GlobalVarsService {
 
     private config = {
         apiUrlDummy: "assets/",
-        apiUrlProxy: "http://116.12.199.25:8093/api/",
-        apiUrl: "/api/",
+        apiUrl: "http://116.12.199.25:8093/api/",
+        apiUrlProxy: "/api/",
         firebaseUser: "roniku@gmail.com",
         firebasePwd: "St7465dsh!`+"
     };
@@ -56,6 +56,50 @@ export class GlobalVarsService {
             .map((response: Response) => response.json()).catch(this.handleError);
     }
 
+    getDataLookups(): Observable<any> {
+        return Observable.forkJoin(
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=countries").map(res => {
+                let data = res.json();
+                data.name = "countries";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=industry-type").map(res => {
+                let data = res.json();
+                data.name = "industry-type";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=locations").map(res => {
+                let data = res.json();
+                data.name = "locations";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=notification-method").map(res => {
+                let data = res.json();
+                data.name = "notification-method";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=titles").map(res => {
+                let data = res.json();
+                data.name = "titles";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=area-of-technologies").map(res => {
+                let data = res.json();
+                data.name = "area-of-technologies";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=job-levels").map(res => {
+                let data = res.json();
+                data.name = "job-levels";
+                return data;
+            }),
+            this.http.get(this["apiUrl"] + "MobileUserApi/GetClassification?name=job-roles").map(res => {
+                let data = res.json();
+                data.name = "job-roles";
+                return data;
+            })
+        );
+    }
     /**
     * Handle HTTP error
     */

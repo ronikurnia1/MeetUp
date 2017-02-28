@@ -1,7 +1,10 @@
 import { Component, ChangeDetectorRef } from "@angular/core";
 import { Camera } from "ionic-native";
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from "@angular/forms";
-import { App, NavController, NavParams, AlertController, ToastController, ActionSheetController } from "ionic-angular";
+import {
+  App, NavController, NavParams, AlertController, ToastController,
+  LoadingController, ActionSheetController
+} from "ionic-angular";
 import { TabsPage } from "../tabs/tabs"; import { DisclimerPage } from "../disclimer/disclimer";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { AuthService } from "../../providers/auth-service";
@@ -21,6 +24,7 @@ export class RegisterPage {
 
   private countries: Array<any>;
   private industries: Array<any>;
+  private technologies: Array<any>;
   private jobLevels: Array<any>;
   private jobRoles: Array<any>;
   private notifications: Array<any>;
@@ -28,6 +32,7 @@ export class RegisterPage {
   private submitAttempt: boolean = false;
   private screenTitle: string;
   private buttonTitle: string;
+  private userType: string;
 
   constructor(
     public navCtrl: NavController,
@@ -39,12 +44,14 @@ export class RegisterPage {
     private authService: AuthService,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     private actionCtrl: ActionSheetController,
     private changeDetec: ChangeDetectorRef) {
 
     this.screenTitle = navParams.get("title");
     this.countries = navParams.get("countries");
     this.industries = navParams.get("industries");
+    this.technologies = navParams.get("technologies");
     this.notifications = navParams.get("notifications");
     this.jobLevels = navParams.get("jobLevels");
     this.jobRoles = navParams.get("jobRoles");
@@ -77,6 +84,8 @@ export class RegisterPage {
       });
     } else {
       let profile = this.globalVars.getValue("userData");
+      this.userType = profile.userType;
+      console.log("user Type:", this.userType);
       // console.log("Profile:", profile);
       // build update user profile form
       this.registerForm = formBuilder.group({
@@ -97,14 +106,16 @@ export class RegisterPage {
         jobRoleTitle: [profile.jobRoleTitle],
         userType: [profile.userType],
         isAdmin: [profile.isAdmin],
-        industryId: [profile.industryId, Validators.required],
+        industryId: [profile.industryId],
         industryTitle: [profile.insudtryTitle],
-        notificationsMethods: [profile.notificationsMethods]
+        techInterestId: [profile.techInterestId],
+        technologyTitle: [profile.techInterestTitle],
+        notificationMethods: [profile.notificationMethods]
       });
       this.notifications.forEach(notif => {
         let value: boolean = false;
-        if (profile.notificationsMethods) {
-          value = (<string>profile.notificationsMethods).indexOf(notif.id) != -1;
+        if (profile.notificationMethods) {
+          value = (<string>profile.notificationMethods).indexOf(notif.id) != -1;
         }
         this.registerForm.addControl(notif.id, new FormControl(value));
       });
@@ -129,11 +140,15 @@ export class RegisterPage {
   titleChange(event: any) {
     this.registerForm.controls["titleTitle"].setValue(this.titles.find(itm => itm.id === event).title);
   }
-
+  technologyChange(event: any) {
+    console.log("Data:", event);
+    //this.registerForm.controls["technologyTitle"].setValue(this.technologies.find(itm => itm.id === event).title);
+  }
   register() {
     event.preventDefault();
     event.stopPropagation();
     this.submitAttempt = true;
+    console.log("Form Status:", this.registerForm.value);
     if (this.registerForm.valid) {
       if (this.screenTitle.toLowerCase() === "register") {
         this.callApiRegistration();
@@ -142,7 +157,6 @@ export class RegisterPage {
       }
     }
   }
-
 
 
   callApiRegistration() {
@@ -184,7 +198,14 @@ export class RegisterPage {
     // console.log("Update profile:", this.registerForm.value);
     // Call backend UpdateProfile API
     let userData = this.getFormValue(this.registerForm);
+
+    let loader = this.loadingCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
+
     this.authService.updateProfile(userData).subscribe(response => {
+      loader.dismissAll();
       if (response.result === "OK") {
         // construct user data
         this.globalVars.setValue("userData", this.registerForm.value);
@@ -208,6 +229,7 @@ export class RegisterPage {
         }
       });
     }, error => {
+      loader.dismissAll();
       // show toast
       let toast = this.toastCtrl.create({
         message: error,
@@ -229,6 +251,7 @@ export class RegisterPage {
       company: form.controls["company"].value,
       country: form.controls["countryId"].value,
       industryId: form.controls["industryId"].value,
+      techInterestId: form.controls["techInterestId"].value,
       jobLevelId: form.controls["jobLevelId"].value,
       jobRoleId: form.controls["jobRoleId"].value,
       mobile: form.controls["mobile"].value,
@@ -242,9 +265,9 @@ export class RegisterPage {
         notifValues += notif.id + ";";
       }
     });
-    userData["notificationsMethods"] = notifValues;
+    userData["notificationMethods"] = notifValues;
     // update the form as well
-    form.controls["notificationsMethods"].setValue(notifValues);
+    form.controls["notificationMethods"].setValue(notifValues);
 
     if (this.screenTitle.toLowerCase() === "register") {
       userData["password"] = form.controls["password"].value;

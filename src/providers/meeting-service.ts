@@ -235,7 +235,7 @@ export class MeetingService {
         let data = {
             meetingid: meetingId,
             byUserEmail: userEmail,
-            statusname: "rejected",
+            statusName: "declined",
             reason: reason
         };
         return this.http.post(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/UpdateMeetingStatus", data)
@@ -248,12 +248,11 @@ export class MeetingService {
      * Cancel My Meeting
      */
     cancelMeeting(meetingId: string, reason: string): Observable<any> {
-        // TODO:
-        // let data = { meetingId: meetingId, reason: reason };
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "CancelMyMeeting", data)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/cancel-meeting.json")
+        let data = { meetingId: meetingId, reason: reason, byUserEmail: this.globalVars.getValue("userData").email };
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileMeetingApi/CancelMeeting", data)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/cancel-meeting.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
      * Withdraw accepted meeting 
