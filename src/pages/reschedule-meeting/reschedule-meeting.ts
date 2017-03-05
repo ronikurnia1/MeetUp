@@ -35,44 +35,23 @@ export class RescheduleMeetingPage {
 
     this.globalVars = globalVars;
 
+
     // TODO: get this value from Backend
+    // for while use current meeting
     let bestTimeSlot = {
-      date: this.minDate,
-      startTime: "10:00",
-      endTime: "11:00"
+      date: this.getDateFormated(this.meeting.date, "YYYY-MM-DD"),
+      startTime: this.meeting.startTime,
+      endTime: this.meeting.endTime
     };
-
-
-    //this.getSuppotingData();
 
     // build form
     this.form = this.formBuilder.group({
-      date: [this.minDate, Validators.required],
+      date: [bestTimeSlot.date, Validators.required],
       startTime: [bestTimeSlot.startTime, Validators.required],
       endTime: [bestTimeSlot.endTime, Validators.required]
     });
 
   }
-
-  // getSuppotingData() {
-  //   let loader = this.loadCtrl.create({
-  //     content: "Please wait..."
-  //   });
-  //   loader.present();
-
-  //   this.meetingService.getLocations().subscribe(response => {
-  //     this.locations = response.data;
-  //     loader.dismissAll();
-  //   }, error => {
-  //     loader.dismissAll();
-  //     let toast = this.toastCtrl.create({
-  //       message: error,
-  //       duration: 3000,
-  //       position: "bottom"
-  //     });
-  //     toast.present();
-  //   });
-  // }
 
 
   ionViewDidLoad() {
@@ -115,7 +94,9 @@ export class RescheduleMeetingPage {
             // then publish event to notify to udate item either on hosting or schedule
             // and then get back to the previous page 
             if (response.result === "OK") {
-              this.events.publish("meeting:rescheduleSuccess", this.meeting)
+              this.events.publish("meeting:refreshMySchedule");
+              this.events.publish("meeting:refreshInvitation");
+              this.events.publish("meeting:refreshSent");
               this.navCtrl.pop();
             }
           });

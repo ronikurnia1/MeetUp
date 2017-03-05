@@ -92,7 +92,8 @@ export class MeetingDetailsPage {
           // and refresh My Schedule as well
           // and then get back to the previous page 
           if (response.result === "OK") {
-            this.events.publish("meeting:acceptInvitationSuccess", this.meeting);
+            this.events.publish("meeting:refreshMySchedule");
+            this.events.publish("meeting:refreshInvitation");
             this.navCtrl.pop();
           }
         });

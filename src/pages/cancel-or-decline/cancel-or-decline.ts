@@ -52,7 +52,7 @@ export class CancelOrDeclinePage {
           // then publish event to notify to remove item from invitation
           // and then get back to the previous page 
           if (response.result === "OK") {
-            this.events.publish("meeting:declineInvitationSuccess", this.meeting)
+            this.events.publish("meeting:refreshInvitation")
             this.navCtrl.pop().then(data => {
               // Close if Meeting Details page are openned
               let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage");
@@ -60,37 +60,6 @@ export class CancelOrDeclinePage {
                 this.navCtrl.pop();
               }
             });
-          }
-        });
-      });
-  }
-
-  withdrawAcceptedMeeting() {
-    event.stopPropagation();
-    event.preventDefault();
-    console.log("Withdraw Meeting.");
-    this.submitAttempt = true;
-    if (this.reason.trim().length === 0) return;
-    this.meetingService.withdrawAcceptedMeeting(this.meeting.id, this.globalVars.getValue("userData").email, this.reason)
-      .subscribe(response => {
-        let message: string = "";
-        // console.log("Response:", data);
-        if (response.result === "OK") {
-          message = "You have canceled the meeting.";
-        } else {
-          message = response.message;
-        }
-        let toast = this.toastCtrl.create({
-          message: message,
-          duration: 3000,
-          position: "bottom"
-        });
-        toast.present().then(value => {
-          // then publish event to notify to remove item from schedule
-          // and then get back to the previous page 
-          if (response.result === "OK") {
-            this.events.publish("meeting:withdrawMeetingSuccess", this.meeting)
-            this.navCtrl.pop();
           }
         });
       });
@@ -120,7 +89,8 @@ export class CancelOrDeclinePage {
           // then publish event to notify to remove item from hosting
           // and then get back to the previous page 
           if (response.result === "OK") {
-            this.events.publish("meeting:cancelMeetingSuccess", this.meeting);
+            this.events.publish("meeting:refreshSent");
+            this.events.publish("meeting:refreshMySchedule");
             this.navCtrl.pop().then(data => {
               // Close if Meeting Details page are openned
               let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage");

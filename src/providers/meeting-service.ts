@@ -254,23 +254,6 @@ export class MeetingService {
         // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/cancel-meeting.json")
         //     .map((response: Response) => response.json()).catch(this.handleError);
     }
-    /**
-     * Withdraw accepted meeting 
-     */
-    withdrawAcceptedMeeting(meetingId: string,
-        userEmail: string, reason: string): Observable<any> {
-        // TODO:
-        // let data = {
-        //     meetingid: meetingId,
-        //     recipientemail: userEmail,
-        //     statusname: "withdrawed",
-        //     reason: reason
-        // };
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateStatusMeeting", data)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/withdraw-accepted-meeting.json")
-            .map((response: Response) => response.json()).catch(this.handleError);
-    }
 
     /**
      * Save attendance registration
@@ -287,18 +270,15 @@ export class MeetingService {
      * Create Block time
      */
     createBlockTime(blockTime: any) {
-        // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "UpdateBlcokTime", blockTime)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/create-blocktime.json")
+        return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/CreateBlockTime", blockTime)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/create-blocktime.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
     /**
      * Update Block time
      */
     updateBlockTime(blockTime: any): Observable<any> {
-        // console.log("blocktime:", blockTime);
-        // TODO:
         return this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/UpdateBlockTime", blockTime)
             .map((response: Response) => response.json()).catch(this.handleError);
         // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/update-blocktime.json")
@@ -308,13 +288,11 @@ export class MeetingService {
     /**
      * Remove Block time
      */
-    removeBlockTime(blockTime: any): Observable<any> {
-        // console.log("blocktime:", blockTime);
-        // TODO:
-        // return this.http.post(this.globalVars.getValue("apiUrlDummy") + "RemoveBlcokTime", blockTime)
-        //     .map((response: Response) => response.json()).catch(this.handleError);
-        return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/remove-blocktime.json")
+    removeBlockTime(blockTimeId: string): Observable<any> {
+        return this.http.get(this.globalVars.getValue("apiUrl") + "MobileUserApi/DeleteBlockTime?blockTimeId=" + blockTimeId)
             .map((response: Response) => response.json()).catch(this.handleError);
+        // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/remove-blocktime.json")
+        //     .map((response: Response) => response.json()).catch(this.handleError);
     }
 
 

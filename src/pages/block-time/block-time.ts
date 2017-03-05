@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
+import * as moment from "moment";
 
 @Component({
   selector: 'page-block-time',
@@ -10,9 +11,11 @@ import { GlobalVarsService } from "../../providers/global-vars-service";
 })
 export class BlockTimePage {
 
-  form: FormGroup;
-  blockTime = {};
-  submitAttempt: boolean = false;
+  private form: FormGroup;
+  private blockTime: any;
+  private submitAttempt: boolean = false;
+  private minDate: string;
+  private maxDate: string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -22,18 +25,21 @@ export class BlockTimePage {
     private alertCtrl: AlertController,
     private meetingService: MeetingService) {
 
-    let blockTime = navParams.get("blockTime");
-    let dateValue: string = `${blockTime.date.substr(6, 4)}-${blockTime.date.substr(3, 2)}-${blockTime.date.substr(0, 2)}`;
+    this.blockTime = navParams.get("blockTime");
+    let dateValue: string = `${this.blockTime.date.substr(6, 4)}-${this.blockTime.date.substr(3, 2)}-${this.blockTime.date.substr(0, 2)}`;
 
     this.form = formBuilder.group({
-      blockTimeId: [blockTime.id, Validators.required],
       userId: [this.globalVars.getValue("userData").id, Validators.required],
       date: [dateValue, Validators.required],
-      startTime: [blockTime.startTime, Validators.required],
-      endTime: [blockTime.endTime, Validators.required],
-      description: [blockTime.subject, Validators.required]
+      startTime: [this.blockTime.startTime, Validators.required],
+      endTime: [this.blockTime.endTime, Validators.required],
+      description: [this.blockTime.subject, Validators.required]
     });
-
+    if (this.blockTime.id) {
+      this.form.addControl("blockTimeId", new FormControl(this.blockTime.id));
+    }
+    this.minDate = this.globalVars.getValue("day1");
+    this.maxDate = this.globalVars.getValue("day2");
   }
 
   ionViewDidLoad() {
@@ -58,7 +64,7 @@ export class BlockTimePage {
           text: "Yes",
           handler: () => {
             // remove block-time
-            this.meetingService.removeBlockTime(this.form.value).subscribe(response => {
+            this.meetingService.removeBlockTime(this.form.controls["blockTimeId"].value).subscribe(response => {
               let toast = this.toastCtrl.create({
                 message: response.message,
                 duration: 3000,
@@ -77,24 +83,50 @@ export class BlockTimePage {
     alert.present();
   }
 
-
-  updateBlockTime() {
+  saveBlockTime() {
     event.stopPropagation();
     event.preventDefault();
     this.submitAttempt = true;
     if (this.form.valid) {
-      this.meetingService.updateBlockTime(this.form.value).subscribe(response => {
-        let toast = this.toastCtrl.create({
-          message: response.message,
-          duration: 3000,
-          position: "bottom"
-        });
-        toast.present();
-        if (response.result === "OK") {
-          // go back to the previous screen
-          this.navCtrl.pop({ animate: true });
-        }
-      });
+      if (this.blockTime.id) {
+        this.updateBlockTime();
+      } else {
+        this.createBlockTime();
+      }
     }
+  }
+
+  createBlockTime() {
+    let values = this.form.value;
+    values.date = moment(values.date).format("DD-MM-YYYY");
+    this.meetingService.createBlockTime(values).subscribe(response => {
+      let toast = this.toastCtrl.create({
+        message: response.message,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
+      if (response.result === "OK") {
+        // go back to the previous screen
+        this.navCtrl.pop({ animate: true });
+      }
+    });
+  }
+
+  updateBlockTime() {
+    let values = this.form.value;
+    values.date = moment(values.date).format("DD-MM-YYYY");
+    this.meetingService.updateBlockTime(values).subscribe(response => {
+      let toast = this.toastCtrl.create({
+        message: response.message,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
+      if (response.result === "OK") {
+        // go back to the previous screen
+        this.navCtrl.pop({ animate: true });
+      }
+    });
   }
 }

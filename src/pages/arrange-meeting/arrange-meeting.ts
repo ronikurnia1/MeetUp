@@ -5,6 +5,7 @@ import {
   AlertController, LoadingController, Events
 } from "ionic-angular";
 import * as moment from "moment";
+import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
 
 @Component({
@@ -32,6 +33,7 @@ export class ArrangeMeetingPage {
     private formBuilder: FormBuilder,
     private events: Events,
     private zone: NgZone,
+    private globalVars: GlobalVarsService,
     private meetingService: MeetingService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController) {
@@ -39,8 +41,8 @@ export class ArrangeMeetingPage {
 
     this.recipient = navParams.get("selectedUser");
 
-    this.minDate = navParams.get("minDate");
-    this.maxDate = navParams.get("maxDate");
+    this.minDate = this.globalVars.getValue("day1");
+    this.maxDate = this.globalVars.getValue("day2");
 
     // initial value for best-time slot
     // TODO: get this value from Backend

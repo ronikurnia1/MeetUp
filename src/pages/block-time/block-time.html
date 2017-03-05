@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Block Time</ion-title>
-    <ion-buttons right>
+    <ion-buttons right *ngIf="blockTime.id">
       <button clear color="primary" ion-button icon-only (click)="removeBlockTime($event)">
         <ion-icon name="trash"></ion-icon>
       </button>
@@ -10,20 +10,23 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="form" (ngSubmit)="updateBlockTime()" novalidate margin-right>
+  <form [formGroup]="form" (ngSubmit)="saveBlockTime()" novalidate margin-right>
     <ion-list>
       <ion-item class="meeting">
         <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="DDD, DD MMM YYYY" formControlName="date"></ion-datetime>
+        <ion-datetime displayFormat="DDD, DD MMM YYYY" formControlName="date" [min]="minDate" [max]="maxDate"></ion-datetime>
       </ion-item>
+      <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.date.valid  && (form.controls.date.dirty || submitAttempt)">Date is required.</div>
       <ion-item class="meeting">
         <ion-label>Start Time</ion-label>
         <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" formControlName="startTime"></ion-datetime>
       </ion-item>
+      <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.startTime.valid  && (form.controls.startTime.dirty || submitAttempt)">Start time is required.</div>
       <ion-item class="meeting">
         <ion-label>End Time</ion-label>
         <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" formControlName="endTime"></ion-datetime>
       </ion-item>
+      <div class="small-text" ion-text color="danger" padding-left *ngIf="!form.controls.endTime.valid  && (form.controls.endTime.dirty || submitAttempt)">End time is required.</div>
       <ion-item class="meeting">
         <ion-label>Description</ion-label>
         <ion-input formControlName="description" type="text"></ion-input>

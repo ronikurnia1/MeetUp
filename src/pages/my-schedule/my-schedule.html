@@ -120,26 +120,26 @@
         </ion-item>
     </ion-list>
 
-    <ion-fab bottom right>
+    <ion-fab bottom right #fab>
         <button ion-fab mini><ion-icon name="add"></ion-icon></button>
         <ion-fab-list side="top">
-            <button ion-fab (click)="syncToPhone($event)">                
+            <button ion-fab (click)="syncToPhone($event, fab)">                
                 <ion-label>Sync to Phone</ion-label>
                 <ion-icon color="primary" name="sync"></ion-icon>
             </button>
-            <button ion-fab (click)="scanQrCode()">                
+            <button ion-fab (click)="scanQrCode($event, fab)">                
                 <ion-label>Meeting History</ion-label>
                 <ion-icon color="primary" name="time"></ion-icon>
             </button>
-            <button ion-fab (click)="viewCalendar($event)">
+            <button ion-fab (click)="createBlockTime($event, fab)">
                 <ion-label>Block Time</ion-label>
                 <ion-icon color="primary" name="remove-circle"></ion-icon>
             </button>
-            <button ion-fab (click)="scanQrCode($event)">
+            <button ion-fab (click)="scanQrCode($event, fab)">
                 <ion-label>Scan Badge</ion-label>
                 <ion-icon color="primary" name="qr-scanner"></ion-icon>
             </button>
-            <button ion-fab (click)="arrangeMeeting($event)">
+            <button ion-fab (click)="arrangeMeeting($event, fab)">
                 <ion-label>Add Meeting</ion-label>
                 <ion-icon color="primary"  name="contacts"></ion-icon>
             </button>

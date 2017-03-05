@@ -2,7 +2,7 @@ import { Component, NgZone, ViewChild } from "@angular/core";
 import {
   App, NavController, NavParams, ToastController,
   Events, Tabs, AlertController, PopoverController,
-  Platform, Content
+  Platform, Content, FabContainer
 } from "ionic-angular";
 import * as moment from "moment";
 // import { Meeting } from "../../domain/meeting";
@@ -26,10 +26,9 @@ import { AdminArrangeMeetingPage } from "../admin-arrange-meeting/admin-arrange-
   templateUrl: "my-schedule.html"
 })
 export class MySchedulePage {
-  private acceptInvitationSuccess: string = "meeting:acceptInvitationSuccess";
-  private declineInvitaionSuccess: string = "meeting:declineInvitationSuccess";
-  private cancelMeetingSuccess: string = "meeting:cancelMeetingSuccess"; 
-  private inviteMeetingSuccess: string = "meeting:inviteMeetingSuccess";
+  private refreshMySchedule: string = "meeting:refreshMySchedule";
+  private refreshInvitation: string = "meeting:refreshInvitation";
+  private refreshSent: string = "meeting:refreshSent";
 
   private tabs: Tabs;
 
@@ -56,7 +55,8 @@ export class MySchedulePage {
     { title: "All", param: "all", eventName: this.filterStatusMenu },
     { title: "Pending", param: "pending", eventName: this.filterStatusMenu },
     { title: "Confirmed", param: "confirmed", eventName: this.filterStatusMenu },
-    { title: "Cancelled", param: "cancelled", eventName: this.filterStatusMenu }
+    { title: "Cancelled", param: "cancelled", eventName: this.filterStatusMenu },
+    { title: "Declined", param: "declined", eventName: this.filterStatusMenu }
   ];
 
 
@@ -85,28 +85,18 @@ export class MySchedulePage {
     this.tabs = navCtrl.parent;
 
     // Subscribe to the event published by MeetingDetailsPage
-    events.subscribe(this.acceptInvitationSuccess, (meetingData: any) => {
-      // remove appropriate invitaion
-      this.removeInvitaion(meetingData);
+    events.subscribe(this.refreshMySchedule, () => {
       this.getMeetingSchedule(null);
     });
     // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.declineInvitaionSuccess, (meetingData: any) => {
-      // remove appropriate invitaion
-      this.removeInvitaion(meetingData);
+    events.subscribe(this.refreshInvitation, () => {
+      this.getMeetingInvitaions(null);
     });
     // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.cancelMeetingSuccess, (meetingData: any) => {
-      // remove appropriate hosting
-      this.removeHosting(meetingData);
-      this.removeSchedule(meetingData);
+    events.subscribe(this.refreshSent, () => {
+      this.getSentMeetings(null);
     });
-    // Subscribe to the event published by CancelOrDeclinePage
-    events.subscribe(this.inviteMeetingSuccess, (meetingData: any) => {
-      // update Sent Tab
-      this.getSentMeetings();
-    });
-
+    
     // subscribe to the PopoverPage
     events.subscribe(this.filterStatusMenu, (menu) => {
       //console.log("menu", menu);
@@ -154,11 +144,9 @@ export class MySchedulePage {
   ionViewWillUnload() {
     // unsubscribe events
     console.log("Unsubscribing");
-    this.events.unsubscribe(this.acceptInvitationSuccess);
-    this.events.unsubscribe(this.declineInvitaionSuccess);
-    this.events.unsubscribe(this.cancelMeetingSuccess);
-    this.events.unsubscribe(this.inviteMeetingSuccess);
-    this.events.unsubscribe(this.filterStatusMenu);
+    this.events.unsubscribe(this.refreshMySchedule);
+    this.events.unsubscribe(this.refreshInvitation);
+    this.events.unsubscribe(this.refreshSent);
   }
 
   cancelMeeting(data: any) {
@@ -171,18 +159,6 @@ export class MySchedulePage {
       this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "cancel" });
     }
   }
-
-  // withdrawAcceptedMeeting(data: any) {
-  //   event.stopPropagation();
-  //   event.preventDefault();
-  //   console.log("Withdraw Meeting.");
-  //   let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
-  //   if (cancelDecline) {
-  //     this.navCtrl.push(cancelDecline, { meetingData: data, type: "withdraw" });
-  //   } else {
-  //     this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "withdraw" });
-  //   }
-  // }
 
   rescheduleMeeting(data: any) {
     event.stopPropagation();
@@ -206,7 +182,7 @@ export class MySchedulePage {
           message = "You have accepted the invitation.";
           // remove the invitaion
           setTimeout(() => {
-            this.removeInvitaion(meeting);
+            this.getMeetingInvitaions(null);
             this.getMeetingSchedule(null);
           }, 2000);
         } else {
@@ -227,9 +203,11 @@ export class MySchedulePage {
   /**
  * Arrange Meeting
  */
-  arrangeMeeting(eventData: Event) {
+  arrangeMeeting(eventData: Event, fab: FabContainer) {
     event.stopPropagation();
     event.preventDefault();
+    //close FAB buttons
+    fab.close();
     //check the user type
     let userType: string = this.globalVars.getValue("userData").userType;
     let page: any;
@@ -300,17 +278,15 @@ export class MySchedulePage {
         // console.log("Meeting:", JSON.stringify(data));
         if (response.result === "OK") {
           this.schedules = response.data;
-          // response.data.forEach(itm => {
-          //   this.schedules.push(this.meetingService.buildMeeting(itm));
-          // });
+          this.schedules.sort((a, b) => {
+            return a.startTime > b.startTime ? 1 : ((b.startTime > a.startTime) ? -1 : 0);
+          });
         } else {
           this.alertUser("Retrieve My Schedule data failed.", response.messsage);
         }
-
       }, err => {
         if (refresher)
           refresher.complete();
-
         this.schedules = [];
         console.log("Error", err);
         this.alertUser("Retrieve My Schedule data failed.", err);
@@ -318,7 +294,6 @@ export class MySchedulePage {
     }, error => {
       if (refresher)
         refresher.complete();
-
       this.schedules = [];
       console.log("Error", error);
       this.alertUser("Retrieve My Schedule data failed.", error);
@@ -336,11 +311,6 @@ export class MySchedulePage {
       if (refresher)
         refresher.complete();
       if (response.result === "OK") {
-        // response.data.forEach(itm => {
-        //   if (itm.type === "meeting") {
-        //     this.fullInvitations.push(this.meetingService.buildMeeting(itm));
-        //   }
-        // });
         this.fullInvitations = response.data;
         this.invitations = this.fullInvitations.slice();
       } else {
@@ -381,7 +351,8 @@ export class MySchedulePage {
 
 
 
-  syncToPhone(event: any) {
+  syncToPhone(event: any, fab: FabContainer) {
+    fab.close();
     if (Calendar.hasReadWritePermission) {
       this.syncCalendarToPhone();
     }
@@ -396,15 +367,11 @@ export class MySchedulePage {
 
   syncCalendarToPhone() {
     // delete all existing IPI calendar
-    Calendar.findEventWithOptions("", "", "", new Date(), new Date(), {}).then(value => {
-
-      Calendar.deleteEvent("", "", "", new Date(), new Date()).then(value => {
-        Calendar.createEventWithOptions("", "", "", new Date(), new Date(), {});
-      }).catch(reason => {
-
-      });
+    Calendar.deleteEvent(null, null, "IPI Calendar").then(value => {
+      console.log("Deleted:", value);
+      Calendar.createEventWithOptions("IPI Testing", "Location test", "IPI Calendar", new Date(), new Date(), {});
     }).catch(reason => {
-
+      console.log("Error:", reason);
     });
   }
 
@@ -488,15 +455,24 @@ export class MySchedulePage {
 
 
   /**
-   * checkSchedule
+   * create Block Time
    */
-  checkSchedule(event: Event) {
-    // console.log("Check Schedule:", eventData);
+  createBlockTime(event: Event, fab: FabContainer) {
+    fab.close();
     event.stopPropagation();
+    event.preventDefault();
+    let data = {
+      date: this.daySelected,
+      startTime: "",
+      endTime: "",
+      description: ""
+    };
+    let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
+    this.navCtrl.push(blockTime, { blockTime: data, }, { animate: true });
   }
 
-  scanQrCode() {
-
+  scanQrCode(event: any, fab: FabContainer) {
+    fab.close();
     // get person data
     // this is for testing only
     this.authService.getProfile("3829203a-4acf-6092-98b9-ff00006fb7ad").subscribe(response => {
@@ -535,41 +511,6 @@ export class MySchedulePage {
     // });
   }
 
-  /**
-   * remove appropriate invitation
-   */
-  private removeInvitaion(meeting: any) {
-    let index = this.invitations.indexOf(meeting);
-    if (index > -1) {
-      this.invitations.splice(index, 1);
-    }
-    index = this.fullInvitations.indexOf(meeting);
-    if (index > -1) {
-      this.fullInvitations.splice(index, 1);
-    }
-  }
-  /**
-   * remove appropriate schedule
-   */
-  private removeSchedule(meeting: any) {
-    let index = this.schedules.indexOf(meeting);
-    if (index > -1) {
-      this.schedules.splice(index, 1);
-    }
-  }
-  /**
-   * remove appropriate hosting
-   */
-  private removeHosting(meeting: any) {
-    let index = this.hostings.indexOf(meeting);
-    if (index > -1) {
-      this.hostings.splice(index, 1);
-    }
-    index = this.fullHostings.indexOf(meeting);
-    if (index > -1) {
-      this.fullHostings.splice(index, 1);
-    }
-  }
 
   segmentChange() {
     // scroll to the bottom

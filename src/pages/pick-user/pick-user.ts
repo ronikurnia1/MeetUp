@@ -143,11 +143,8 @@ export class PickUserPage {
       });
     } else {
       let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
-
-      let minDate = this.globalVars.getValue("day1");
-      let maxDate = this.globalVars.getValue("day2");
       this.navCtrl.pop().then(value => {
-        this.navCtrl.push(arrangeMeeting, { selectedUser: user, minDate: minDate, maxDate: maxDate }, { animate: true });
+        this.navCtrl.push(arrangeMeeting, { selectedUser: user}, { animate: true });
       });
     }
   }

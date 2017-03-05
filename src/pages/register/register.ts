@@ -108,8 +108,8 @@ export class RegisterPage {
         isAdmin: [profile.isAdmin],
         industryId: [profile.industryId],
         industryTitle: [profile.insudtryTitle],
-        techInterestId: [profile.techInterestId],
-        technologyTitle: [profile.techInterestTitle],
+        // TODO: please double check!
+        techInterests: [(profile.techInterests || "").replace(";", ",")],
         notificationMethods: [profile.notificationMethods]
       });
       this.notifications.forEach(notif => {
@@ -119,7 +119,6 @@ export class RegisterPage {
         }
         this.registerForm.addControl(notif.id, new FormControl(value));
       });
-
     }
   }
 
@@ -141,7 +140,7 @@ export class RegisterPage {
     this.registerForm.controls["titleTitle"].setValue(this.titles.find(itm => itm.id === event).title);
   }
   technologyChange(event: any) {
-    console.log("Data:", event);
+    // console.log("Data:", event);
     //this.registerForm.controls["technologyTitle"].setValue(this.technologies.find(itm => itm.id === event).title);
   }
   register() {
@@ -247,16 +246,15 @@ export class RegisterPage {
       avatar: form.controls["avatar"].value,
       firstName: form.controls["firstName"].value,
       lastName: form.controls["lastName"].value,
-      email: form.controls["email"].value,
       company: form.controls["company"].value,
       country: form.controls["countryId"].value,
       industryId: form.controls["industryId"].value,
-      techInterestId: form.controls["techInterestId"].value,
       jobLevelId: form.controls["jobLevelId"].value,
       jobRoleId: form.controls["jobRoleId"].value,
       mobile: form.controls["mobile"].value,
       userType: form.controls["userType"].value,
       isAdmin: form.controls["isAdmin"].value,
+      techInterestId: form.controls["techInterests"].value.join(";"), 
       about: ""
     };
     let notifValues: string = "";
@@ -268,10 +266,12 @@ export class RegisterPage {
     userData["notificationMethods"] = notifValues;
     // update the form as well
     form.controls["notificationMethods"].setValue(notifValues);
+    form.controls["techInterests"].setValue(userData.techInterestId);
 
     if (this.screenTitle.toLowerCase() === "register") {
       userData["password"] = form.controls["password"].value;
     }
+
     // console.log("Data", JSON.stringify(userData));
     return userData;
   }
