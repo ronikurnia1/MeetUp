@@ -120,7 +120,7 @@ export class ArrangeMeetingPage {
         toast.present();
         if (response.result === "OK") {
           // emit event: meeting:inviteMeetingSuccess
-          this.events.publish("meeting:inviteMeetingSuccess", null);
+          this.events.publish("meeting:refreshSent", null);
           // go back to the previous screen          
           this.navCtrl.pop({ animate: true });
         }

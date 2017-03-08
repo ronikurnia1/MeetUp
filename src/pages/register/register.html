@@ -74,7 +74,7 @@
     </ion-item>
     <ion-item class="meeting" *ngIf="userType === 'delegate'">
       <ion-label>Interested with</ion-label>
-      <ion-select class="ion-select-long" multiple="true" (ionChange)="technologyChange($event)" [selectOptions]="{title: 'Select Technology'}" formControlName="techInterests">
+      <ion-select class="ion-select-long" multiple="true" (ionChange)="technologyChange($event)" [selectOptions]="{title: 'Select Technology'}" formControlName="techInterestId">
         <ion-option *ngFor="let tech of technologies" [value]="tech.id">{{tech.title}}</ion-option>
       </ion-select>
     </ion-item>

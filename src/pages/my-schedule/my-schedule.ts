@@ -96,7 +96,7 @@ export class MySchedulePage {
     events.subscribe(this.refreshSent, () => {
       this.getSentMeetings(null);
     });
-    
+
     // subscribe to the PopoverPage
     events.subscribe(this.filterStatusMenu, (menu) => {
       //console.log("menu", menu);
@@ -312,7 +312,10 @@ export class MySchedulePage {
         refresher.complete();
       if (response.result === "OK") {
         this.fullInvitations = response.data;
-        this.invitations = this.fullInvitations.slice();
+        this.invitations = this.fullInvitations.slice().sort((a, b) => {
+          return (a.date + a.startTime) > (b.date + b.startTime) ? 1 :
+            (((b.date + b.startTime) > (a.date + a.startTime)) ? -1 : 0);
+        });
       } else {
         this.alertUser("Retrieve Invitations data failed.", response.messsage);
       }
@@ -336,7 +339,10 @@ export class MySchedulePage {
         refresher.complete();
       if (response.result === "OK") {
         this.fullHostings = response.data;
-        this.hostings = this.fullHostings.slice();
+        this.hostings = this.fullHostings.slice().sort((a, b) => {
+          return (a.date + a.startTime) > (b.date + b.startTime) ? 1 :
+            (((b.date + b.startTime) > (a.date + a.startTime)) ? -1 : 0);
+        });
       } else {
         this.alertUser("Retrieve Sent data failed.", response.messsage);
       }
@@ -354,27 +360,38 @@ export class MySchedulePage {
   syncToPhone(event: any, fab: FabContainer) {
     fab.close();
     if (Calendar.hasReadWritePermission) {
-      this.syncCalendarToPhone();
+      this.clearCalendar();
+      this.updateCalendar();
     }
     else {
       Calendar.requestReadWritePermission().then(value => {
-        this.syncCalendarToPhone();
+      this.clearCalendar();
+      this.updateCalendar();
       }).catch(reason => {
         this.alertUser("Failed to sync", reason.message);
       });
     }
   }
 
-  syncCalendarToPhone() {
+  clearCalendar() {
     // delete all existing IPI calendar
-    Calendar.deleteEvent(null, null, "IPI Calendar").then(value => {
-      console.log("Deleted:", value);
-      Calendar.createEventWithOptions("IPI Testing", "Location test", "IPI Calendar", new Date(), new Date(), {});
-    }).catch(reason => {
-      console.log("Error:", reason);
-    });
+    Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1") + " 01:00"),
+      new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
+        value.forEach(itm => {
+          Calendar.deleteEvent(itm.title, itm.location, itm.note, itm.startDate, itm.endDate);
+        });
+      });
   }
 
+  updateCalendar() {
+    this.schedules.forEach(itm => {
+      if (!itm.isBlockTime) {
+        Calendar.createEvent(itm.subject, itm.meetingLocation, "IPI Meeting",
+          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + itm.startTime),
+          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + itm.endTime));
+      }
+    });
+  }
 
   /**
    * View Meeting Details

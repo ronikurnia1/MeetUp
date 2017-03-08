@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, Events,
+  ToastController, AlertController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MeetingService } from "../../providers/meeting-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
@@ -21,6 +22,7 @@ export class BlockTimePage {
     public navParams: NavParams,
     private globalVars: GlobalVarsService,
     private formBuilder: FormBuilder,
+    private events: Events,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private meetingService: MeetingService) {
@@ -105,6 +107,8 @@ export class BlockTimePage {
         duration: 3000,
         position: "bottom"
       });
+      // update My Schedule
+      this.events.publish("meeting:refreshMySchedule");
       toast.present();
       if (response.result === "OK") {
         // go back to the previous screen
@@ -122,6 +126,8 @@ export class BlockTimePage {
         duration: 3000,
         position: "bottom"
       });
+      // update My Schedule
+      this.events.publish("meeting:refreshMySchedule");
       toast.present();
       if (response.result === "OK") {
         // go back to the previous screen

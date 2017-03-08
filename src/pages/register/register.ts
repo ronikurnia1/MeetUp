@@ -109,7 +109,7 @@ export class RegisterPage {
         industryId: [profile.industryId],
         industryTitle: [profile.insudtryTitle],
         // TODO: please double check!
-        techInterests: [(profile.techInterests || "").replace(";", ",")],
+        techInterestId: [(profile.techInterestId || "").split(";")],
         notificationMethods: [profile.notificationMethods]
       });
       this.notifications.forEach(notif => {
@@ -254,7 +254,7 @@ export class RegisterPage {
       mobile: form.controls["mobile"].value,
       userType: form.controls["userType"].value,
       isAdmin: form.controls["isAdmin"].value,
-      techInterestId: form.controls["techInterests"].value.join(";"), 
+      techInterestId: form.controls["techInterestId"].value.join(";"),
       about: ""
     };
     let notifValues: string = "";
@@ -266,7 +266,7 @@ export class RegisterPage {
     userData["notificationMethods"] = notifValues;
     // update the form as well
     form.controls["notificationMethods"].setValue(notifValues);
-    form.controls["techInterests"].setValue(userData.techInterestId);
+    form.controls["techInterestId"].setValue(userData.techInterestId);
 
     if (this.screenTitle.toLowerCase() === "register") {
       userData["password"] = form.controls["password"].value;
