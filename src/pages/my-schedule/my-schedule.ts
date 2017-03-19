@@ -2,7 +2,7 @@ import { Component, NgZone, ViewChild } from "@angular/core";
 import {
   App, NavController, NavParams, ToastController,
   Events, Tabs, AlertController, PopoverController,
-  Platform, Content, FabContainer
+  Platform, Content, FabContainer, Loading, LoadingController
 } from "ionic-angular";
 import * as moment from "moment";
 // import { Meeting } from "../../domain/meeting";
@@ -50,6 +50,7 @@ export class MySchedulePage {
 
   private filterStatusMenu: "menu:filterStatus"
 
+  private loader: Loading;
 
   private statusFilters = [
     { title: "All", param: "all", eventName: this.filterStatusMenu },
@@ -75,6 +76,7 @@ export class MySchedulePage {
     private meetingService: MeetingService,
     private globalVars: GlobalVarsService,
     private zone: NgZone,
+    private loadCtrl: LoadingController,
     private events: Events,
     private alertCtrl: AlertController,
     private authService: AuthService,
@@ -102,7 +104,6 @@ export class MySchedulePage {
       //console.log("menu", menu);
       this.handleFilter(menu);
     });
-
   }
 
   toggleDay(value: string) {
@@ -300,7 +301,6 @@ export class MySchedulePage {
     });
   }
 
-
   /**
    * Get meeting invitations of logged user
    */
@@ -355,44 +355,187 @@ export class MySchedulePage {
     });
   }
 
-
-
   syncToPhone(event: any, fab: FabContainer) {
     fab.close();
+
+    // this.loader = this.loadCtrl.create({
+    //   content: "Please wait..."
+    // });
+    // this.loader.present();
+
     if (Calendar.hasReadWritePermission) {
-      this.clearCalendar();
-      this.updateCalendar();
+      this.syncCaledarToPhone();
     }
     else {
       Calendar.requestReadWritePermission().then(value => {
-      this.clearCalendar();
-      this.updateCalendar();
+        this.syncCaledarToPhone();
       }).catch(reason => {
+        this.closeLoader();
         this.alertUser("Failed to sync", reason.message);
       });
     }
   }
 
-  clearCalendar() {
-    // delete all existing IPI calendar
-    Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1") + " 01:00"),
-      new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
-        value.forEach(itm => {
-          Calendar.deleteEvent(itm.title, itm.location, itm.note, itm.startDate, itm.endDate);
-        });
-      });
+
+  test1(event: any, fab: FabContainer) {
+    fab.close();
+    this.removeExistingCalendarEvent(2);
   }
 
-  updateCalendar() {
-    this.schedules.forEach(itm => {
-      if (!itm.isBlockTime) {
-        Calendar.createEvent(itm.subject, itm.meetingLocation, "IPI Meeting",
-          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + itm.startTime),
-          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + itm.endTime));
+  test2(event: any, fab: FabContainer) {
+    fab.close();
+    this.createCalendarEvent(2);
+  }
+
+
+  // test3(event: any, fab: FabContainer) {
+  //   fab.close();
+  //   this.listEvents();
+  // }
+
+  // test4(event: any, fab: FabContainer) {
+  //   fab.close();
+  //   this.createCaledar("MyCalendar");
+  // }
+
+  // listCalendar() {
+  //   Calendar.listCalendars().then(value => {
+  //     this.alertUser("List Calendar", JSON.stringify(value));
+  //   }, reason => {
+  //     this.showToast(JSON.stringify(reason));
+  //   });
+  // }
+
+  // clearCalendar() {
+
+  // }
+
+  // createCaledar(name: string) {
+  //   let calOps = Calendar.getCalendarOptions();
+  //   calOps.calendarName = name;
+  //   Calendar.createCalendar(calOps).then(value => {
+  //     this.alertUser("Create Calendar OK", JSON.stringify(value));
+  //   }, reason => {
+  //     this.alertUser("Create Calendar NOT OK", JSON.stringify(reason));
+  //   });
+  // }
+
+  // listEvents() {
+  //   // delete all existing IPI calendar
+  //   Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
+  //     new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
+  //       this.alertUser("Delete Calendar", JSON.stringify(value));
+  //     }, reason => {
+  //       this.showToast(JSON.stringify(reason));
+  //     });
+  // }
+
+  syncCaledarToPhone() {
+    let calendarId: number;
+    Calendar.listCalendars().then(listCal => {
+      if (listCal.length > 0) {
+        calendarId = listCal[0].id;
+        this.removeExistingCalendarEvent(calendarId);
+      } else {
+        this.closeLoader();
+        this.showToast("No calendar found.");
       }
+    }, listCalReason => {
+      this.closeLoader();
+      this.showToast("Cannot get calendar: " + JSON.stringify(listCalReason));
     });
   }
 
+
+  removeExistingCalendarEvent(calendarId: number) {
+    // delete previous
+    let promiseOps: Array<Promise<any>> = new Array<Promise<any>>();
+    let calOps = Calendar.getCalendarOptions();
+
+    Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
+      new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
+
+        value.forEach(itm => {
+          // need additional filter
+          if (itm.calendar_id == calendarId) {
+            promiseOps.push(Calendar.deleteEvent(itm.title, itm.eventLocation, null, new Date(itm.dtstart), new Date(itm.dtend)));
+          }
+        });
+
+        //this.alertUser("Total Meeting", "Need to remove: " + promiseOps.length);
+
+        Promise.all(promiseOps).then(result => {
+          // after remove existing
+          this.createCalendarEvent(calendarId);
+          // let alert = this.alertCtrl.create({
+          //   title: "Confirm Calendar Sync",
+          //   message: "Do you want to sync Calendar?",
+          //   buttons: [
+          //     {
+          //       text: "Cancel",
+          //       role: "cancel",
+          //       handler: () => {
+          //         // cancel
+          //       }
+          //     },
+          //     {
+          //       text: "Yes",
+          //       handler: () => {
+          //         this.createCalendarEvent(calendarId);
+          //       }
+          //     }
+          //   ]
+          // });
+          // alert.present();
+        }, reason => {
+          this.closeLoader();
+          this.showToast("Cannot remove calendar: " + JSON.stringify(reason));
+        }).catch(error => {
+          this.closeLoader();
+          this.showToast("Cannot remove calendar: " + JSON.stringify(error));
+        });
+      }, reason => {
+        this.closeLoader();
+        this.showToast("Cannot access calendar: " + JSON.stringify(reason));
+      });
+  }
+
+
+  createCalendarEvent(calendarId: number) {
+    let promiseOps: Array<Promise<any>> = new Array<Promise<any>>();
+    let calOps = Calendar.getCalendarOptions();
+    calOps.firstReminderMinutes = 10;
+    calOps.secondReminderMinutes = null;
+    calOps.calendarId = calendarId;
+    this.schedules.forEach(itm => {
+      if (!itm.isBlockTime) {
+        promiseOps.push(Calendar.createEventWithOptions(itm.subject,
+          itm.meetingLocation,
+          itm.remark,
+          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.startTime),
+          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.endTime),
+          calOps));
+      }
+    });
+
+    //this.alertUser("Total Meeting", "Need to create: " + promiseOps.length);
+    Promise.all(promiseOps).then(result => {
+      // re-create calendar
+      this.closeLoader();
+      this.showToast("Calendar sync successfully.");
+    }, reason => {
+      this.closeLoader();
+      this.showToast("Cannot create calendar: " + JSON.stringify(reason));
+    }).catch(error => {
+      this.closeLoader();
+      this.showToast("Cannot create calendar: " + JSON.stringify(error));
+    });
+  }
+
+  closeLoader() {
+    if (this.loader)
+      this.loader.dismissAll();
+  }
   /**
    * View Meeting Details
    */
