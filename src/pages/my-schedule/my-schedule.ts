@@ -355,102 +355,83 @@ export class MySchedulePage {
     });
   }
 
-  syncToPhone(event: any, fab: FabContainer) {
+  async syncCalendarToPhone(event: any, fab: FabContainer) {
     fab.close();
 
-    // this.loader = this.loadCtrl.create({
-    //   content: "Please wait..."
-    // });
-    // this.loader.present();
+    this.loader = this.loadCtrl.create({
+      content: "Please wait..."
+    });
+    this.loader.present();
 
     if (Calendar.hasReadWritePermission) {
-      this.syncCaledarToPhone();
+      await this.syncCalendar();
     }
     else {
-      Calendar.requestReadWritePermission().then(value => {
-        this.syncCaledarToPhone();
-      }).catch(reason => {
-        this.closeLoader();
-        this.alertUser("Failed to sync", reason.message);
-      });
+      await Calendar.requestReadWritePermission();
+      await this.syncCalendar();
     }
   }
 
+  async syncCalendar() {
 
-  test1(event: any, fab: FabContainer) {
-    fab.close();
-    this.removeExistingCalendarEvent(2);
-  }
-
-  test2(event: any, fab: FabContainer) {
-    fab.close();
-    this.createCalendarEvent(2);
-  }
-
-
-  // test3(event: any, fab: FabContainer) {
-  //   fab.close();
-  //   this.listEvents();
-  // }
-
-  // test4(event: any, fab: FabContainer) {
-  //   fab.close();
-  //   this.createCaledar("MyCalendar");
-  // }
-
-  // listCalendar() {
-  //   Calendar.listCalendars().then(value => {
-  //     this.alertUser("List Calendar", JSON.stringify(value));
-  //   }, reason => {
-  //     this.showToast(JSON.stringify(reason));
-  //   });
-  // }
-
-  // clearCalendar() {
-
-  // }
-
-  // createCaledar(name: string) {
-  //   let calOps = Calendar.getCalendarOptions();
-  //   calOps.calendarName = name;
-  //   Calendar.createCalendar(calOps).then(value => {
-  //     this.alertUser("Create Calendar OK", JSON.stringify(value));
-  //   }, reason => {
-  //     this.alertUser("Create Calendar NOT OK", JSON.stringify(reason));
-  //   });
-  // }
-
-  // listEvents() {
-  //   // delete all existing IPI calendar
-  //   Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
-  //     new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
-  //       this.alertUser("Delete Calendar", JSON.stringify(value));
-  //     }, reason => {
-  //       this.showToast(JSON.stringify(reason));
-  //     });
-  // }
-
-  syncCaledarToPhone() {
-    let calendarId: number;
-    Calendar.listCalendars().then(listCal => {
-      if (listCal.length > 0) {
-        calendarId = listCal[0].id;
-        this.removeExistingCalendarEvent(calendarId);
-      } else {
-        this.closeLoader();
-        this.showToast("No calendar found.");
-      }
-    }, listCalReason => {
+    if (this.schedules.length <= 0) {
+      // no event calendar to sync
       this.closeLoader();
-      this.showToast("Cannot get calendar: " + JSON.stringify(listCalReason));
-    });
-  }
+      this.showToast("No event calendar to sync");
+      return;
+    }
 
+    let calendarId: number;
+    let cals = await Calendar.listCalendars();
+
+    if (cals.length === 0) {
+      // no default calendar available
+      this.closeLoader();
+      this.showToast("No default calendar available. Please create one");
+      return;
+    }
+    this.loader.setContent("Check existing...");
+    calendarId = cals[0].id;
+
+    let deleteOps: Array<Promise<any>> = new Array<Promise<any>>();
+    let createOps: Array<Promise<any>> = new Array<Promise<any>>();
+
+    let values = await Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
+      new Date(this.globalVars.getValue("day2") + " 23:59"));
+
+    // delete
+    for (let i: number = 0; i < values.length; i++) {
+      this.loader.setContent("Removing existing...");
+      await Calendar.deleteEvent(values[i].title, values[i].eventLocation, null,
+        new Date(values[i].dtstart), new Date(values[i].dtend));
+    }
+
+    // create
+    let calOps = Calendar.getCalendarOptions();
+    calOps.firstReminderMinutes = 10;
+    calOps.secondReminderMinutes = null;
+    calOps.calendarId = calendarId;
+
+    for (let i: number = 0; i < this.schedules.length; i++) {
+      if (!this.schedules[i].isBlockTime) {
+        this.loader.setContent("Updating new event calendar...");
+        await Calendar.createEventWithOptions(this.schedules[i].subject,
+          this.schedules[i].meetingLocation,
+          this.schedules[i].remark,
+          new Date(this.getDateFormated(this.schedules[i].date, "YYYY-MM-DD") + " " + this.schedules[i].startTime),
+          new Date(this.getDateFormated(this.schedules[i].date, "YYYY-MM-DD") + " " + this.schedules[i].endTime),
+          calOps);
+      }
+    }
+    this.closeLoader();
+    this.showToast("Event calendar sync successfully.");
+  }
 
   removeExistingCalendarEvent(calendarId: number) {
     // delete previous
     let promiseOps: Array<Promise<any>> = new Array<Promise<any>>();
     let calOps = Calendar.getCalendarOptions();
+
 
     Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
       new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
@@ -462,11 +443,27 @@ export class MySchedulePage {
           }
         });
 
+        calOps.firstReminderMinutes = 10;
+        calOps.secondReminderMinutes = null;
+        calOps.calendarId = calendarId;
+        this.schedules.forEach(itm => {
+          if (!itm.isBlockTime) {
+            promiseOps.push(Calendar.createEventWithOptions(itm.subject,
+              itm.meetingLocation,
+              itm.remark,
+              new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.startTime),
+              new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.endTime),
+              calOps));
+          }
+        });
+
         //this.alertUser("Total Meeting", "Need to remove: " + promiseOps.length);
 
         Promise.all(promiseOps).then(result => {
+          this.closeLoader();
+          this.showToast("Calendar sync successfully.");
+
           // after remove existing
-          this.createCalendarEvent(calendarId);
           // let alert = this.alertCtrl.create({
           //   title: "Confirm Calendar Sync",
           //   message: "Do you want to sync Calendar?",

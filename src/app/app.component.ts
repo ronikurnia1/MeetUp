@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { Platform } from "ionic-angular";
+import { Component, ViewChild } from "@angular/core";
+import { Platform, AlertController, Nav } from "ionic-angular";
 import { StatusBar, Splashscreen, Calendar } from "ionic-native";
-
+import { Push, PushToken } from "@ionic/cloud-angular";
 import { TabsPage } from "../pages/tabs/tabs";
 import { LoginPage } from "../pages/login/login";
 import { CryptoService } from "../providers/crypto-service";
@@ -11,10 +11,13 @@ import { GlobalVarsService } from "../providers/global-vars-service";
   templateUrl: "app.html",
 })
 export class MyApp {
+  @ViewChild(Nav) nav: Nav;
   rootPage: any;
 
-  constructor(platform: Platform,
+  constructor(private platform: Platform,
+    private push: Push,
     private crypto: CryptoService,
+    private alertCtrl: AlertController,
     private globalVars: GlobalVarsService) {
 
     platform.ready().then(() => {
@@ -36,9 +39,6 @@ export class MyApp {
 
       });
 
-      // Get calendar
-      //Calendar.listCalendars().then()
-
       // check if userData stored locally
       let storedUserData = localStorage.getItem("userData");
       if (storedUserData) {
@@ -54,6 +54,23 @@ export class MyApp {
         this.rootPage = LoginPage;
       }
 
+      // register push notifiation
+      this.initPushNotification();
     });
   }
+
+
+  initPushNotification() {
+    this.push.register().then((pt: PushToken) => {
+      return this.push.saveToken(pt);
+    }).then((pt: PushToken) => {
+      console.log("Token saved: ", pt.token);
+    });
+
+    this.push.rx.notification().subscribe((msg) => {
+      let alert = this.alertCtrl.create({ message: msg.text, title: msg.title });
+      alert.present();
+    });
+  }
+
 }

@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
+import { CloudSettings, CloudModule } from "@ionic/cloud-angular";
 import { MyApp } from "./app.component";
 import { MomentModule } from "angular2-moment";
 import { Ionic2RatingModule } from "ionic2-rating";
@@ -52,6 +53,25 @@ export const firebaseConfig = {
   messagingSenderId: "938935194124"
 };
 
+export const cloudSettings: CloudSettings = {
+  core: {
+    app_id: "4a1de533"
+  },
+  push: {
+    sender_id: "938935194124",
+    pluginConfig: {
+      android: {
+        iconColor: "#343434"
+      },
+      ios: {
+        alert: "true",
+        badge: false,
+        sound: "true"
+      }
+    }
+  }
+};
+
 @NgModule({
   declarations: [
     Elastic,
@@ -90,7 +110,8 @@ export const firebaseConfig = {
   imports: [
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
     MomentModule, ProviderModule.forRoot(), QRCodeModule,
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
