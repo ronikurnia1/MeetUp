@@ -11,14 +11,15 @@ import { GlobalVarsService } from "../providers/global-vars-service";
   templateUrl: "app.html",
 })
 export class MyApp {
+
   @ViewChild(Nav) nav: Nav;
   rootPage: any;
 
-  constructor(private platform: Platform,
-    private push: Push,
-    private crypto: CryptoService,
-    private alertCtrl: AlertController,
-    private globalVars: GlobalVarsService) {
+  constructor(public platform: Platform,
+    public push: Push,
+    public crypto: CryptoService,
+    public alertCtrl: AlertController,
+    public globalVars: GlobalVarsService) {
 
     platform.ready().then(() => {
 
@@ -61,11 +62,16 @@ export class MyApp {
 
 
   initPushNotification() {
+
+    if (!this.platform.is('cordova')) {
+      console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
+      return;
+    }
     this.push.register().then((pt: PushToken) => {
       return this.push.saveToken(pt);
     }).then((pt: PushToken) => {
-      let alert = this.alertCtrl.create({ message: "Saved token: " + pt.token, title: "Token Saved" });
-      alert.present();
+      // let alert = this.alertCtrl.create({ message: "Saved token: " + pt.token, title: "Token Saved" });
+      // alert.present();
       console.log("Token saved: ", pt.token);
     });
 

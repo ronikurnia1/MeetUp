@@ -37,7 +37,7 @@
     "zone.js": "0.8.5"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "^1.1.4",
+    "@ionic/app-scripts": "^1.2.2",
     "@types/jquery": "^2.0.41",
     "lodash.camelcase": "^4.3.0",
     "lodash.upperfirst": "^4.3.1",
@@ -54,7 +54,8 @@
     "phonegap-plugin-barcodescanner",
     "cordova-plugin-device-orientation",
     "cordova-pulgin-camera",
-    "cordova-plugin-calendar"
+    "cordova-plugin-calendar",
+    "phonegap-plugin-push"
   ],
   "cordovaPlatforms": [],
   "description": "meet-up",
