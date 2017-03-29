@@ -64,6 +64,8 @@ export class MyApp {
     this.push.register().then((pt: PushToken) => {
       return this.push.saveToken(pt);
     }).then((pt: PushToken) => {
+      let alert = this.alertCtrl.create({ message: "Saved token: " + pt.token, title: "Token Saved" });
+      alert.present();
       console.log("Token saved: ", pt.token);
     });
 
