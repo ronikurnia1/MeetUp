@@ -24,13 +24,15 @@ export class PushService {
       return this.push.saveToken(pt);
     }).then((pt: PushToken) => {
       console.log("Token saved: ", pt.token);
-      // TODO: Let IPI back-end know this user's token
       let registerPushToken = {
         userId: userId,
         pushToken: pt.token
       };
+      // Save device's registered token for chat purpose
+      this.globalVars.setValue("PushToken", pt.token);
 
-      // TODO: Check with IPI Backend
+      // TODO: Let IPI backend know this user's token
+      // TODO: Check with IPI backend
       this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/RegisterToken", registerPushToken)
         .subscribe((response: Response) => {
           console.log("Push Token registered");
