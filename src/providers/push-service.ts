@@ -29,7 +29,7 @@ export class PushService {
         pushToken: pt.token
       };
       // Save device's registered token for chat purpose
-      this.globalVars.setValue("PushToken", pt.token);
+      this.globalVars.setValue("pushToken", pt.token);
 
       // TODO: Let IPI backend know this user's token
       // TODO: Check with IPI backend
