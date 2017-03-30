@@ -19,7 +19,7 @@ import { AuthService } from "../../providers/auth-service";
 import { ScanBadgePage } from "../scan-badge/scan-badge";
 import { PopoverPage } from "../user-profile/popover";
 import { AdminArrangeMeetingPage } from "../admin-arrange-meeting/admin-arrange-meeting";
-
+import { PushService } from "../../providers/push-service";
 
 @Component({
   selector: "page-my-schedule",
@@ -81,6 +81,7 @@ export class MySchedulePage {
     private alertCtrl: AlertController,
     private authService: AuthService,
     private popoverCtrl: PopoverController,
+    private pushSvc: PushService,
     private platform: Platform) {
 
     // Hold reference to the Tabs
@@ -353,6 +354,12 @@ export class MySchedulePage {
       console.log("Error", error);
       this.alertUser("Retrieve Sent data failed.", error);
     });
+  }
+
+
+  testPush(event: any, fab: FabContainer) {
+    fab.close();
+    this.pushSvc.pushNotif("ASAL", "this is message", "This is title", "oke");
   }
 
   async syncCalendarToPhone(event: any, fab: FabContainer) {
