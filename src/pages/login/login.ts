@@ -6,7 +6,7 @@ import { AuthService } from "../../providers/auth-service";
 import { CryptoService } from "../../providers/crypto-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { RegisterPage } from "../register/register";
-import { PushService } from "../providers/push-service";
+import { PushService } from "../../providers/push-service";
 
 @Component({
   selector: 'page-login',
