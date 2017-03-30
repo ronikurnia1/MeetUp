@@ -74,6 +74,7 @@ export class ChatDetailsPage {
     let profilePage: any = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
 
     // get profile 
+    // TODO: please double check!
     this.authService.getProfile("099e203a-4acf-6092-98b9-ff00006fb7ad").subscribe(respose => {
       if (respose.result === "OK") {
         this.navCtrl.push(profilePage, { profile: respose.user }, { animate: true });
