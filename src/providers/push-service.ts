@@ -42,8 +42,21 @@ export class PushService {
     this.push.rx.notification().subscribe((msg) => {
       // let alert = this.alertCtrl.create({ message: msg.text, title: msg.title });
       // alert.present();
+
+      // TODO: push notification handler!
     });
   }
 
+  public unregisterPushNotification(userId: string): void {
+    if (!this.platform.is('cordova')) {
+      console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
+      return;
+    }
+    this.push.unregister().then(() => {
+      console.log("Push notification unregistered.");
+    }, (reason: any) => {
+      console.log("Unregister push notification failed.");
+    });
+  }
 
 }
