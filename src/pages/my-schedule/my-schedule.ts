@@ -381,6 +381,12 @@ export class MySchedulePage {
       return;
     }
 
+    if (!this.platform.is('cordova')) {
+      this.closeLoader();
+      console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
+      return;
+    }
+
     let calendarId: number;
     let cals = await Calendar.listCalendars();
 
@@ -392,9 +398,6 @@ export class MySchedulePage {
     }
     this.loader.setContent("Check existing...");
     calendarId = cals[0].id;
-
-    let deleteOps: Array<Promise<any>> = new Array<Promise<any>>();
-    let createOps: Array<Promise<any>> = new Array<Promise<any>>();
 
     let values = await Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
       new Date(this.globalVars.getValue("day2") + " 23:59"));
@@ -427,107 +430,6 @@ export class MySchedulePage {
     this.showToast("Event calendar sync successfully.");
   }
 
-  removeExistingCalendarEvent(calendarId: number) {
-    // delete previous
-    let promiseOps: Array<Promise<any>> = new Array<Promise<any>>();
-    let calOps = Calendar.getCalendarOptions();
-
-
-    Calendar.listEventsInRange(new Date(this.globalVars.getValue("day1")),
-      new Date(this.globalVars.getValue("day2") + " 23:59")).then(value => {
-
-        value.forEach(itm => {
-          // need additional filter
-          if (itm.calendar_id == calendarId) {
-            promiseOps.push(Calendar.deleteEvent(itm.title, itm.eventLocation, null, new Date(itm.dtstart), new Date(itm.dtend)));
-          }
-        });
-
-        calOps.firstReminderMinutes = 10;
-        calOps.secondReminderMinutes = null;
-        calOps.calendarId = calendarId;
-        this.schedules.forEach(itm => {
-          if (!itm.isBlockTime) {
-            promiseOps.push(Calendar.createEventWithOptions(itm.subject,
-              itm.meetingLocation,
-              itm.remark,
-              new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.startTime),
-              new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.endTime),
-              calOps));
-          }
-        });
-
-        //this.alertUser("Total Meeting", "Need to remove: " + promiseOps.length);
-
-        Promise.all(promiseOps).then(result => {
-          this.closeLoader();
-          this.showToast("Calendar sync successfully.");
-
-          // after remove existing
-          // let alert = this.alertCtrl.create({
-          //   title: "Confirm Calendar Sync",
-          //   message: "Do you want to sync Calendar?",
-          //   buttons: [
-          //     {
-          //       text: "Cancel",
-          //       role: "cancel",
-          //       handler: () => {
-          //         // cancel
-          //       }
-          //     },
-          //     {
-          //       text: "Yes",
-          //       handler: () => {
-          //         this.createCalendarEvent(calendarId);
-          //       }
-          //     }
-          //   ]
-          // });
-          // alert.present();
-        }, reason => {
-          this.closeLoader();
-          this.showToast("Cannot remove calendar: " + JSON.stringify(reason));
-        }).catch(error => {
-          this.closeLoader();
-          this.showToast("Cannot remove calendar: " + JSON.stringify(error));
-        });
-      }, reason => {
-        this.closeLoader();
-        this.showToast("Cannot access calendar: " + JSON.stringify(reason));
-      });
-  }
-
-
-  createCalendarEvent(calendarId: number) {
-    let promiseOps: Array<Promise<any>> = new Array<Promise<any>>();
-    let calOps = Calendar.getCalendarOptions();
-    calOps.firstReminderMinutes = 10;
-    calOps.secondReminderMinutes = null;
-    calOps.calendarId = calendarId;
-    this.schedules.forEach(itm => {
-      if (!itm.isBlockTime) {
-        promiseOps.push(Calendar.createEventWithOptions(itm.subject,
-          itm.meetingLocation,
-          itm.remark,
-          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.startTime),
-          new Date(this.getDateFormated(itm.date, "YYYY-MM-DD") + " " + itm.endTime),
-          calOps));
-      }
-    });
-
-    //this.alertUser("Total Meeting", "Need to create: " + promiseOps.length);
-    Promise.all(promiseOps).then(result => {
-      // re-create calendar
-      this.closeLoader();
-      this.showToast("Calendar sync successfully.");
-    }, reason => {
-      this.closeLoader();
-      this.showToast("Cannot create calendar: " + JSON.stringify(reason));
-    }).catch(error => {
-      this.closeLoader();
-      this.showToast("Cannot create calendar: " + JSON.stringify(error));
-    });
-  }
 
   closeLoader() {
     if (this.loader)
