@@ -5,7 +5,7 @@ import { GlobalVarsService } from "./global-vars-service";
 import { AuthService } from "./auth-service";
 import { CryptoService } from "./crypto-service";
 import { FirebaseChatService } from "./firebase-chat-service";
-
+import { PushService } from "./push-service";
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
  */
@@ -24,7 +24,8 @@ export class ProviderModule {
                 GlobalVarsService,
                 CryptoService,
                 AuthService,
-                FirebaseChatService
+                FirebaseChatService,
+                PushService
             ]
         };
     }

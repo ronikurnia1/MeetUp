@@ -1,7 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { Platform, AlertController, Nav } from "ionic-angular";
 import { StatusBar, Splashscreen, Calendar } from "ionic-native";
-import { Push, PushToken } from "@ionic/cloud-angular";
+import { PushService } from "../providers/push-service";
 import { TabsPage } from "../pages/tabs/tabs";
 import { LoginPage } from "../pages/login/login";
 import { CryptoService } from "../providers/crypto-service";
@@ -16,7 +16,7 @@ export class MyApp {
   rootPage: any;
 
   constructor(public platform: Platform,
-    public push: Push,
+    public pushSvc: PushService,
     public crypto: CryptoService,
     public alertCtrl: AlertController,
     public globalVars: GlobalVarsService) {
@@ -51,34 +51,14 @@ export class MyApp {
         // put it into global vars
         this.globalVars.setValue("userData", userData);
         this.rootPage = TabsPage;
+        // Register push notification
+        this.pushSvc.registerPushNotification(this.globalVars.getValue("userData").id);
       } else {
         this.rootPage = LoginPage;
       }
-
-      // register push notifiation
-      this.initPushNotification();
     });
   }
 
 
-  initPushNotification() {
-
-    if (!this.platform.is('cordova')) {
-      console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
-      return;
-    }
-    this.push.register().then((pt: PushToken) => {
-      return this.push.saveToken(pt);
-    }).then((pt: PushToken) => {
-      // let alert = this.alertCtrl.create({ message: "Saved token: " + pt.token, title: "Token Saved" });
-      // alert.present();
-      console.log("Token saved: ", pt.token);
-    });
-
-    this.push.rx.notification().subscribe((msg) => {
-      let alert = this.alertCtrl.create({ message: msg.text, title: msg.title });
-      alert.present();
-    });
-  }
 
 }

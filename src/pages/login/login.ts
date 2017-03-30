@@ -6,6 +6,7 @@ import { AuthService } from "../../providers/auth-service";
 import { CryptoService } from "../../providers/crypto-service";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { RegisterPage } from "../register/register";
+import { PushService } from "../providers/push-service";
 
 @Component({
   selector: 'page-login',
@@ -25,6 +26,7 @@ export class LoginPage {
     private authService: AuthService,
     private crypto: CryptoService,
     private globalVars: GlobalVarsService,
+    private pushSvc: PushService,
     private formBuilder: FormBuilder) {
     // build login form
     this.loginForm = formBuilder.group({
@@ -101,14 +103,6 @@ export class LoginPage {
         if (loginResponse.result === "OK") {
           // console.log("login response:", loginResponse.userProfile);
           // put user's data into globalVars
-
-          // TODO: remove this later
-          // loginResponse.userProfile["userType"] = "exhibitor";
-          // if (loginResponse.userProfile["avatar"] === "") {
-          //   loginResponse.userProfile["avatar"] = "assets/icon/avatar.png";
-          // }
-          // END TODO
-
           this.globalVars.setValue("userData", loginResponse.userProfile);
           if (this.loginForm.controls["rememberMe"].value) {
             // save encrypted user's data on storage
@@ -124,6 +118,9 @@ export class LoginPage {
           let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage") || TabsPage;
           // this.app.getRootNav().push(tabsPage);
           this.app.getRootNav().setRoot(tabsPage, null, { animate: true });
+
+          // Register push notification
+          this.pushSvc.registerPushNotification(this.globalVars.getValue("userData").id);
         } else {
           let toast = this.toastCtrl.create({
             message: loginResponse.message,
