@@ -3,8 +3,8 @@
     <ion-title>Notification</ion-title>
 </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <ion-list>
+<ion-content>
+  <ion-list padding>
     <ion-item class="meeting" *ngFor="let notif of notifications" (click)="viewDetails()">
       <ion-icon color="primary" name="alert" item-left></ion-icon>
       <div class="wrap-text">{{notif.message}}</div>

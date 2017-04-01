@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-import { Platform } from "ionic-angular";
+import { Platform, AlertController } from "ionic-angular";
 import { Push, PushToken } from "@ionic/cloud-angular";
 import { GlobalVarsService } from "./global-vars-service";
 import "rxjs/Rx";
@@ -14,9 +14,10 @@ const PUSH_PROFILE: string = "ipipush";
 export class PushService {
   constructor(public http: Http,
     public platform: Platform,
+    public alertCtrl: AlertController,
     public globalVars: GlobalVarsService,
     public push: Push) {
-    console.log('Hello PushService Provider');
+    // console.log('Hello PushService Provider');
   }
 
   public registerPushNotification(userId: string): void {
@@ -28,7 +29,7 @@ export class PushService {
       return this.push.saveToken(pt);
     }).then((pt: PushToken) => {
       console.log("Token saved: ", pt.token);
-      let registerPushToken = {
+      let storePushToken = {
         userId: userId,
         pushToken: pt.token
       };
@@ -37,7 +38,7 @@ export class PushService {
 
       // TODO: Let IPI backend know this user's token
       // TODO: Check with IPI backend
-      this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/RegisterToken", registerPushToken)
+      this.http.post(this.globalVars.getValue("apiUrl") + "MobileUserApi/RegisterToken", storePushToken)
         .subscribe((response: Response) => {
           console.log("Push Token registered");
         }, (error) => {
@@ -46,8 +47,12 @@ export class PushService {
     });
 
     this.push.rx.notification().subscribe((msg) => {
-      // let alert = this.alertCtrl.create({ message: msg.text, title: msg.title });
-      // alert.present();
+      // Notifications type: Announcement & Meeting
+      // let notifType = msg.payload
+
+
+      let alert = this.alertCtrl.create({ message: JSON.stringify(msg.payload), title: msg.title });
+      alert.present();
 
       // TODO: push notification handler!
     });
@@ -71,34 +76,36 @@ export class PushService {
   public pushNotif(userId: string, message: string, title: string, type: string): void {
     //this.http.get(this.globalVars.getValue("apiUrl") + "MobileUserApi/GetUserToken?userId=" + userId)
     this.http.get("http://52.77.249.130/api/MobileMeetingApi/GetLocations")
-      .subscribe((response) => {
-        let token: string = "exkyS_1bxcY:APA91bFvrDp3Q3nqDqUL7wQ-UUzUn0BiYrTvfHYgbIvFfw8PsOSWfX8L3XaVGSPyKfX1qWigI6kDOvwZ-ZBcX5NGggMKA-FbVgUt4up1k81SYaW-bXHYFFVgPYB71g88C-fUSNM7m_dT";
-        let headers = new Headers();
-        headers.append("Content-Type", "application/json");
-        headers.append("Authorization", BEARER_TOKEN);
-        let data = {
-          tokens: [token],
-          profile: PUSH_PROFILE,
-          notification: {
-            message: message,
-            title: title,
-            payload: {
-              type: type
-            }
-          },
-          send_to_all: false
-        };
+      .subscribe((response: Response) => {
+        // If get token
+        if (response.json().result === "OK") {
+          let token: string = "exkyS_1bxcY:APA91bFvrDp3Q3nqDqUL7wQ-UUzUn0BiYrTvfHYgbIvFfw8PsOSWfX8L3XaVGSPyKfX1qWigI6kDOvwZ-ZBcX5NGggMKA-FbVgUt4up1k81SYaW-bXHYFFVgPYB71g88C-fUSNM7m_dT";
+          let headers = new Headers();
+          headers.append("Content-Type", "application/json");
+          headers.append("Authorization", BEARER_TOKEN);
+          let data = {
+            tokens: [token],
+            profile: PUSH_PROFILE,
+            notification: {
+              message: message,
+              title: title,
+              payload: {
+                type: type
+              }
+            },
+            send_to_all: false
+          };
 
-        // push notification
-        this.http.post("https://api.ionic.io/push/notifications", data, { headers: headers }).subscribe((result: Response) => {
-          console.log("Push notif sent successfully.");
-        }, (err) => {
-          console.log("Push notif sent failed:", err);
-        });
+          // push notification
+          this.http.post("https://api.ionic.io/push/notifications", data, { headers: headers }).subscribe((result: Response) => {
+            console.log("Push notif sent successfully.");
+          }, (err) => {
+            console.log("Push notif sent failed:", err);
+          });
+        }
       }, (error) => {
         console.log("Get user token failed:", error);
       });
-
   };
 
 
