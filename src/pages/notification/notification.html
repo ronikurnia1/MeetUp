@@ -5,7 +5,7 @@
 </ion-header>
 <ion-content>
   <ion-list padding>
-    <ion-item class="meeting" *ngFor="let notif of notifications" (click)="viewDetails()">
+    <ion-item class="meeting" *ngFor="let notif of notifications" (click)="viewDetails(notif)">
       <ion-icon color="primary" name="alert" item-left></ion-icon>
       <div class="wrap-text">{{notif.message}}</div>
       <div class="wrap-text smaller">{{getDateFormated(notif.date)}}</div>

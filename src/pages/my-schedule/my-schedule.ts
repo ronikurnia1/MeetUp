@@ -214,21 +214,21 @@ export class MySchedulePage {
     let userType: string = this.globalVars.getValue("userData").userType;
     let page: any;
 
-    let tabs: Tabs = this.navCtrl.parent;
+    //let tabs: Tabs = this.navCtrl.parent;
 
     switch (userType.toLowerCase()) {
       case "admin":
       case "ipi staff":
       case "event organizer": {
-        page = tabs.parent.getViews().find(itm => itm.name === "AdminArrangeMeetingPage") || AdminArrangeMeetingPage;
+        page = this.tabs.parent.getViews().find(itm => itm.name === "AdminArrangeMeetingPage") || AdminArrangeMeetingPage;
         break;
       }
       default: {
-        page = tabs.parent.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
+        page = this.tabs.parent.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
         break;
       }
     }
-    tabs.parent.push(page, null, { animate: true });
+    this.tabs.parent.push(page, null, { animate: true });
   }
 
   /**
@@ -359,7 +359,8 @@ export class MySchedulePage {
 
   testPush(event: any, fab: FabContainer) {
     fab.close();
-    this.pushSvc.pushNotif("ASAL", "this is message", "This is title", "oke");
+    //this.pushSvc.pushNotif("ASAL", "this is message for testing!", "IPI MeetUp", "notification");
+    this.pushSvc.pushNotif("ASAL", "this is message for testing!", "IPI MeetUp", "chat");
   }
 
   async syncCalendarToPhone(event: any, fab: FabContainer) {

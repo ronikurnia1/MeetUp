@@ -4,8 +4,8 @@
         {
             "message": "You have 2 invitations! Check now!",
             "date": "2017-01-23 09:30",
-            "type": "invitation",
-            "meetingId": ""
+            "type": "meeting",
+            "meetingId": "5435354353"
         },
         {
             "message": "John Snow has cancelled the meeting",
@@ -22,8 +22,14 @@
         {
             "message": "Invitation has been sent to John Snow!",
             "date": "2017-01-22 14:30",
-            "type": "sent",
+            "type": "meeting",
             "meetingId": "4534545345"
-        }        
+        }, 
+        {
+            "message": "New announcement has been published!",
+            "date": "2017-03-22 14:30",
+            "type": "announcement",
+            "meetingId": ""
+        }                       
     ]
 }

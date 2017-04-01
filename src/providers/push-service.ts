@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-import { Platform, AlertController } from "ionic-angular";
+import { Platform, Tabs, Events, ToastController, AlertController, NavController } from "ionic-angular";
 import { Push, PushToken } from "@ionic/cloud-angular";
 import { GlobalVarsService } from "./global-vars-service";
 import "rxjs/Rx";
@@ -14,8 +14,10 @@ const PUSH_PROFILE: string = "ipipush";
 export class PushService {
   constructor(public http: Http,
     public platform: Platform,
+    public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public globalVars: GlobalVarsService,
+    public events: Events,
     public push: Push) {
     // console.log('Hello PushService Provider');
   }
@@ -47,14 +49,27 @@ export class PushService {
     });
 
     this.push.rx.notification().subscribe((msg) => {
-      // Notifications type: Announcement & Meeting
-      // let notifType = msg.payload
-
-
-      let alert = this.alertCtrl.create({ message: JSON.stringify(msg.payload), title: msg.title });
-      alert.present();
-
-      // TODO: push notification handler!
+      // Notifications type: Announcement & Meeting    
+      let notifType: string = msg.payload["type"];
+      if (msg.app.asleep || msg.app.closed) {
+        // background process
+        // redirect to Notifications or Chat    
+        let selectedTabEvent: string = "app:selectTabEvent";
+        // 1 = notification page, 2 = chat page
+        let tabIndex: number = notifType === "notification" ? 1 : 2;
+        this.events.publish(selectedTabEvent, tabIndex);
+      } else {
+        // Foreground process
+        if (notifType === "notification") {
+          // update(refresh) notifications
+          let refreshNotifEvent: string = "app:refreshNotification";
+          this.events.publish(refreshNotifEvent);
+        }
+        // Use toast
+        this.showToast(msg.text);
+      }
+      // let alert = this.alertCtrl.create({ message: JSON.stringify(msg.payload), title: msg.title });
+      // alert.present();
     });
   }
 
@@ -72,18 +87,23 @@ export class PushService {
 
   /**
    * Push Notify user
+   * type: notif or chat
    */
   public pushNotif(userId: string, message: string, title: string, type: string): void {
-    //this.http.get(this.globalVars.getValue("apiUrl") + "MobileUserApi/GetUserToken?userId=" + userId)
+    //this.http.get(this.globalVars.getValue("apiUrl") + "MobileUserApi/GetPushToken?userId=" + userId)
     this.http.get("http://52.77.249.130/api/MobileMeetingApi/GetLocations")
       .subscribe((response: Response) => {
-        // If get token
-        if (response.json().result === "OK") {
+        let data = response.json();
+        data.data.token = "TEST";
+        // Check if token available
+        if (data.result === "OK" && data.data.token) {
+          // TODO: fix this!
           let token: string = "exkyS_1bxcY:APA91bFvrDp3Q3nqDqUL7wQ-UUzUn0BiYrTvfHYgbIvFfw8PsOSWfX8L3XaVGSPyKfX1qWigI6kDOvwZ-ZBcX5NGggMKA-FbVgUt4up1k81SYaW-bXHYFFVgPYB71g88C-fUSNM7m_dT";
+          //let token: string = data.data.token;
           let headers = new Headers();
           headers.append("Content-Type", "application/json");
           headers.append("Authorization", BEARER_TOKEN);
-          let data = {
+          let notifData = {
             tokens: [token],
             profile: PUSH_PROFILE,
             notification: {
@@ -97,7 +117,7 @@ export class PushService {
           };
 
           // push notification
-          this.http.post("https://api.ionic.io/push/notifications", data, { headers: headers }).subscribe((result: Response) => {
+          this.http.post("https://api.ionic.io/push/notifications", notifData, { headers: headers }).subscribe((result: Response) => {
             console.log("Push notif sent successfully.");
           }, (err) => {
             console.log("Push notif sent failed:", err);
@@ -107,6 +127,15 @@ export class PushService {
         console.log("Get user token failed:", error);
       });
   };
+
+  showToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 4000,
+      position: "bottom"
+    });
+    toast.present();
+  }
 
 
 }

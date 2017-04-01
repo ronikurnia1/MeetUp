@@ -11,8 +11,8 @@ export class GlobalVarsService {
 
     private config = {
         apiUrlDummy: "assets/",
-        apiUrlProxy: "http://52.77.249.130/api/",
-        apiUrl: "/api/",
+        apiUrl: "http://52.77.249.130/api/",
+        apiUrlProxy: "/api/",
         firebaseUser: "roniku@gmail.com",
         firebasePwd: "St7465dsh!`+"
     };

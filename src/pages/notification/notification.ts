@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, Events, NavParams, AlertController } from 'ionic-angular';
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { MeetingService } from "../../providers/meeting-service";
 import * as moment from "moment";
 import { MeetingDetailsPage } from "../meeting-details/meeting-details";
+
+
+// Notification next action:
+// 1. Go to Detail Meeting screen (refresh: schedule, invitation)
+// 2. Go to Announcement (Mesage) detail screen (refresh: Announcement)
 
 @Component({
   selector: 'page-notification',
@@ -11,27 +16,54 @@ import { MeetingDetailsPage } from "../meeting-details/meeting-details";
 })
 export class NotificationPage {
   private notifications: any[];
+  private refreshNotifEvent: string = "app:refreshNotification";
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private events: Events,
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService,
     private alertCtrl: AlertController) {
     this.getNotification();
+
+    // Subscribe to the event published by PushService
+    events.subscribe(this.refreshNotifEvent, () => {
+      this.getNotification();
+    });
+
   }
 
 
-  viewDetails() {
-    this.meetingService.getMeetingById("").subscribe(response => {
-      if (response.result === "OK") {
-        let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
-        this.navCtrl.push(meetingDetails, { meetingData: response.data, type: "hosted" }, { animate: true });
-      } else {
-        this.alertUser("Retrieve meeting data failed.", response.messsage);
+  viewDetails(notif: any) {
+    let notifType = notif.type;
+    switch (notifType) {
+      case "meeting": {
+        this.meetingService.getMeetingById("").subscribe(response => {
+          if (response.result === "OK") {
+            //TODO: check meetingId exist on invitation or my-schedule
+            let type: string = "invitation";
+            let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+            this.navCtrl.push(meetingDetails, { meetingData: response.data, type: type }, { animate: true });
+
+          } else {
+            this.alertUser("Retrieve meeting data failed.", response.messsage);
+          }
+        }, error => {
+          this.alertUser("Retrieve meeting data failed.", error);
+        });
+        break;
       }
-    }, error => {
-      this.alertUser("Retrieve meeting data failed.", error);
-    });
+      case "announcement": {
+        //TODO: go to announcement details:
+
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+
   }
 
   /**
@@ -53,8 +85,15 @@ export class NotificationPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationPage');
+    // console.log('ionViewDidLoad NotificationPage');
   }
+
+  ionViewWillUnload() {
+    // unsubscribe events
+    console.log("Notif Page Unsubscribing");
+    this.events.unsubscribe(this.refreshNotifEvent);
+  }
+
 
   alertUser(title: string, message: string) {
     let alert = this.alertCtrl.create({
