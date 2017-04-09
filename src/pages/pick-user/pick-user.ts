@@ -18,6 +18,8 @@ export class PickUserPage {
   private title: string;
   private keywords: string;
   private group: string;
+  private currentPageIndex: number;
+  private infiniteScroll: any;
 
   private deletegeFilter = [
     { title: "All User Group", param: "all", eventName: this.filterUserMenu },
@@ -34,7 +36,7 @@ export class PickUserPage {
     { title: "Event Organizer", param: "event-organizer", eventName: this.filterUserMenu }
   ];
 
-  users: any[];
+  users: any = [];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams, private toastCtrl: ToastController,
@@ -48,13 +50,13 @@ export class PickUserPage {
     this.title = "All User Group";
     this.group = "all";
     this.keywords = "";
+    this.currentPageIndex = 1;
     // subscribe to the PopoverPage
     events.subscribe(this.filterUserMenu, (menu) => {
       //console.log("menu", menu);
       this.handleFilter(menu);
     });
     this.users = [];
-    this.searchUser({ target: { value: "" } }, true, true);
   }
 
   filterUser(event: any) {
@@ -82,11 +84,8 @@ export class PickUserPage {
   /**
    * Get user based on group & keywords/filter
    */
-  searchUser(event: any, withLoader: boolean, useLocalData: boolean, refresher?: any) {
+  searchUser(keywords: string, withLoader: boolean, userType: string, pageIndex: number, refresher?: any) {
     let loader: any;
-    if (refresher)
-      refresher.complete();
-
     if (withLoader) {
       loader = this.loadCtrl.create({
         content: "Please wait..."
@@ -94,18 +93,33 @@ export class PickUserPage {
       loader.present();
     }
 
-    let keywords = event.target.value || "";
-    this.users = [];
-    this.meetingService.getUsers(keywords, useLocalData).subscribe(response => {
+    //this.users = [];
+    this.meetingService.getUsers(keywords, userType, pageIndex).subscribe(response => {
       if (loader)
         loader.dismissAll();
+
       if (response.result === "OK") {
         // TODO: implement filtering
         if (this.group !== "all") {
-          this.users = (response.users as any[]).filter(itm => itm.userTypeName === this.group);
+          //this.users = (response.users as any[]).filter(itm => itm.userTypeName === this.group);
+          (response.users as any[]).filter(itm => itm.userTypeName === this.group).forEach(user => {
+            this.users.push(user);
+          });
+          console.log("with filter:", this.users.length);
         } else {
-          this.users = response.users;
+          // this.users = response.users;
+          response.users.forEach(user => {
+            this.users.push(user);
+          });
+          console.log("no filter:", this.users.length);
         }
+
+        if (refresher)
+          refresher.complete();
+
+        if (this.infiniteScroll)
+          this.infiniteScroll.complete();
+
       } else {
         this.alertUser("Retrieve users failed.", response.message);
       }
@@ -123,15 +137,35 @@ export class PickUserPage {
   }
 
   refreshData(refresher: any) {
-    this.searchUser({ target: { value: this.keywords } }, true, false, refresher);
+    this.currentPageIndex = 1;
+    this.users = [];
+    this.searchUser(this.keywords, true, this.group, this.currentPageIndex, refresher);
   }
 
   handleFilter(menu: any) {
     this.title = menu.title;
     this.group = menu.param;
+    this.currentPageIndex = 1;
+    this.users = [];
     // do user searching
-    this.searchUser({ target: { value: this.keywords } }, false, true, undefined);
+    this.searchUser(this.keywords, false, this.group, this.currentPageIndex, undefined);
   }
+
+
+  putKeyword(event: any) {
+    let keywords = event.target.value || "";
+    this.currentPageIndex = 1;
+    this.users = [];
+    // do user searching
+    this.searchUser(keywords, false, this.group, this.currentPageIndex, undefined);
+  }
+
+  doInfinite(infiniteScroll: any) {
+    this.infiniteScroll = infiniteScroll;
+    this.currentPageIndex += 1;
+    this.searchUser(this.keywords, false, this.group, this.currentPageIndex, undefined);
+  }
+
 
   userSelected(user: any) {
     event.stopPropagation();
@@ -144,13 +178,14 @@ export class PickUserPage {
     } else {
       let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
       this.navCtrl.pop().then(value => {
-        this.navCtrl.push(arrangeMeeting, { selectedUser: user}, { animate: true });
+        this.navCtrl.push(arrangeMeeting, { selectedUser: user }, { animate: true });
       });
     }
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PickUserPage');
+    // console.log('ionViewDidLoad PickUserPage');
+    this.searchUser(this.keywords, true, this.group, this.currentPageIndex, undefined);
   }
 
   ionViewWillUnload() {

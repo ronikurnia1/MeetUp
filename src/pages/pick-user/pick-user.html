@@ -7,7 +7,7 @@
     </ion-title>
   </ion-navbar>
   <ion-toolbar no-border>
-    <ion-searchbar (ionInput)="searchUser($event, false, true)" [(ngModel)]="keywords"></ion-searchbar>
+    <ion-searchbar (ionInput)="putKeyword($event)" [(ngModel)]="keywords"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -25,6 +25,8 @@
       <div>{{user.company}}</div>
       <div>{{user.countryName}}</div>
     </ion-item>
-
   </ion-list>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

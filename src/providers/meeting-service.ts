@@ -18,37 +18,18 @@ export class MeetingService {
     /**
      * get users based on given group & keywords
      */
-    getUsers(keyword: string, useLocalData: boolean): Observable<any> {
-        // check local storage
-        // console.log("keyword:", keyword);
-        if (localStorage.getItem("meetingUser") && useLocalData) {
-            return new Observable<any>(observer => {
-                let result: any = JSON.parse(localStorage.getItem("meetingUser"));
-                if (keyword) {
-                    result.users = (result.users as any[]).filter(itm => {
-                        return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1
-                    });
-                    // console.log("data:", result);
-                }
-                observer.next(result);
-                observer.complete();
-            });
-        }
-        let queryString = "?userId=" + this.globalVars.getValue("userData").id + "&keyword=";
+    getUsers(keyword: string, userType: string, pageIndex: number): Observable<any> {
+        let queryString = "?userId=" + this.globalVars.getValue("userData").id + "&pageIndex=" + pageIndex + "&keyword=" + keyword;
         let request = "MobileMeetingApi/GetEventUsers" + queryString;
         return this.http.get(this.globalVars.getValue("apiUrl") + request)
             .map((response: Response) => {
-                localStorage.setItem("meetingUser", JSON.stringify(response.json()));
+                //localStorage.setItem("meetingUser", JSON.stringify(response.json()));
                 let result: any = response.json();
-                result.users = (result.users as any[]).filter(itm => {
-                    return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1
-                });
+                if (userType !== "all" && userType !== "") {
+                    result.users = (result.users as any[]).filter(itm => {
+                        return itm.userTypeName.toLowerCase() === userType.toLowerCase();
+                    });
+                }
                 return result;
             }).catch(this.handleError);
         // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")
@@ -59,7 +40,7 @@ export class MeetingService {
     /**
      * get users for chatting
      */
-    getUsersForChat(keyword: string, useLocalData: boolean): Observable<any> {
+    getUsersForChat(keyword: string, useLocalData: boolean, pageIndex: number): Observable<any> {
         // check local storage
         if (localStorage.getItem("chatUser") && useLocalData) {
 
@@ -80,7 +61,8 @@ export class MeetingService {
             });
         }
 
-        let queryString = "?userId=" + this.globalVars.getValue("userData").id + "&userTypeId=&industryId=&keyword=";
+        let queryString = "?userId=" + this.globalVars.getValue("userData").id +
+            "&pageIndex=" + pageIndex + "&userTypeId=&industryId=&keyword=";
         let request = "MobileUserApi/GetUsersChat" + queryString;
 
         return this.http.get(this.globalVars.getValue("apiUrl") + request)

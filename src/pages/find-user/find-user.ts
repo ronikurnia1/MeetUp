@@ -22,14 +22,14 @@ export class FindUserPage {
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService) {
     this.keywords = "";
-    this.getUserForChat("", true, true);
+    this.getUserForChat("", true, false, 1);
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FindUserPage");
   }
 
-  getUserForChat(keywords: string, withLoader: boolean, useLocalData: boolean, refresher?: any) {
+  getUserForChat(keywords: string, withLoader: boolean, useLocalData: boolean, pageIndex: number, refresher?: any) {
     if (refresher)
       refresher.complete();
 
@@ -41,7 +41,7 @@ export class FindUserPage {
       loader.present();
     }
 
-    this.meetingService.getUsersForChat(keywords, useLocalData).subscribe((response) => {
+    this.meetingService.getUsersForChat(keywords, useLocalData, pageIndex).subscribe((response) => {
       if (loader)
         loader.dismissAll();
       if (response.result === "OK") {
@@ -60,11 +60,11 @@ export class FindUserPage {
   filterProfile(event: any) {
     let keywords: string = event.target.value || "";
     this.profiles = [];
-    this.getUserForChat(keywords, false, true);
+    this.getUserForChat(keywords, false, false, 1);
   }
 
   refreshData(refresher: any) {
-    this.getUserForChat(this.keywords, true, false, refresher);
+    this.getUserForChat(this.keywords, true, false, 3, refresher);
   }
 
   openChat(receiver: any) {
