@@ -69,8 +69,8 @@ export class LoginPage {
         countries = response.countries;
         notifications = response.notificationMethods;
         titles = response.titles;
-        let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-        this.navCtrl.push(register, { title: "Register", countries: countries, titles: titles, notifications: notifications });
+        //let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
+        this.navCtrl.push(RegisterPage, { title: "Register", countries: countries, titles: titles, notifications: notifications });
       } else {
         let toast = this.toastCtrl.create({
           message: response.Message,

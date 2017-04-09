@@ -95,37 +95,41 @@ export class PickUserPage {
 
     //this.users = [];
     this.meetingService.getUsers(keywords, userType, pageIndex).subscribe(response => {
-      if (loader)
-        loader.dismissAll();
-
       if (response.result === "OK") {
         // TODO: implement filtering
         if (this.group !== "all") {
-          //this.users = (response.users as any[]).filter(itm => itm.userTypeName === this.group);
           (response.users as any[]).filter(itm => itm.userTypeName === this.group).forEach(user => {
             this.users.push(user);
           });
           console.log("with filter:", this.users.length);
         } else {
-          // this.users = response.users;
           response.users.forEach(user => {
             this.users.push(user);
           });
           console.log("no filter:", this.users.length);
         }
-
-        if (refresher)
-          refresher.complete();
-
-        if (this.infiniteScroll)
-          this.infiniteScroll.complete();
-
       } else {
         this.alertUser("Retrieve users failed.", response.message);
       }
+      if (loader)
+        loader.dismissAll();
+
+      if (refresher)
+        refresher.complete();
+
+      if (this.infiniteScroll)
+        this.infiniteScroll.complete();
+
     }, error => {
       if (loader)
         loader.dismissAll();
+
+      if (refresher)
+        refresher.complete();
+
+      if (this.infiniteScroll)
+        this.infiniteScroll.complete();
+
       // show toast
       let toast = this.toastCtrl.create({
         message: error,
@@ -176,9 +180,9 @@ export class PickUserPage {
         this.navCtrl.pop();
       });
     } else {
-      let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
+      //let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
       this.navCtrl.pop().then(value => {
-        this.navCtrl.push(arrangeMeeting, { selectedUser: user }, { animate: true });
+        this.navCtrl.push(ArrangeMeetingPage, { selectedUser: user }, { animate: true });
       });
     }
   }

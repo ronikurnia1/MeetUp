@@ -186,8 +186,8 @@ export class RegisterPage {
 
           // Redirect to my schedule page
           // check if Tabs already exist
-          let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage") || TabsPage;
-          this.app.getRootNav().push(tabsPage);
+          //let tabsPage = this.app.getRootNav().getViews().find(itm => itm.name === "TabsPage") || TabsPage;
+          this.app.getRootNav().push(TabsPage);
         }
       });
     });
@@ -341,12 +341,8 @@ export class RegisterPage {
   viewDisclimer(subject: string) {
     event.preventDefault();
     event.stopPropagation();
-    let disclimer = this.navCtrl.getViews().find(itm => itm.name === "DisclimerPage");
-    if (disclimer) {
-      this.navCtrl.push(disclimer, { subject: subject });
-    } else {
-      this.navCtrl.push(DisclimerPage, { subject: subject });
-    }
+    //let disclimer = this.navCtrl.getViews().find(itm => itm.name === "DisclimerPage");
+    this.navCtrl.push(DisclimerPage, { subject: subject });
   }
 }
 

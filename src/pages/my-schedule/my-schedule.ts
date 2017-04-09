@@ -154,12 +154,8 @@ export class MySchedulePage {
   cancelMeeting(data: any) {
     event.stopPropagation();
     event.preventDefault();
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
-    if (cancelDecline) {
-      this.navCtrl.push(cancelDecline, { meetingData: data, type: "cancel" });
-    } else {
-      this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "cancel" });
-    }
+    //let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage");
+    this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "cancel" });
   }
 
   rescheduleMeeting(data: any) {
@@ -167,8 +163,8 @@ export class MySchedulePage {
     event.preventDefault();
     let minDate = this.globalVars.getValue("day1");
     let maxDate = this.globalVars.getValue("day2");
-    let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
-    this.navCtrl.push(reschedule, { meetingData: data, minDate: minDate, maxDate: maxDate });
+    //let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
+    this.navCtrl.push(RescheduleMeetingPage, { meetingData: data, minDate: minDate, maxDate: maxDate });
   }
 
   acceptMeeting(meeting: any) {
@@ -198,8 +194,8 @@ export class MySchedulePage {
     event.stopPropagation();
     event.preventDefault();
     // console.log("Decline Meeting.");
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
-    this.navCtrl.push(cancelDecline, { meetingData: data, type: "decline" });
+    //let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
+    this.navCtrl.push(CancelOrDeclinePage, { meetingData: data, type: "decline" });
   }
 
   /**
@@ -238,8 +234,8 @@ export class MySchedulePage {
     // console.log("View Calender.");
     event.stopPropagation();
     event.preventDefault();
-    let calendarView = this.navCtrl.getViews().find(itm => itm.name === "CalendarViewPage") || CalendarViewPage;
-    this.navCtrl.push(calendarView);
+    //let calendarView = this.navCtrl.getViews().find(itm => itm.name === "CalendarViewPage") || CalendarViewPage;
+    this.navCtrl.push(CalendarViewPage);
   }
 
   ngOnInit() {
@@ -452,12 +448,12 @@ export class MySchedulePage {
     if (data.isBlockTime) {
       // Open blocking detail
       console.log("Open blocktime detail.");
-      let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
-      this.navCtrl.push(blockTime, { blockTime: data }, { animate: true });
+      //let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
+      this.navCtrl.push(BlockTimePage, { blockTime: data }, { animate: true });
     } else {
       // console.log("View meeting details.");
-      let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
-      this.navCtrl.push(meetingDetails, { meetingData: data, type: type }, { animate: true });
+      //let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+      this.navCtrl.push(MeetingDetailsPage, { meetingData: data, type: type }, { animate: true });
     }
   }
   /**
@@ -534,8 +530,8 @@ export class MySchedulePage {
       endTime: "",
       description: ""
     };
-    let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
-    this.navCtrl.push(blockTime, { blockTime: data, }, { animate: true });
+    //let blockTime = this.navCtrl.getViews().find(itm => itm.name === "BlockTimePage") || BlockTimePage;
+    this.navCtrl.push(BlockTimePage, { blockTime: data, }, { animate: true });
   }
 
   scanQrCode(event: any, fab: FabContainer) {
@@ -544,8 +540,8 @@ export class MySchedulePage {
     // this is for testing only
     this.authService.getProfile("3829203a-4acf-6092-98b9-ff00006fb7ad").subscribe(response => {
       if (response.result === "OK") {
-        let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
-        this.navCtrl.push(page, { profile: response.user }, { animate: true });
+        //let page = this.navCtrl.getViews().find(itm => itm.name === "ScanBadgePage") || ScanBadgePage;
+        this.navCtrl.push(ScanBadgePage, { profile: response.user }, { animate: true });
       } else {
         let alert = this.alertCtrl.create({
           title: "Failed to get profile",

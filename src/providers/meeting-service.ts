@@ -40,43 +40,14 @@ export class MeetingService {
     /**
      * get users for chatting
      */
-    getUsersForChat(keyword: string, useLocalData: boolean, pageIndex: number): Observable<any> {
-        // check local storage
-        if (localStorage.getItem("chatUser") && useLocalData) {
-
-            return new Observable<any>(observer => {
-                let result: any = JSON.parse(localStorage.getItem("chatUser"));
-                if (keyword) {
-                    result.users = (result.users as any[]).filter(itm => {
-                        return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                            itm.industryTitle.toLowerCase().indexOf(keyword.toLowerCase()) > -1
-                    });
-                    // console.log("data:", result);
-                }
-                observer.next(result);
-                observer.complete();
-            });
-        }
-
+    getUsersForChat(keyword: string, pageIndex: number): Observable<any> {
         let queryString = "?userId=" + this.globalVars.getValue("userData").id +
-            "&pageIndex=" + pageIndex + "&userTypeId=&industryId=&keyword=";
+            "&pageIndex=" + pageIndex + "&userTypeId=&industryId=&keyword=" + keyword;
         let request = "MobileUserApi/GetUsersChat" + queryString;
 
         return this.http.get(this.globalVars.getValue("apiUrl") + request)
             .map((response: Response) => {
-                localStorage.setItem("chatUser", JSON.stringify(response.json()));
-                let result: any = response.json();
-                result.users = (result.users as any[]).filter(itm => {
-                    return itm.email.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.firstName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.lastName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.countryName.toLowerCase().indexOf(keyword.toLowerCase()) > -1 ||
-                        itm.industryTitle.toLowerCase().indexOf(keyword.toLowerCase()) > -1
-                });
-                return result;
+                return response.json();
             }).catch(this.handleError);
 
         // return this.http.get(this.globalVars.getValue("apiUrlDummy") + "dummy-data/get-users.json")

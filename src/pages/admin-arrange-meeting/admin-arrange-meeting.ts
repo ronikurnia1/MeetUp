@@ -82,8 +82,8 @@ export class AdminArrangeMeetingPage {
   pickUpUser(party: string) {
     event.stopPropagation();
     event.preventDefault();
-    let pickUser = this.navCtrl.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
-    this.navCtrl.push(pickUser, { callback: this.pickupCallback, partyType: party }, { animate: true });
+    //let pickUser = this.navCtrl.getViews().find(itm => itm.name === "PickUserPage") || PickUserPage;
+    this.navCtrl.push(PickUserPage, { callback: this.pickupCallback, partyType: party }, { animate: true });
   }
 
   pickupCallback = (givenData) => {

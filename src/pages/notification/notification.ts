@@ -42,8 +42,8 @@ export class NotificationPage {
           if (response.result === "OK") {
             //TODO: check meetingId exist on invitation or my-schedule
             let type: string = "invitation";
-            let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
-            this.navCtrl.push(meetingDetails, { meetingData: response.data, type: type }, { animate: true });
+            //let meetingDetails = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+            this.navCtrl.push(MeetingDetailsPage, { meetingData: response.data, type: type }, { animate: true });
 
           } else {
             this.alertUser("Retrieve meeting data failed.", response.messsage);

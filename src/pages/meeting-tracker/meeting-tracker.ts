@@ -82,11 +82,11 @@ export class MeetingTrackerPage {
   viewMeetingDetail(meeting: any) {
     event.stopPropagation();
     event.preventDefault();
-    let profilePage = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
+    //let profilePage = this.navCtrl.getViews().find(itm => itm.name === "MeetingDetailsPage") || MeetingDetailsPage;
     // get meeting details
     this.meetingService.getMeetingById(meeting.id).subscribe(response => {
       if (response.result === "OK") {
-        this.navCtrl.push(profilePage, { meetingData: response.data, type: "tracker" });
+        this.navCtrl.push(MeetingDetailsPage, { meetingData: response.data, type: "tracker" });
       } else {
         this.alertUser("Retrieve Meeting data failed.", response.message);
       }

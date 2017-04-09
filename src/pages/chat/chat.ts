@@ -52,8 +52,8 @@ export class ChatPage {
   findUser() {
     event.stopPropagation();
     event.preventDefault();
-    let findUser = this.navCtrl.getViews().find(itm => itm.name === "FindUserPage ") || FindUserPage;
-    this.navCtrl.push(findUser, null, { animate: true });
+    //let findUser = this.navCtrl.getViews().find(itm => itm.name === "FindUserPage ") || FindUserPage;
+    this.navCtrl.push(FindUserPage, null, { animate: true });
   }
 
   /**

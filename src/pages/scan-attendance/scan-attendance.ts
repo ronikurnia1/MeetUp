@@ -41,8 +41,8 @@ export class ScanAttendancePage {
         // get person data
         this.authService.getProfile(personId).subscribe(response => {
           if (response.result === "OK") {
-            let page = this.navCtrl.getViews().find(itm => itm.name === "SaveAttendanceDataPage") || SaveAttendanceDataPage;
-            this.navCtrl.push(page, { profile: response.profile }, { animate: true });
+            //let page = this.navCtrl.getViews().find(itm => itm.name === "SaveAttendanceDataPage") || SaveAttendanceDataPage;
+            this.navCtrl.push(SaveAttendanceDataPage, { profile: response.profile }, { animate: true });
           } else {
             let alert = this.alertCtrl.create({
               title: "Scan failed",

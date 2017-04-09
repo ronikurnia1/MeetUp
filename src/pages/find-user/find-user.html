@@ -13,8 +13,8 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-list [virtualScroll]="profiles" approxItemHeight="45px">
-    <ion-item *virtualItem="let profile" class="meeting" (click)="openChat(profile)">
+  <ion-list [virtualScroll]="profiles" approxItemHeight="95px">
+    <ion-item ng-style="{'min-height':'80px'}" *virtualItem="let profile" class="meeting" (click)="openChat(profile)">
       <div bp-layout="flex">
         <ion-avatar item-left bp-layout="fit">
           <img [src]="profile.avatar || 'assets/icon/avatar.png'">
@@ -27,4 +27,7 @@
       </div>
     </ion-item>
   </ion-list>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

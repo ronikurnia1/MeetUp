@@ -1,9 +1,12 @@
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { CloudSettings, CloudModule } from "@ionic/cloud-angular";
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import { MyApp } from "./app.component";
 import { MomentModule } from "angular2-moment";
 import { Ionic2RatingModule } from "ionic2-rating";
+
 //import { Storage } from "@ionic/storage";
 import { AngularFireModule } from "angularfire2";
 import { QRCodeModule } from "angular2-qrcode";
@@ -108,6 +111,8 @@ export const cloudSettings: CloudSettings = {
     MeetingStatusFilterPipe
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
     MomentModule, ProviderModule.forRoot(), QRCodeModule,
     AngularFireModule.initializeApp(firebaseConfig),

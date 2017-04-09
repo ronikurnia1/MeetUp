@@ -11,8 +11,10 @@ import { FirebaseChatService } from "../../providers/firebase-chat-service";
 })
 export class FindUserPage {
 
-  private profiles: any[];
+  private profiles: any = [];
   private keywords: string;
+  private currentPageIndex: number;
+  private infiniteScroll: any;
 
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
@@ -21,17 +23,17 @@ export class FindUserPage {
     private chatService: FirebaseChatService,
     private globalVars: GlobalVarsService,
     private meetingService: MeetingService) {
+    this.profiles = [];
     this.keywords = "";
-    this.getUserForChat("", true, false, 1);
+    this.currentPageIndex = 1;
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad FindUserPage");
+    this.getUserForChat(this.keywords, true, this.currentPageIndex, undefined);
   }
 
-  getUserForChat(keywords: string, withLoader: boolean, useLocalData: boolean, pageIndex: number, refresher?: any) {
-    if (refresher)
-      refresher.complete();
+  getUserForChat(keywords: string, withLoader: boolean, pageIndex: number, refresher?: any) {
 
     let loader: any;
     if (withLoader) {
@@ -41,30 +43,57 @@ export class FindUserPage {
       loader.present();
     }
 
-    this.meetingService.getUsersForChat(keywords, useLocalData, pageIndex).subscribe((response) => {
-      if (loader)
-        loader.dismissAll();
+    this.meetingService.getUsersForChat(keywords, pageIndex).subscribe((response) => {
       if (response.result === "OK") {
-        this.profiles = response.users;
+        response.users.forEach(user => {
+          this.profiles.push(user);
+        });
       } else {
         this.alertUser("Retrieve users failed.", response.message);
       }
-    }, error => {
+
       if (loader)
         loader.dismissAll();
+
+      if (refresher)
+        refresher.complete();
+
+      if (this.infiniteScroll)
+        this.infiniteScroll.complete();
+
+    }, error => {
+
+      if (loader)
+        loader.dismissAll();
+
+      if (refresher)
+        refresher.complete();
+
+      if (this.infiniteScroll)
+        this.infiniteScroll.complete();
+
       this.alertUser("Retrive user data failed.", error);
     });
   }
 
-
   filterProfile(event: any) {
     let keywords: string = event.target.value || "";
     this.profiles = [];
-    this.getUserForChat(keywords, false, false, 1);
+    this.currentPageIndex = 1;
+    this.getUserForChat(keywords, false, this.currentPageIndex, undefined);
   }
 
   refreshData(refresher: any) {
-    this.getUserForChat(this.keywords, true, false, 3, refresher);
+    this.profiles = [];
+    this.currentPageIndex = 1;
+    this.getUserForChat(this.keywords, true, this.currentPageIndex, refresher);
+  }
+
+
+  doInfinite(infiniteScroll: any) {
+    this.infiniteScroll = infiniteScroll;
+    this.currentPageIndex += 1;
+    this.getUserForChat(this.keywords, false, this.currentPageIndex, undefined);
   }
 
   openChat(receiver: any) {

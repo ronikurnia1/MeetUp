@@ -30,8 +30,8 @@ export class AnnouncementPage {
       if (response.result === "OK") {
         let message = response.data;
 
-        let details = this.navCtrl.getViews().find(itm => itm.name === "AnnouncementDetailsPage") || AnnouncementDetailsPage;
-        this.navCtrl.push(details, { message: message }, { animate: true });
+        //let details = this.navCtrl.getViews().find(itm => itm.name === "AnnouncementDetailsPage") || AnnouncementDetailsPage;
+        this.navCtrl.push(AnnouncementDetailsPage, { message: message }, { animate: true });
       } else {
         let alert = this.alertCtrl.create({
           title: "Cannot open Message Details",

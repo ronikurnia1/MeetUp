@@ -45,11 +45,11 @@ export class MeetingDetailsPage {
   viewProfile() {
     event.stopPropagation();
     event.preventDefault();
-    let profilePage = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
+    //let profilePage = this.navCtrl.getViews().find(itm => itm.name === "UserProfilePage") || UserProfilePage;
     // get profile 
     this.authService.getProfile(this.meeting.userId).subscribe(respose => {
       if (respose.result === "OK") {
-        this.navCtrl.push(profilePage, { profile: respose.user });
+        this.navCtrl.push(UserProfilePage, { profile: respose.user });
       } else {
         this.showToast(respose.message);
       }
@@ -103,15 +103,15 @@ export class MeetingDetailsPage {
   declineMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
-    this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "decline" });
+    //let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
+    this.navCtrl.push(CancelOrDeclinePage, { meetingData: this.meeting, type: "decline" });
   }
 
   cancelMeeting() {
     event.stopPropagation();
     event.preventDefault();
-    let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
-    this.navCtrl.push(cancelDecline, { meetingData: this.meeting, type: "cancel" });
+    //let cancelDecline = this.navCtrl.getViews().find(itm => itm.name === "CancelOrDeclinePage") || CancelOrDeclinePage;
+    this.navCtrl.push(CancelOrDeclinePage, { meetingData: this.meeting, type: "cancel" });
   }
 
   rescheduleMeeting() {
@@ -119,8 +119,8 @@ export class MeetingDetailsPage {
     event.preventDefault();
     let minDate = this.globalVars.getValue("day1");
     let maxDate = this.globalVars.getValue("day2");
-    let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
-    this.navCtrl.push(reschedule, { meetingData: this.meeting, minDate: minDate, maxDate: maxDate });
+    //let reschedule = this.navCtrl.getViews().find(itm => itm.name === "RescheduleMeetingPage") || RescheduleMeetingPage;
+    this.navCtrl.push(RescheduleMeetingPage, { meetingData: this.meeting, minDate: minDate, maxDate: maxDate });
   }
 
   postMeetingSurvey() {

@@ -47,8 +47,8 @@ export class UserProfilePage {
     event.preventDefault();
     switch (menu) {
       case "editProfile": {
-        let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
-        this.navCtrl.push(register, {
+        //let register = this.navCtrl.getViews().find(itm => itm.name === "RegisterPage") || RegisterPage;
+        this.navCtrl.push(RegisterPage, {
           title: "Edit Profile",
           countries: this.globalVars.getValue("countries"),
           industries: this.globalVars.getValue("industry-type"),
@@ -62,18 +62,18 @@ export class UserProfilePage {
         break;
       }
       case "changePassword": {
-        let page = this.navCtrl.getViews().find(itm => itm.name === "ChangePasswordPage") || ChangePasswordPage;
-        this.navCtrl.push(page, null, { animate: true });
+        //let page = this.navCtrl.getViews().find(itm => itm.name === "ChangePasswordPage") || ChangePasswordPage;
+        this.navCtrl.push(ChangePasswordPage, null, { animate: true });
         break
       }
       default: {
         // console.log("View meeting details.");
-        let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
+        //let arrangeMeeting = this.navCtrl.getViews().find(itm => itm.name === "ArrangeMeetingPage") || ArrangeMeetingPage;
         this.meetingService.getMeetingDate().subscribe(res => {
           let minDate = res.data[0].id.substr(6, 4) + "-" + res.data[0].id.substr(3, 2) + "-" + res.data[0].id.substr(0, 2);
           let maxDate = res.data[1].id.substr(6, 4) + "-" + res.data[1].id.substr(3, 2) + "-" + res.data[1].id.substr(0, 2);
           this.navCtrl.pop().then(value => {
-            this.navCtrl.push(arrangeMeeting, { selectedUser: this.profile, minDate: minDate, maxDate: maxDate }, { animate: true });
+            this.navCtrl.push(ArrangeMeetingPage, { selectedUser: this.profile, minDate: minDate, maxDate: maxDate }, { animate: true });
           });
         }, err => {
           this.alertUser("Cannot Arrange a Meeting", err);
