@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from "@angular/http";
-import { Observable } from "rxjs/Observable";
-import { Platform, Tabs, Events, ToastController, AlertController, NavController } from "ionic-angular";
+//import { Observable } from "rxjs/Observable";
+import { Platform, Events, ToastController, AlertController } from "ionic-angular";
 import { Push, PushToken } from "@ionic/cloud-angular";
 import { GlobalVarsService } from "./global-vars-service";
 import "rxjs/Rx";

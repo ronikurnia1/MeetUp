@@ -4,9 +4,8 @@ import * as moment from "moment";
 import { UserProfilePage } from "../user-profile/user-profile";
 import { GlobalVarsService } from "../../providers/global-vars-service";
 import { AuthService } from "../../providers/auth-service";
-import { AngularFireDatabase, FirebaseListObservable } from "angularfire2";
+import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database";
 import { FirebaseChatService } from "../../providers/firebase-chat-service";
-import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'page-chat-details',

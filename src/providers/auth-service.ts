@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
-import { AuthProviders, AngularFireAuth, FirebaseAuthState, AuthMethods, AngularFireDatabase } from "angularfire2";
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from "rxjs/Observable";
 import { GlobalVarsService } from "./global-vars-service";
 import "rxjs/Rx";
@@ -11,29 +13,29 @@ import "rxjs/Rx";
 @Injectable()
 export class AuthService {
 
-  private authState: FirebaseAuthState;
+  private afUser: firebase.User;
 
   constructor(private http: Http,
-    private auth$: AngularFireAuth,
-    private db: AngularFireDatabase,
+    private afAuth: AngularFireAuth,
+    //private db: AngularFireDatabase,
     private globalVars: GlobalVarsService) {
-    this.authState = null;
-    auth$.subscribe((state: FirebaseAuthState) => {
-      this.authState = state;
+    this.afUser = null;
+    afAuth.authState.subscribe(user => {
+      console.log("User:", user);
+      this.afUser = user;
     });
   }
 
   get authenticated(): boolean {
-    return this.authState !== null;
+    return this.afUser !== null;
   }
 
-  loginToFirebase(): firebase.Promise<FirebaseAuthState> {
-    let credential = { email: this.globalVars.getValue("firebaseUser"), password: this.globalVars.getValue("firebasePwd") };
-    return this.auth$.login(credential, { provider: AuthProviders.Password, method: AuthMethods.Password });
+  loginToFirebase(): firebase.Promise<any> {
+    return this.afAuth.auth.signInWithEmailAndPassword(this.globalVars.getValue("firebaseUser"), this.globalVars.getValue("firebasePwd"));
   }
 
   logOutFromFirebase(): void {
-    this.auth$.logout();
+    this.afAuth.auth.signOut();
   }
   /**
    * Register user
@@ -73,7 +75,7 @@ export class AuthService {
     // TODO:
     let request = "MobileUserApi/GetEventUserById?userId=" + profileId;
     return this.http.get(this.globalVars.getValue("apiUrl") + request)
-        .map((response: Response) => response.json()).catch(this.handleError);
+      .map((response: Response) => response.json()).catch(this.handleError);
     // let request = "dummy-data/get-profile.json"
     // return this.http.get(this.globalVars.getValue("apiUrlDummy") + request)
     //   .map((response: Response) => response.json()).catch(this.handleError);

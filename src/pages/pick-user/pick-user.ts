@@ -101,12 +101,12 @@ export class PickUserPage {
           (response.users as any[]).filter(itm => itm.userTypeName === this.group).forEach(user => {
             this.users.push(user);
           });
-          console.log("with filter:", this.users.length);
+          // console.log("with filter:", this.users.length);
         } else {
           response.users.forEach(user => {
             this.users.push(user);
           });
-          console.log("no filter:", this.users.length);
+          // console.log("no filter:", this.users.length);
         }
       } else {
         this.alertUser("Retrieve users failed.", response.message);

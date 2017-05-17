@@ -7,7 +7,7 @@ import { MeetingService } from "../../providers/meeting-service";
 import { FirebaseChatService } from "../../providers/firebase-chat-service";
 import { ChatDetailsPage } from "../chat-details/chat-details";
 import { FindUserPage } from "../find-user/find-user";
-import { AngularFireDatabase, FirebaseListObservable } from "angularfire2";
+import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/database";
 import { Observable } from "rxjs/Observable";
 
 

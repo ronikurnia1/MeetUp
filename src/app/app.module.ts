@@ -9,6 +9,9 @@ import { Ionic2RatingModule } from "ionic2-rating";
 
 //import { Storage } from "@ionic/storage";
 import { AngularFireModule } from "angularfire2";
+import { AngularFireDatabaseModule } from "angularfire2/database";
+import { AngularFireAuthModule } from "angularfire2/auth";
+
 import { QRCodeModule } from "angular2-qrcode";
 
 import { EqualValidator } from "../providers/equal-validator";
@@ -116,6 +119,7 @@ export const cloudSettings: CloudSettings = {
     IonicModule.forRoot(MyApp), Ionic2RatingModule,
     MomentModule, ProviderModule.forRoot(), QRCodeModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule, AngularFireAuthModule,
     CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],

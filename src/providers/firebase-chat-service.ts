@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFire } from "angularfire2";
+import { AngularFireDatabase } from "angularfire2/database";
 import * as firebase from 'firebase';
 import "rxjs/Rx";
 
@@ -9,8 +9,7 @@ const DB_ROOT: string = "https://ipi-chat.firebaseio.com";
 export class FirebaseChatService {
 
   constructor(
-    private db: AngularFireDatabase,
-    private af: AngularFire) {
+    private db: AngularFireDatabase) {
   }
 
   sendMessage(chatId: string, sender: any, receiver: any, message: string): firebase.Promise<void> {

@@ -15,8 +15,8 @@ import { MeetingService } from "../../providers/meeting-service";
 export class ArrangeMeetingPage {
 
   private recipient: any;
-  private subjectSelectOptions = { title: "Subject" };
-  private locationSelectOptions = { title: "Location" };
+  //private subjectSelectOptions = { title: "Subject" };
+  //private locationSelectOptions = { title: "Location" };
 
   private technologies: any;
   private locations: any;

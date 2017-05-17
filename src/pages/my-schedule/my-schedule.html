@@ -18,8 +18,8 @@
         </ion-segment-button>
     </ion-segment>
     <ion-toolbar no-border>
-        <ion-searchbar [value]="filterInvitation" (ionInput)="filterInvitations($event)" *ngIf="section === 'Invitations'"></ion-searchbar>
-        <ion-searchbar [value]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'Sent'"></ion-searchbar>
+        <ion-searchbar [(ngModel)]="filterInvitation" (ionInput)="filterInvitations($event)" *ngIf="section === 'Invitations'"></ion-searchbar>
+        <ion-searchbar [(ngModel)]="filterHosting" (ionInput)="filterHostings($event)" *ngIf="section === 'Sent'"></ion-searchbar>
 
         <div bp-layout="row gutter-none" *ngIf="section === 'My Schedule'">
             <div bp-layout="col" (click)="toggleDay(day1)">
