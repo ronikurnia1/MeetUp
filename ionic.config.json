@@ -1,12 +1,11 @@
 {
   "name": "MeetUp",
   "app_id": "4a1de533",
-  "v2": true,
-  "typescript": true,
   "proxies": [
     {
       "path": "/api",
       "proxyUrl": "http://54.169.219.45:8090/api/"
     }
-  ]
+  ],
+  "type": "ionic-angular"
 }
