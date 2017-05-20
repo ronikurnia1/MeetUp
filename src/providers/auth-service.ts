@@ -21,7 +21,7 @@ export class AuthService {
     private globalVars: GlobalVarsService) {
     this.afUser = null;
     afAuth.authState.subscribe(user => {
-      console.log("User:", user);
+      //console.log("User:", user);
       this.afUser = user;
     });
   }
