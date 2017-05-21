@@ -18,6 +18,7 @@ import { EqualValidator } from "../providers/equal-validator";
 import { Elastic } from "../providers/elastic";
 
 import { TabsPage } from "../pages/tabs/tabs";
+import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
 import { MySchedulePage } from "../pages/my-schedule/my-schedule";
 import { MeetingDetailsPage } from "../pages/meeting-details/meeting-details";
@@ -84,6 +85,7 @@ export const cloudSettings: CloudSettings = {
     EqualValidator,
     MyApp,
     TabsPage,
+    HomePage,
     LoginPage,
     MySchedulePage,
     MeetingDetailsPage,
@@ -126,6 +128,7 @@ export const cloudSettings: CloudSettings = {
   entryComponents: [
     MyApp,
     TabsPage,
+    HomePage,
     LoginPage,
     MySchedulePage,
     MeetingDetailsPage,

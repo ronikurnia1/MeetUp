@@ -1,0 +1,17 @@
+.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+    background-image: none;
+}
+
+.logo {
+    padding: 20px 50px 20px 40px;
+}
+.smaller-font {
+    font-size: 12px;
+}
+.label-ios {
+    margin: 0;
+}
+
+.item-ios [item-left], .item-ios [item-start] {
+    margin: 8px 4px 8px 0;
+}

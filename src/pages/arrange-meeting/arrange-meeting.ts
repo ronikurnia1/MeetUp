@@ -15,8 +15,8 @@ import { MeetingService } from "../../providers/meeting-service";
 export class ArrangeMeetingPage {
 
   private recipient: any;
-  //private subjectSelectOptions = { title: "Subject" };
-  //private locationSelectOptions = { title: "Location" };
+  private subjectSelectOptions = { title: "Subject" };
+  private locationSelectOptions = { title: "Location" };
 
   private technologies: any;
   private locations: any;
@@ -77,8 +77,10 @@ export class ArrangeMeetingPage {
 
     this.meetingService.getSubjects().subscribe(response => {
       this.technologies = response.data;
+      console.log("Tech", this.technologies);
       this.meetingService.getLocations().subscribe(response => {
         this.locations = response.data;
+        console.log("Loc", this.locations);
         loader.dismissAll();
       }, error => {
         loader.dismissAll();

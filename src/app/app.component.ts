@@ -3,7 +3,9 @@ import { Platform, AlertController, Nav } from "ionic-angular";
 import { StatusBar, Splashscreen, Calendar } from "ionic-native";
 import { PushService } from "../providers/push-service";
 import { TabsPage } from "../pages/tabs/tabs";
+import { HomePage } from "../pages/home/home";
 import { LoginPage } from "../pages/login/login";
+
 import { CryptoService } from "../providers/crypto-service";
 import { GlobalVarsService } from "../providers/global-vars-service";
 
@@ -50,7 +52,8 @@ export class MyApp {
 
         // put it into global vars
         this.globalVars.setValue("userData", userData);
-        this.rootPage = TabsPage;
+        //this.rootPage = TabsPage;
+        this.rootPage = HomePage;
         // Register push notification
         this.pushSvc.registerPushNotification(this.globalVars.getValue("userData").id);
       } else {
